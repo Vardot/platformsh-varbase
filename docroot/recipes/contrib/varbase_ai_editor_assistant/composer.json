@@ -1,0 +1,19 @@
+{
+  "name": "drupal/varbase_ai_editor_assistant",
+  "description": "A recipe to add AI-powered features and an assistant button to a CKEditor 5 text editor",
+  "keywords": ["recipe", "Varbase recipes", "varbase recipe", "Drupal recipes", "drupal recipe", "rich editor", "AI Assistant", "AI Editor", "Text format", "CKEditor 5"],
+  "type": "drupal-recipe",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "Vardot",
+      "homepage": "https://www.drupal.org/vardot",
+      "role": "Maintainer"
+    }
+  ],
+  "require": {
+    "drupal/core": "~10 || ~11",
+    "vardot/varbase-patches": "*",
+    "drupal/ai": "~1"
+  }
+}

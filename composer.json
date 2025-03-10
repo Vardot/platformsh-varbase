@@ -1,98 +1,168 @@
 {
-  "name": "platformsh/drupal11",
-  "description": "This template builds Drupal 11 for Platform.sh based the \"Drupal Recommended\" Composer project.",
+  "name": "vardot/platformsh-varbase",
+  "description": "Project template for Varbase distribution.",
   "type": "project",
   "license": "GPL-2.0-or-later",
-  "homepage": "https://www.drupal.org/project/drupal",
-  "support": {
-    "docs": "https://www.drupal.org/docs/user_guide/en/index.html",
-    "chat": "https://www.drupal.org/node/314178"
-  },
-  "repositories": [
+  "version": "10.1.x-dev",
+  "homepage": "https://www.drupal.org/project/varbase",
+  "authors": [
     {
-      "type": "composer",
-      "url": "https://packages.drupal.org/8"
+      "name": "Vardot",
+      "homepage": "https://github.com/vardot",
+      "role": "Maintainer"
     }
   ],
+  "support": {
+    "issues": "http://drupal.org/project/issues/varbase",
+    "source": "http://cgit.drupalcode.org/varbase"
+  },
+  "repositories": {
+    "drupal": {
+      "type": "composer",
+      "url": "https://packages.drupal.org/8"
+    },
+    "assets": {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    }
+  },
   "require": {
-    "composer/installers": "^2.0",
-    "drupal/core-composer-scaffold": "^11.0",
-    "drupal/core-project-message": "^11.0",
-    "drupal/core-recommended": "^11.0",
+    "composer/installers": "~2",
+    "drupal/core-composer-scaffold": "~11",
+    "drupal/core-project-message": "~11",
+    "cweagans/composer-patches": "~1",
+    "webflo/drupal-finder": "~1.0",
+    "vardot/varbase": "10.1.x-dev",
+    "vardot/varbase-patches": "10.1.x-dev",
+    "drupal/gleap-gleap": "~1",
+    "drupal/redis": "^1",
     "drush/drush": "^13",
     "platformsh/config-reader": "^2.4"
   },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
   "conflict": {
     "drupal/drupal": "*"
   },
-  "minimum-stability": "stable",
-  "prefer-stable": true,
   "config": {
+    "bin-dir": "bin/",
+    "secure-http": false,
+    "optimize-autoloader": true,
+    "preferred-install": {
+      "drupal/core": "dist"
+    },
     "allow-plugins": {
       "composer/installers": true,
+      "cweagans/composer-patches": true,
+      "oomphinc/composer-installers-extender": true,
       "drupal/core-composer-scaffold": true,
       "drupal/core-project-message": true,
       "phpstan/extension-installer": true,
       "dealerdirect/phpcodesniffer-composer-installer": true,
-      "cweagans/composer-patches": true
-    },
-    "sort-packages": true
+      "php-http/discovery": true,
+      "pyrech/composer-changelogs": true
+    }
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "Varbase\\composer\\ScriptHandler::createRequiredFiles",
+      "Varbase\\composer\\ScriptHandler::removeGitDirectories"
+    ],
+    "post-update-cmd": [
+      "Varbase\\composer\\ScriptHandler::createRequiredFiles",
+      "Varbase\\composer\\ScriptHandler::removeGitDirectories"
+    ],
+    "post-drupal-scaffold-cmd": ["Varbase\\composer\\ScriptHandler::postDrupalScaffoldProcedure"]
   },
   "extra": {
     "drupal-scaffold": {
+      "allowed-packages": [
+        "drupal/core",
+        "vardot/varbase"
+      ],
+      "gitignore": true,
       "locations": {
-        "web-root": "web/"
+        "web-root": "docroot/"
+      },
+      "file-mapping": {
+        "[web-root]/sites/default/default.services.yml": {
+          "mode": "replace",
+          "overwrite": false,
+          "path": "docroot/core/assets/scaffold/files/default.services.yml"
+        },
+        "[web-root]/sites/default/default.settings.php": {
+          "mode": "replace",
+          "overwrite": false,
+          "path": "docroot/core/assets/scaffold/files/default.settings.php"
+        }
       }
     },
     "installer-paths": {
-      "web/core": [
-        "type:drupal-core"
+      "docroot/core": ["type:drupal-core"],
+      "docroot/profiles/contrib/{$name}": ["type:drupal-profile"],
+      "docroot/modules/contrib/{$name}": ["type:drupal-module"],
+      "docroot/themes/contrib/{$name}": ["type:drupal-theme"],
+      "docroot/recipes/contrib/{$name}": ["type:drupal-recipe"],
+      "docroot/libraries/slick": ["npm-asset/slick-carousel"],
+      "docroot/libraries/ace": ["npm-asset/ace-builds"],
+      "docroot/libraries/jquery-ui-touch-punch": ["bower-asset/jqueryui-touch-punch"],
+      "docroot/libraries/swagger-ui/dist": ["npm-asset/swagger-ui-dist"],
+      "docroot/libraries/ckeditor5-anchor-drupal": ["npm-asset/northernco--ckeditor5-anchor-drupal"],
+      "docroot/libraries/ckeditor5/plugins/media-embed": ["npm-asset/ckeditor--ckeditor5-media-embed"],
+      "docroot/libraries/jquery.fancytree": ["npm-asset/jquery.fancytree"],
+      "docroot/libraries/{$name}": [
+        "type:drupal-library",
+        "type:bower-asset",
+        "type:npm-asset"
       ],
-      "web/libraries/{$name}": [
-        "type:drupal-library"
-      ],
-      "web/modules/contrib/{$name}": [
-        "type:drupal-module"
-      ],
-      "web/profiles/contrib/{$name}": [
-        "type:drupal-profile"
-      ],
-      "web/themes/contrib/{$name}": [
-        "type:drupal-theme"
-      ],
-      "drush/Commands/contrib/{$name}": [
-        "type:drupal-drush"
-      ],
-      "web/modules/custom/{$name}": [
-        "type:drupal-custom-module"
-      ],
-      "web/profiles/custom/{$name}": [
-        "type:drupal-custom-profile"
-      ],
-      "web/themes/custom/{$name}": [
-        "type:drupal-custom-theme"
+      "docroot/modules/custom/{$name}": ["type:drupal-custom-module"],
+      "docroot/themes/custom/{$name}": ["type:drupal-custom-theme"],
+      "drush/contrib/{$name}": ["type:drupal-drush"]
+    },
+    "installer-types": [
+      "drupal-recipe",
+      "bower-asset",
+      "npm-asset"
+    ],
+    "drupal-libraries": {
+      "library-directory": "docroot/libraries",
+      "libraries": [
+        {"name": "dropzone","package": "npm-asset/dropzone"},
+        {"name": "blazy", "package": "npm-asset/blazy"},
+        {"name": "slick", "package": "npm-asset/slick-carousel"},
+        {"name": "ace", "package": "npm-asset/ace-builds"},
+        {"name": "jquery-ui-touch-punch", "package": "bower-asset/jqueryui-touch-punch"},
+        {"name": "imagesloaded", "package": "npm-asset/imagesloaded"},
+        {"name": "swagger-ui", "package": "npm-asset/swagger-ui-dist"},
+        {"name": "ckeditor5-anchor-drupal", "package": "npm-asset/northernco--ckeditor5-anchor-drupal"},
+        {"name": "ckeditor5-media-embed", "package": "npm-asset/ckeditor--ckeditor5-media-embed"},
+        {"name": "jquery.fancytree", "package": "npm-asset/jquery.fancytree"}
       ]
     },
     "drupal-core-project-message": {
-      "include-keys": [
-        "homepage",
-        "support"
-      ],
+      "include-keys": ["homepage", "support"],
       "post-create-project-cmd-message": [
-        "<bg=blue;fg=white>                                                         </>",
-        "<bg=blue;fg=white>  Congratulations, you\u2019ve installed the Drupal codebase  </>",
-        "<bg=blue;fg=white>  from the drupal/recommended-project template!          </>",
-        "<bg=blue;fg=white>                                                         </>",
-        "",
-        "<bg=yellow;fg=black>Next steps</>:",
-        "  * Install the site: https://www.drupal.org/docs/installing-drupal",
-        "  * Read the user guide: https://www.drupal.org/docs/user_guide/en/index.html",
-        "  * Get support: https://www.drupal.org/support",
-        "  * Get involved with the Drupal community:",
-        "      https://www.drupal.org/getting-involved",
-        "  * Remove the plugin that prints this message:",
-        "      composer remove drupal/core-project-message"
+          "<bg=blue;fg=white>                                                         </>",
+          "<bg=blue;fg=white>  Congratulations, you have installed the Varbase codebase </>",
+          "<bg=blue;fg=white>  from the vardot/varbase-project template!              </>",
+          "<bg=blue;fg=white>                                                         </>",
+          "",
+          "<bg=yellow;fg=black>Next steps</>:",
+
+          "  * Install the site: https://www.drupal.org/docs/installing-drupal",
+          "  * Read the user guide: https://docs.varbase.vardot.com",
+          "  * Get support: https://www.vardot.com/en/form/get-support-varbase",
+          "  * Join Our Slack Team for Feedback and Support:",
+          "      http://slack.varbase.vardot.com",
+          "  * Remove the plugin that prints this message:",
+          "      composer remove drupal/core-project-message"
       ]
-    }
+    },
+    "enable-patching": true,
+    "composer-exit-on-patch-failure": true,
+    "patchLevel": {
+      "drupal/core": "-p2"
+    },
+    "patches": { }
   }
 }

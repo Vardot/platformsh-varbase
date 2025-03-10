@@ -5,7 +5,7 @@
 
 "https://{default}/":
     type: upstream
-    upstream: "drupal:http"
+    upstream: "varbase:http"
     cache:
       enabled: true
 
@@ -15,3 +15,17 @@
 "https://www.{default}/":
     type: redirect
     to: "https://{default}/"
+
+# ---------------------------------------------------------------------------
+#   Comment the following NOT to have a Storybook on production environment.
+#   Uncomment when starting a storybook in development or staging.
+#
+#   Follow with Integration of Varbase with Storybook
+#   https://docs.varbase.vardot.com/v/10.0.x/developers/theme-development-with-varbase/integration-of-varbase-with-storybook
+#
+#   This will allow for a storybook sub domain to point
+#   at the storybook:http upstream
+# ---------------------------------------------------------------------------
+"https://storybook.{default}":
+    type: upstream
+    upstream: "storybook:http"

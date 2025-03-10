@@ -1,0 +1,10 @@
+name: Varbase AI Image Alt
+description: Provides a recipe to automatically generate and fill the alt text of an image field using AI.
+type: Varbase AI
+install:
+  - ai
+  - ai_image_alt_text
+  - ai_image_bulk_alt_text
+config:
+  import:
+    ai_image_alt_text: '*'

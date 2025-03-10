@@ -1,0 +1,18 @@
+{
+  "name": "drupal/varbase_ai_taxonomy_tagging",
+  "description": "Provides a recipe to automatically tag selected referenced taxonomy terms based on the content entity's body field.",
+  "keywords": ["recipe", "Varbase recipes", "varbase recipe", "Drupal recipes", "drupal recipe", "Taxonomy", "tags", "Tagging"],
+  "type": "drupal-recipe",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "Vardot",
+      "homepage": "https://www.drupal.org/vardot",
+      "role": "Maintainer"
+    }
+  ],
+  "require": {
+    "drupal/core": "~10 || ~11",
+    "drupal/ai": "~1"
+  }
+}

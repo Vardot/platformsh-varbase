@@ -1,0 +1,53 @@
+name: Varbase AI Agents
+description: Provides an AI-powered chatbot for streamlined administration and allows managing multiple agents with distinct functionalities.
+type: Varbase AI
+install:
+  - key
+  - ai
+  - ai_assistant_api
+  - ai_chatbot
+  - ai_agents
+config:
+  import:
+    ai_chatbot: '*'
+    ai_agents: '*'
+  actions:
+    block.block.ai_chatbot:
+      createIfNotExists:
+        langcode: en
+        status: true
+        dependencies:
+          module:
+            - ai_chatbot
+            - block_class
+          theme:
+            - gin
+        id: ai_chatbot
+        theme: gin
+        region: content
+        weight: 0
+        provider: null
+        plugin: ai_deepchat_block
+        settings:
+          id: ai_deepchat_block
+          label: 'AI Agent'
+          label_display: '0'
+          provider: ai_chatbot
+          ai_assistant: ai_agent_assistant
+          bot_name: 'AI Agent'
+          bot_image: /profiles/contrib/varbase/logo.png
+          use_username: 1
+          default_username: User
+          use_avatar: 1
+          default_avatar: ''
+          first_message: 'Hello! How can I help you today?'
+          stream: 1
+          toggle_state: remember
+          width: 400px
+          height: 500px
+          placement: bottom-right
+          show_structured_results: false
+          show_copy_icon: true
+          collapse_minimal: false
+          style_file: bard.yml
+        visibility: {  }

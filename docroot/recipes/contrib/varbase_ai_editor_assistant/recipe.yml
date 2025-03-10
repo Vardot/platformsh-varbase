@@ -1,0 +1,76 @@
+name: Varbase AI Editor Assistant
+description: A recipe to add AI-powered features and an assistant button to a CKEditor 5 text editor.
+type: Varbase AI
+install:
+  - ai_ckeditor
+input:
+  ckeditor_machine_name:
+    data_type: string
+    description: 'The machine name of the CKEditor 5 editor to configure with AI enhancements.'
+    prompt:
+      method: ask
+      arguments:
+        question: 'Enter the machine name of the CKEditor 5 text editor you want to configure with AI capabilities:'
+    default:
+      source: value
+      value: 'full_html'
+  ckeditor_index:
+    data_type: string
+    description: 'The position index for the AI Assistant button in the editor toolbar.'
+    prompt:
+      method: ask
+      arguments:
+        question: 'Specify the position index for the AI Assistant button:'
+    default:
+      source: value
+      value: '0'
+config:
+  strict: false
+  import:
+    ai_ckeditor: '*'
+  actions:
+    editor.editor.${ckeditor_machine_name}:
+      addButtonPluginIntoActiveToolbar:
+        button_name: aickeditor
+        button_index: ${ckeditor_index}
+        plugin_name: ai_ckeditor_ai
+        plugin_settings:
+          dialog:
+            autoresize: 'min-width: 600px'
+            height: '750'
+            width: '900'
+            dialog_class: ai-ckeditor-modal
+          plugins:
+            ai_automators_ckeditor:
+              workflows: {  }
+              enabled: true
+            ai_ckeditor_completion:
+              provider: openai__gpt-4o
+              enabled: true
+            ai_ckeditor_help:
+              enabled: false
+            ai_ckeditor_reformat_html:
+              provider: openai__gpt-4o
+              enabled: true
+            ai_ckeditor_spellfix:
+              provider: openai__gpt-4o
+              enabled: true
+            ai_ckeditor_summarize:
+              provider: openai__gpt-4o
+              enabled: true
+            ai_ckeditor_tone:
+              enabled: false
+            ai_ckeditor_translate:
+              enabled: false
+    user.role.site_admin:
+      grantPermissions:
+        - 'use ai ckeditor'
+    user.role.seo_admin:
+      grantPermissions:
+        - 'use ai ckeditor'
+    user.role.content_admin:
+      grantPermissions:
+        - 'use ai ckeditor'
+    user.role.editor:
+      grantPermissions:
+        - 'use ai ckeditor'
