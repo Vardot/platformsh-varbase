@@ -1,0 +1,47 @@
+services:
+  mysql:
+    image: tugboatqa/mariadb
+  webapp:
+    image: tugboatqa/php:8.3-apache
+    default: true
+    http: false
+    depends: webdb
+    commands:
+      init:
+        - a2enmod headers rewrite env mime expires ssl
+        - ln -snf "${TUGBOAT_ROOT}/docroot" "${DOCROOT}"
+        - echo "memory_limit = -1" >> /usr/local/etc/php/conf.d/my-php.ini
+        - echo "max_execution_time = 1200" >> /usr/local/etc/php/conf.d/my-php.ini
+        - echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/my-php.ini
+        - echo "max_input_time = 180" >> /usr/local/etc/php/conf.d/my-php.ini
+        - echo "max_input_vars = 10000" >> /usr/local/etc/php/conf.d/my-php.ini
+        - echo "post_max_size = 64M" >> /usr/local/etc/php/conf.d/my-php.ini
+        - echo "upload_max_filesize = 32M" >> /usr/local/etc/php/conf.d/my-php.ini
+        - echo "max_file_uploads = 40" >> /usr/local/etc/php/conf.d/my-php.ini
+      update:
+        - COMPOSER_MEMORY_LIMIT=-1 composer install -vvv
+        # Install Varbase.
+        - ./bin/drush site-install varbase --yes --account-name="webmaster" --account-pass="webmaster" --account-mail="webmaster@vardot.com" --db-url="mysql://tugboat:tugboat@mysql:3306/tugboat" --locale="en" varbase_multilingual_configuration.enable_multilingual=true varbase_extra_components.varbase_demo=true varbase_extra_components.editoria11y=true varbase_extra_components.vmi=true varbase_extra_components.varbase_heroslider=true varbase_extra_components.varbase_carousels=true varbase_extra_components.varbase_search=true varbase_extra_components.varbase_blog=true varbase_extra_components.varbase_auth=true varbase_extra_components.varbase_ai=true varbase_extra_components.varbase_api=true install_configure_form.enable_update_status_emails=NULL -vvv
+        - ./bin/drush pm:enable varbase_development --yes
+        - ./bin/drush pm:enable varbase_content_planner --yes
+        - ./bin/drush pm:enable varbase_media_instagram --yes
+        - ./bin/drush pm:enable varbase_media_twitter --yes
+        - ./bin/drush pm:enable social_auth_facebook --yes
+        - ./bin/drush pm:enable social_auth_twitter --yes
+        - ./bin/drush pm:enable social_auth_linkedin --yes
+        - ./bin/drush pm:enable varbase_update_helper --yes
+        - ./bin/drush cache:rebuild
+        - ./bin/drush -y config:set openai.settings api_key "sk-change-this";
+        - ./bin/drush -y config:set openai.settings api_org "org-change-this";
+        # Add tugboat URLs to the Drupal trusted host patterns.
+        - echo "\$settings['trusted_host_patterns'] = ['\.tugboatqa\.com\$'];" >> ${TUGBOAT_ROOT}/docroot/sites/default/settings.php
+        # Set up the files directory permissions.
+        - mkdir -p ${TUGBOAT_ROOT}/docroot/sites/default/files
+        - chgrp -R www-data ${TUGBOAT_ROOT}/docroot/sites/default/files
+        - chmod 2775 ${TUGBOAT_ROOT}/docroot/sites/default/files
+        - chmod -R g+w ${TUGBOAT_ROOT}/docroot/sites/default/files
+      build:
+        - ./bin/drush cache:rebuild
+        - ./bin/drush updatedb --yes
+        - ./bin/drush cache:rebuild
+  
