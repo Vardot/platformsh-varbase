@@ -18,7 +18,6 @@
     dependencies:
         php:
             "composer/composer": "~2.8.0"
-            "drush/drush": "~13"
     runtime:
         extensions:
             - sodium
@@ -38,7 +37,7 @@
     # The size of the persistent disk of the application (in MB).
     disk: 2048
 
-    # The 'mounts' describe writable, persistent filesystem mounts in the application. 
+    # The 'mounts' describe writable, persistent filesystem mounts in the application.
     mounts:
         # The default Drupal files directory.
         '/docroot/sites/default/files':
@@ -79,6 +78,7 @@
         # No services are available but the disk is writeable.
         build: |
             set -e
+            cd $PLATFORM_APP_DIR
         # The deploy hook runs after your application has been deployed and started.
         # Code cannot be modified at this point but the database is available.
         # The site is not accepting requests while this script runs so keep it
@@ -132,20 +132,7 @@
                         scripts: false
                     '^/sites/[^/]+/settings.*?\.php$':
                         scripts: false
-                # -------------------------------------------------------------
-                #   Comment the following NOT to have a Storybook on production environment.
-                #   Uncomment when starting a storybook in development or staging.
-                #
-                #   Follow with Integration of Varbase with Storybook
-                #   https://docs.varbase.vardot.com/v/10.0.x/developers/theme-development-with-varbase/integration-of-varbase-with-storybook
-                #
-                #   This will allow for origin
-                # -------------------------------------------------------------
-                headers:
-                    Access-Control-Allow-Origin: "*"
-                    Access-Control-Expose-Headers: "true"
-                    Access-Control-Max-Age: "false"
-                    Access-Control-Allow-Credentials: "true"
+
             # The files directory has its own special configuration rules.
             '/sites/default/files':
                 # Allow access to all files in the public files directory.
@@ -175,11 +162,12 @@
                     Access-Control-Expose-Headers: "true"
                     Access-Control-Max-Age: "false"
                     Access-Control-Allow-Credentials: "true"
+
     crons:
-        # Run Drupal's cron tasks every 19 minutes.
-        drupal:
+        varbase:
+            # Run Drupal's cron tasks every 19 minutes.
             spec: '*/19 * * * *'
-            commands: 
+            commands:
                 start: 'cd docroot ; drush core-cron'
 
 # -------------------------------------------------------------
@@ -198,9 +186,8 @@
     dependencies:
         php:
             "composer/composer": "~2.8.0"
-            "drush/drush": "~13"
         nodejs:
-            yarn: "^4.6.0"
+            npm: "^11.1.0"
             pm2: "^5.3"
     disk: 512
     build:
@@ -208,19 +195,17 @@
     variables:
         env:
             NODE_OPTIONS: --max-old-space-size=4096
-            STORYBOOK_SERVER_RENDER_URL: 'https://demo.varbase.vardot.com'
     hooks:
         build: |
             set -e
             cd $PLATFORM_APP_DIR
-            composer install --ignore-platform-reqs --no-scripts
-            yarn set version berry
-            yarn install
-            yarn storybook:build
-        post_deploy: |
-            cd $PLATFORM_APP_DIR
-            export STORYBOOK_SERVER_RENDER_URL=$(node .storybook/setup-storybook.js)
-            echo "STORYBOOK_SERVER_RENDER_URL: $STORYBOOK_SERVER_RENDER_URL"
+            composer install --ignore-platform-reqs --no-scripts 
+            npx corepack enable
+            npx corepack prepare yarn@4.6.0 --activate
+            export PATH="$HOME/.yarn/bin:$PATH"
+            corepack yarn --version
+            corepack yarn install
+            corepack yarn storybook:build
     web:
         locations:
             '/':

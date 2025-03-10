@@ -6,7 +6,7 @@ This is a placeholder folder to build the static storybook on builds.
 > or when the auto storybook build system fails with a bug in components.
 
 To build the static Storybook:
-Follow with [Integration of Varbase with Storybook](https://docs.varbase.vardot.com/v/10.0.x/developers/theme-development-with-varbase/integration-of-varbase-with-storybook)
+Follow with [Integration of Varbase with Storybook](https://docs.varbase.vardot.com/developers/theme-development-with-varbase/integration-of-varbase-with-storybook-2.0)
 Make sure that the site is configured.
 
 ```

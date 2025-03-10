@@ -19,21 +19,36 @@
 
 
 ```yaml
-  cors.config:
-    enabled: true
-    # Specify allowed headers, like 'x-allowed-header'.
-    allowedHeaders: ['*']
-    # Specify allowed request methods, specify ['*'] to allow all possible ones.
-    allowedMethods: []
-    # Configure requests allowed from specific origins. Do not include trailing
-    # slashes with URLs.
-    allowedOrigins: ['*']
-    # Sets the Access-Control-Expose-Headers header.
-    exposedHeaders: false
-    # Sets the Access-Control-Max-Age header.
-    maxAge: false
-    # Sets the Access-Control-Allow-Credentials header.
-    supportsCredentials: true
+  # Local development services.
+  #
+  # To activate this feature, follow the instructions at the top of the
+  # 'settings.platformsh.php' or 'settings.local.php' file, which sits next to this file.
+  parameters:
+    twig.config:
+      debug: true
+      cache: false
+    http.response.debug_cacheability_headers: true
+    storybook.development: true
+    cors.config:
+      enabled: true
+      # Specify allowed headers, like 'x-allowed-header'.
+      allowedHeaders: ['*']
+      # Specify allowed request methods, specify ['*'] to allow all possible ones.
+      allowedMethods: ['*']
+      # Configure requests allowed from specific origins. Do not include trailing
+      # slashes with URLs.
+      allowedOrigins: ['*']
+      # Configure requests allowed from origins, matching against regex patterns.
+      allowedOriginsPatterns: ['*']
+      # Sets the Access-Control-Expose-Headers header.
+      exposedHeaders: false
+      # Sets the Access-Control-Max-Age header.
+      maxAge: false
+      # Sets the Access-Control-Allow-Credentials header.
+      supportsCredentials: true
+  services:
+    cache.backend.null:
+      class: Drupal\Core\Cache\NullBackendFactory
 ```
 
 
@@ -52,10 +67,11 @@
 
 > **Set up Storybook for your Drupal site.**
 
-* Change `varbase.ddev.site` in the **`package.json`** file to the appropriate local or development domain name.
-* Replace `http://varbase.ddev.site` in the **`preview.js`** file with the base URL of your project or an environment variable representing the local or development domain.
+
+* Replace `process.env.STORYBOOK_SERVER_RENDER_URL` with the domain in the **`preview.ts`** file with the base URL of your project or an environment variable representing the local or development domain.
 * Open a command terminal window and navigate to your project's directory.
-* Run the command **`yarn install`** in the terminal to install the necessary dependencies.
+* Run the **`yarn install`** command in the terminal to install the necessary dependencies.
+* Run the **`yarn storybook:gen`** command to generate all stories using the following alias script.
 * Run the command **`yarn storybook:dev`** to build the **Storybook**.
 * The default browser will open, displaying the list of Default Varbase Components in the Storybook.
 
