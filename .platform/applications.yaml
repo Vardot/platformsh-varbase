@@ -132,6 +132,20 @@
                         scripts: false
                     '^/sites/[^/]+/settings.*?\.php$':
                         scripts: false
+                # -------------------------------------------------------------
+                #   Comment the following NOT to have a Storybook on production environment.
+                #   Uncomment when starting a storybook in development or staging.
+                #
+                #   Follow with Integration of Varbase with Storybook
+                #   https://docs.varbase.vardot.com/v/10.0.x/developers/theme-development-with-varbase/integration-of-varbase-with-storybook
+                #
+                #   This will allow for origin
+                # -------------------------------------------------------------
+                headers:
+                    Access-Control-Allow-Origin: "*"
+                    Access-Control-Expose-Headers: "true"
+                    Access-Control-Max-Age: "false"
+                    Access-Control-Allow-Credentials: "true"
 
             # The files directory has its own special configuration rules.
             '/sites/default/files':
@@ -139,7 +153,7 @@
                 allow: true
                 expires: 5m
                 passthru: '/index.php'
-                root: 'docroot/sites/default/files'
+                root: 'sites/default/files'
 
                 # Do not execute PHP scripts from the writeable mount.
                 scripts: false
