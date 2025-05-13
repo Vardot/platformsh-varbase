@@ -153,7 +153,7 @@
                 allow: true
                 expires: 5m
                 passthru: '/index.php'
-                root: 'sites/default/files'
+                root: 'docroot/sites/default/files'
 
                 # Do not execute PHP scripts from the writeable mount.
                 scripts: false
@@ -162,20 +162,6 @@
                     # Provide a longer TTL (2 weeks) for aggregated CSS and JS files.
                     '^/sites/default/files/(css|js)':
                         expires: 2w
-                # -------------------------------------------------------------
-                #   Comment the following NOT to have a Storybook on production environment.
-                #   Uncomment when starting a storybook in development or staging.
-                #
-                #   Follow with Integration of Varbase with Storybook
-                #   https://docs.varbase.vardot.com/v/10.0.x/developers/theme-development-with-varbase/integration-of-varbase-with-storybook
-                #
-                #   This will allow for origin
-                # -------------------------------------------------------------
-                headers:
-                    Access-Control-Allow-Origin: "*"
-                    Access-Control-Expose-Headers: "true"
-                    Access-Control-Max-Age: "false"
-                    Access-Control-Allow-Credentials: "true"
 
     crons:
         varbase:
