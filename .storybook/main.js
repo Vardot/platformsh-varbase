@@ -2,13 +2,9 @@
 const config = {
   // Change the place where storybook searched for stories.
   stories: [
-    // Listing Varbase Components in the Storybook
-    "../docroot/modules/contrib/varbase_components/components/**/*.mdx",
-    "../docroot/modules/contrib/varbase_components/components/**/*.stories.@(json|yml)",
-    // -------------------------------------------------------------------------------
-    // Uncomment the following line to start listing components Vartheme BS5 Starterkit.
-    // "../docroot/themes/contrib/vartheme_ba5/components/**/*.mdx",
-    // "../docroot/themes/contrib/vartheme_ba5/components/**/*.stories.@(json|yml)",
+    // Listing Vartheme BS5 Starterkit components in the Storybook
+    "../docroot/themes/contrib/vartheme_ba5/components/**/*.mdx",
+    "../docroot/themes/contrib/vartheme_ba5/components/**/*.stories.@(json|yml)",
     // -------------------------------------------------------------------------------
     // Uncomment the following line to start listing components from custom cloned generated theme
     // Change `mytheme` to the name of the custom theme.
