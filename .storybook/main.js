@@ -3,8 +3,8 @@ const config = {
   // Change the place where storybook searched for stories.
   stories: [
     // Listing Vartheme BS5 Starterkit components in the Storybook
-    "../docroot/themes/contrib/vartheme_ba5/components/**/*.mdx",
-    "../docroot/themes/contrib/vartheme_ba5/components/**/*.stories.@(json|yml)",
+    "../docroot/themes/contrib/vartheme_bs5/components/**/*.mdx",
+    "../docroot/themes/contrib/vartheme_bs5/components/**/*.stories.@(json|yml)",
     // -------------------------------------------------------------------------------
     // Uncomment the following line to start listing components from custom cloned generated theme
     // Change `mytheme` to the name of the custom theme.
