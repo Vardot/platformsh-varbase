@@ -17,7 +17,6 @@
         root: "/"
     dependencies:
         php:
-            "composer/composer": "~2.8.0"
             "drush/drush": "~13"
     runtime:
         extensions:
@@ -195,8 +194,6 @@
     source:
         root: "/"
     dependencies:
-        php:
-            "composer/composer": "~2.8.0"
         nodejs:
             npm: "^6.10"
             node: "^18.17"
