@@ -23,7 +23,27 @@
     },
     "assets": {
       "type": "composer",
-      "url": "https://asset-packagist.org"
+      "url": "https://asset-packagist.org",
+      "only": [
+        "npm-asset/dropzone", 
+        "npm-asset/blazy",
+        "npm-asset/slick-carousel",
+        "npm-asset/ace-builds",
+        "npm-asset/swagger-ui-dist",
+        "npm-asset/ckeditor--ckeditor5-media-embed",
+        "npm-asset/ckeditor--ckeditor5-clipboard",
+        "npm-asset/ckeditor--ckeditor5-core",
+        "npm-asset/ckeditor--ckeditor5-engine",
+        "npm-asset/ckeditor--ckeditor5-icons",
+        "npm-asset/ckeditor--ckeditor5-typing",
+        "npm-asset/ckeditor--ckeditor5-ui",
+        "npm-asset/ckeditor--ckeditor5-undo",
+        "npm-asset/ckeditor--ckeditor5-utils",
+        "npm-asset/ckeditor--ckeditor5-widget",
+        "npm-asset/es-toolkit",
+        "npm-asset/aos",
+        "npm-asset/jquery.fancytree"
+      ]
     }
   },
   "require": {
@@ -34,6 +54,8 @@
     "webflo/drupal-finder": "~1.0",
     "vardot/varbase": "~10.1.0",
     "vardot/varbase-patches": "~10.1.0",
+    "vardot/varbase-libraries": "~10.1.0",
+    "vardot/varbase-replaces": "~10.1.0",
     "drupal/gleap-gleap": "~1",
     "drupal/redis": "~1",
     "drush/drush": "~13",
@@ -105,9 +127,7 @@
       "docroot/recipes/contrib/{$name}": ["type:drupal-recipe"],
       "docroot/libraries/slick": ["npm-asset/slick-carousel"],
       "docroot/libraries/ace": ["npm-asset/ace-builds"],
-      "docroot/libraries/jquery-ui-touch-punch": ["bower-asset/jqueryui-touch-punch"],
       "docroot/libraries/swagger-ui/dist": ["npm-asset/swagger-ui-dist"],
-      "docroot/libraries/ckeditor5-anchor-drupal": ["npm-asset/northernco--ckeditor5-anchor-drupal"],
       "docroot/libraries/ckeditor5/plugins/media-embed": ["npm-asset/ckeditor--ckeditor5-media-embed"],
       "docroot/libraries/jquery.fancytree": ["npm-asset/jquery.fancytree"],
       "docroot/libraries/{$name}": [
@@ -131,10 +151,8 @@
         {"name": "blazy", "package": "npm-asset/blazy"},
         {"name": "slick", "package": "npm-asset/slick-carousel"},
         {"name": "ace", "package": "npm-asset/ace-builds"},
-        {"name": "jquery-ui-touch-punch", "package": "bower-asset/jqueryui-touch-punch"},
         {"name": "imagesloaded", "package": "npm-asset/imagesloaded"},
         {"name": "swagger-ui", "package": "npm-asset/swagger-ui-dist"},
-        {"name": "ckeditor5-anchor-drupal", "package": "npm-asset/northernco--ckeditor5-anchor-drupal"},
         {"name": "ckeditor5-media-embed", "package": "npm-asset/ckeditor--ckeditor5-media-embed"},
         {"name": "jquery.fancytree", "package": "npm-asset/jquery.fancytree"}
       ]
