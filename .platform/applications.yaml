@@ -17,7 +17,7 @@
         root: "/"
     dependencies:
         php:
-            "composer/composer": "~2.8.0"
+            "drush/drush": "~13"
     runtime:
         extensions:
             - sodium
@@ -184,8 +184,6 @@
     source:
         root: "/"
     dependencies:
-        php:
-            "composer/composer": "~2.8.0"
         nodejs:
             npm: "^11.1.0"
             pm2: "^5.3"
@@ -195,6 +193,7 @@
     variables:
         env:
             NODE_OPTIONS: --max-old-space-size=4096
+            STORYBOOK_SERVER_RENDER_URL: 'https://demo.varbase.vardot.com'
     hooks:
         build: |
             set -e
@@ -206,6 +205,10 @@
             corepack yarn --version
             corepack yarn install
             corepack yarn storybook:build
+        post_deploy: |
+            cd $PLATFORM_APP_DIR
+            export STORYBOOK_SERVER_RENDER_URL=$(node .storybook/setup-storybook.js)
+            echo "STORYBOOK_SERVER_RENDER_URL: $STORYBOOK_SERVER_RENDER_URL"
     web:
         locations:
             '/':

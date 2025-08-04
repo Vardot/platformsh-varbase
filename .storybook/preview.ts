@@ -1,4 +1,5 @@
 import type { Preview } from '@storybook/server'
+import process from 'process';
 
 const preview: Preview = {
   parameters: {
