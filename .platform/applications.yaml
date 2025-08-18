@@ -18,6 +18,8 @@
     dependencies:
         php:
             "drush/drush": "~13"
+        nodejs:
+            npm: ">=11.5.2"
     runtime:
         extensions:
             - sodium
@@ -188,6 +190,9 @@
     type: 'nodejs:20'
     source:
         root: "/"
+    dependencies:
+        nodejs:
+            npm: ">=11.5.2"
     disk: 512
     build:
         flavor: none
