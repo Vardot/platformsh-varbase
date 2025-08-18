@@ -40,20 +40,46 @@
   "drupal-libraries": {
     "library-directory": "docroot/libraries",
     "libraries": [
-      {"name": "ckeditor5/plugins/media-embed", "package": "@ckeditor/ckeditor5-media-embed"},
-      {"name": "ace", "package": "ace-builds"},
-      {"name": "aos", "package": "aos"},
-      {"name": "blazy", "package": "blazy"},
-      {"name": "dropzone", "package": "dropzone"},
-      {"name": "jquery.fancytree", "package": "jquery.fancytree"},
-      {"name": "slick", "package": "slick-carousel/slick"},
-      {"name": "swagger-ui/dist", "package": "swagger-ui-dist"}
+      {
+        "name": "ckeditor5/plugins/media-embed",
+        "package": "@ckeditor/ckeditor5-media-embed"
+      },
+      {
+        "name": "ace",
+        "package": "ace-builds"
+      },
+      {
+        "name": "aos",
+        "package": "aos"
+      },
+      {
+        "name": "blazy",
+        "package": "blazy"
+      },
+      {
+        "name": "dropzone",
+        "package": "dropzone"
+      },
+      {
+        "name": "jquery.fancytree",
+        "package": "jquery.fancytree"
+      },
+      {
+        "name": "slick",
+        "package": "slick-carousel/slick"
+      },
+      {
+        "name": "swagger-ui/dist",
+        "package": "swagger-ui-dist"
+      }
     ]
   },
   "devDependencies": {
+    "@chromatic-com/storybook": "^3.2.4",
     "@storybook/addon-a11y": "~8",
     "@storybook/addon-essentials": "~8",
     "@storybook/addon-links": "~8",
+    "@storybook/addon-webpack5-compiler-swc": "^2.1.0",
     "@storybook/blocks": "~8",
     "@storybook/builder-webpack5": "~8",
     "@storybook/cli": "~8",
@@ -64,8 +90,10 @@
     "@storybook/react": "~8",
     "@storybook/server": "~8",
     "@storybook/server-webpack5": "~8",
+    "@storybook/test": "^8.6.0",
     "@storybook/theming": "~8",
     "@storybook/types": "~8",
+    "eslint-plugin-storybook": "^0.11.3",
     "fork-ts-checker-webpack-plugin": "~8 || ~9",
     "prettier": "^2.1.2",
     "storybook": "~8",
@@ -75,10 +103,7 @@
     "stylelint-order": "~6.0",
     "webpack": "~5",
     "webpack-cli": "~5",
-    "@chromatic-com/storybook": "^3.2.4",
-    "@storybook/addon-webpack5-compiler-swc": "^2.1.0",
-    "@storybook/test": "^8.6.0",
-    "eslint-plugin-storybook": "^0.11.3"
+    "yarn": "^1.22.22"
   },
   "packageManager": "yarn@4.9.2"
 }

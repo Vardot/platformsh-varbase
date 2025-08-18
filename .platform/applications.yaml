@@ -21,7 +21,6 @@
         nodejs:
             npm: "^11.1.0"
             pm2: "^5.3"
-            yarn: "4.9.2"
     runtime:
         extensions:
             - sodium
@@ -83,6 +82,11 @@
         build: |
             set -e
             cd $PLATFORM_APP_DIR
+            npx corepack enable
+            npx corepack prepare yarn@4.9.2 --activate
+            export PATH="$HOME/.yarn/bin:$PATH"
+            corepack yarn --version
+            corepack yarn install
         # The deploy hook runs after your application has been deployed and started.
         # Code cannot be modified at this point but the database is available.
         # The site is not accepting requests while this script runs so keep it
@@ -191,7 +195,6 @@
         nodejs:
             npm: "^11.1.0"
             pm2: "^5.3"
-            yarn: "4.9.2"
     disk: 512
     build:
         flavor: none
@@ -204,8 +207,12 @@
             set -e
             cd $PLATFORM_APP_DIR
             composer install --ignore-platform-reqs --no-scripts 
-            yarn install
-            yarn storybook:build
+            npx corepack enable
+            npx corepack prepare yarn@4.9.2 --activate
+            export PATH="$HOME/.yarn/bin:$PATH"
+            corepack yarn --version
+            corepack yarn install
+            corepack yarn storybook:build
         post_deploy: |
             cd $PLATFORM_APP_DIR
             export STORYBOOK_SERVER_RENDER_URL=$(node .storybook/setup-storybook.js)
