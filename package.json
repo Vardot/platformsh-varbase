@@ -4,7 +4,7 @@
   "license": "GPL-2.0",
   "private": true,
   "engines": {
-    "yarn": ">= 4.6.0",
+    "yarn": ">= 4.9.2",
     "node": ">= 20.0"
   },
   "scripts": {
@@ -20,12 +20,37 @@
     "phpcbf": "phpcbf --standard=./.phpcs.xml .",
     "lint:yaml": "node ./node_modules/eslint/bin/eslint.js --config=.eslintrc.json --ext .yml .",
     "lint:js": "node ./node_modules/eslint/bin/eslint.js --config=.eslintrc.json --ext .js .",
-    "lint:css": "npx stylelint --config=.stylelintrc.json"
+    "lint:css": "npx stylelint --config=.stylelintrc.json",
+    "drupal-libraries-sync": "node ./docroot/profiles/contrib/varbase/scripts/drupal-libraries-sync.js",
+    "postinstall": "node ./docroot/profiles/contrib/varbase/scripts/drupal-libraries-sync.js"
   },
   "resolutions": {
     "webpack": "^5"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-media-embed": "~45.2.0",
+    "ace-builds": "~1",
+    "aos": "~2",
+    "blazy": "~1",
+    "dropzone": "~5",
+    "jquery.fancytree": "~2",
+    "slick-carousel": "~1",
+    "swagger-ui-dist": "~3"
+  },
+  "drupal-libraries": {
+    "library-directory": "docroot/libraries",
+    "libraries": [
+      {"name": "ckeditor5/plugins/media-embed", "package": "@ckeditor/ckeditor5-media-embed"},
+      {"name": "ace", "package": "ace-builds"},
+      {"name": "aos", "package": "aos"},
+      {"name": "blazy", "package": "blazy"},
+      {"name": "dropzone", "package": "dropzone"},
+      {"name": "jquery.fancytree", "package": "jquery.fancytree"},
+      {"name": "slick", "package": "slick-carousel/slick"},
+      {"name": "swagger-ui/dist", "package": "swagger-ui-dist"}
+    ]
+  },
+  "devDependencies": {
     "@storybook/addon-a11y": "~8",
     "@storybook/addon-essentials": "~8",
     "@storybook/addon-links": "~8",
@@ -50,13 +75,10 @@
     "stylelint-order": "~6.0",
     "webpack": "~5",
     "webpack-cli": "~5",
-    "yarn": "^1.22.22"
-  },
-  "devDependencies": {
     "@chromatic-com/storybook": "^3.2.4",
     "@storybook/addon-webpack5-compiler-swc": "^2.1.0",
     "@storybook/test": "^8.6.0",
     "eslint-plugin-storybook": "^0.11.3"
   },
-  "packageManager": "yarn@4.6.0"
+  "packageManager": "yarn@4.9.2"
 }

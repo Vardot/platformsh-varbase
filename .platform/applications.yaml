@@ -18,6 +18,10 @@
     dependencies:
         php:
             "drush/drush": "~13"
+        nodejs:
+            npm: "^11.1.0"
+            pm2: "^5.3"
+            yarn: "4.9.2"
     runtime:
         extensions:
             - sodium
@@ -187,6 +191,7 @@
         nodejs:
             npm: "^11.1.0"
             pm2: "^5.3"
+            yarn: "4.9.2"
     disk: 512
     build:
         flavor: none
@@ -199,12 +204,8 @@
             set -e
             cd $PLATFORM_APP_DIR
             composer install --ignore-platform-reqs --no-scripts 
-            npx corepack enable
-            npx corepack prepare yarn@4.6.0 --activate
-            export PATH="$HOME/.yarn/bin:$PATH"
-            corepack yarn --version
-            corepack yarn install
-            corepack yarn storybook:build
+            yarn install
+            yarn storybook:build
         post_deploy: |
             cd $PLATFORM_APP_DIR
             export STORYBOOK_SERVER_RENDER_URL=$(node .storybook/setup-storybook.js)
