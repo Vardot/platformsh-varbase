@@ -38,3 +38,4 @@ drush-backups
 .console
 /.editorconfig
 /.gitattributes
+/bin/*
