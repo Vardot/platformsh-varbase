@@ -6,6 +6,18 @@
     "plugin:yml/recommended"
   ],
   "root": true,
+  "ignorePatterns": [
+    "node_modules/**",
+    "vendor/**",
+    "docroot/core/**",
+    "docroot/modules/contrib/**",
+    "docroot/themes/contrib/**",
+    "docroot/profiles/contrib/**",
+    "docroot/libraries/**",
+    "docroot/sites/*/files/**",
+    ".yarn/**",
+    "storybook/**"
+  ],
   "env": {
     "browser": true
   },
@@ -28,7 +40,7 @@
   },
   "settings": {
     "react": {
-      "version": "latest"
+      "version": "detect"
     }
   },
   "rules": {

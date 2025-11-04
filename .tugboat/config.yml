@@ -44,4 +44,3 @@ services:
         - ./bin/drush cache:rebuild
         - ./bin/drush updatedb --yes
         - ./bin/drush cache:rebuild
-  

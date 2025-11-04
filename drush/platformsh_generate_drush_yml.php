@@ -1,23 +1,26 @@
 <?php
+
 /**
  * @file
  * A script that creates the .drush/drush.yml file.
  */
+
+use Platformsh\ConfigReader\Config;
 
 // This file should only be executed as a PHP-CLI script.
 if (PHP_SAPI !== 'cli') {
   exit;
 }
 
-require_once(__DIR__ . '/../vendor/autoload.php');
+require_once __DIR__ . '/../vendor/autoload.php';
 
 /**
  * Returns a site URL to use with Drush, if possible.
  *
- * @return string|NULL
+ * @return string|null
  */
 function _platformsh_drush_site_url() {
-  $platformsh = new \Platformsh\ConfigReader\Config();
+  $platformsh = new Config();
 
   if (!$platformsh->inRuntime()) {
     return;
@@ -28,8 +31,7 @@ function _platformsh_drush_site_url() {
   // Sort URLs, with the primary route first, then by HTTPS before HTTP, then by length.
   usort($routes, function (array $a, array $b) {
     // false sorts before true, normally, so negate the comparison.
-    return
-      [!$a['primary'], strpos($a['url'], 'https://') !== 0, strlen($a['url'])]
+    return [!$a['primary'], strpos($a['url'], 'https://') !== 0, strlen($a['url'])]
       <=>
       [!$b['primary'], strpos($b['url'], 'https://') !== 0, strlen($b['url'])];
   });

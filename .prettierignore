@@ -1,0 +1,11 @@
+assets/vendor/**/*
+node_modules/**/*
+*.yml
+vendor/**/*
+docroot/core/**/*
+docroot/modules/contrib/**/*
+docroot/themes/contrib/**/*
+docroot/profiles/contrib/**/*
+docroot/libraries/**/*
+.yarn/**/*
+storybook/**/*

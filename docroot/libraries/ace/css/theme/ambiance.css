@@ -73,7 +73,7 @@
 .ace-ambiance.normal-mode .ace_cursor-layer {
   z-index: 0;
 }
- 
+
 .ace-ambiance .ace_marker-layer .ace_selection {
   background: rgba(221, 240, 255, 0.20);
 }
@@ -133,7 +133,7 @@
 }
 
 .ace-ambiance .ace_constant.ace_library {
-  
+
 }
 
 .ace-ambiance .ace_constant.ace_numeric {

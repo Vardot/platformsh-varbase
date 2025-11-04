@@ -1,12 +1,14 @@
 <?php
+
 /**
  * @file
  * Platform.sh settings.
  */
 
+use Platformsh\ConfigReader\Config;
 use Drupal\Core\Installer\InstallerKernel;
 
-$platformsh = new \Platformsh\ConfigReader\Config();
+$platformsh = new Config();
 
 if (PHP_SAPI !== 'cli') {
   if (defined('MAINTENANCE_MODE') && constant('MAINTENANCE_MODE') === 'install') {
@@ -46,7 +48,8 @@ if (isset($platformsh->branch)) {
   // Production type environment.
   if ($platformsh->onProduction() || $platformsh->onDedicated()) {
     $config['system.logging']['error_level'] = 'hide';
-  } // Development type environment.
+  }
+  // Development type environment.
   else {
     $config['system.logging']['error_level'] = 'verbose';
   }
@@ -115,7 +118,7 @@ if ($platformsh->inRuntime()) {
     $settings['file_temp_path'] = $platformsh->appDir . '/tmp';
   }
 
-// Configure the default PhpStorage and Twig template cache directories.
+  // Configure the default PhpStorage and Twig template cache directories.
   if (!isset($settings['php_storage']['default'])) {
     $settings['php_storage']['default']['directory'] = $settings['file_private_path'];
   }
@@ -143,7 +146,7 @@ $settings['trusted_host_patterns'] = ['.*'];
 // and 'drupalconfig:' into $config.
 foreach ($platformsh->variables() as $name => $value) {
   $parts = explode(':', $name);
-  list($prefix, $key) = array_pad($parts, 3, null);
+  list($prefix, $key) = array_pad($parts, 3, NULL);
   switch ($prefix) {
     // Variables that begin with `drupalsettings` or `drupal` get mapped
     // to the $settings array verbatim, even if the value is an array.
@@ -153,6 +156,7 @@ foreach ($platformsh->variables() as $name => $value) {
     case 'drupal':
       $settings[$key] = $value;
       break;
+
     // Variables that begin with `drupalconfig` get mapped to the $config
     // array.  Deeply nested variable names, with colon delimiters,
     // get mapped to deeply nested array elements. Array values
@@ -207,6 +211,6 @@ $config['search_api.server.' . $solr_server_name]['backend_config']['connector_c
  */
 // if (isset($platformsh->branch)) {
 //   if (!$platformsh->onProduction() || !$platformsh->onDedicated()) {
-  $settings['container_yamls'][] = $app_root . '/' . $site_path . '/development.local.services.yml';
+$settings['container_yamls'][] = $app_root . '/' . $site_path . '/development.local.services.yml';
 //   }
 // }
