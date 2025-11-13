@@ -1,0 +1,223 @@
+applications:
+    varbase:
+        # The runtime the application uses.
+        type: php:8.3
+        source:
+            root: "/"
+        dependencies:
+            php:
+                "drush/drush": "~13"
+            nodejs:
+                npm: ">=11.5.2"
+        runtime:
+            extensions:
+                - sodium
+                - apcu
+                - yaml
+                - imagick
+                # - memcached
+        # The relationships of the application with services or other applications.
+        #
+        # The left-hand side is the name of the relationship as it will be exposed
+        # to the application in the PLATFORM_RELATIONSHIPS variable. The right-hand
+        # side is in the form `<service name>:<endpoint name>`.
+        relationships:
+            database: 'db:mysql'
+            # cache: 'cache:memcached'
+        # The 'mounts' describe writable, persistent filesystem mounts in the application.
+        mounts:
+            # The default Drupal files directory.
+            '/docroot/sites/default/files':
+                source: instance
+                source_path: 'files'
+            # Drupal gets its own dedicated tmp directory. The settings.platformsh.php
+            # file will automatically configure Drupal to use this directory.
+            '/tmp':
+                source: instance
+                source_path: 'tmp'
+            # Private file uploads are stored outside the web root. The settings.platformsh.php
+            # file will automatically configure Drupal to use this directory.
+            '/private':
+                source: instance
+                source_path: 'private'
+            # Drush needs a scratch space for its own caches.
+            '/.drush':
+                source: instance
+                source_path: 'drush'
+            # Drush will try to save backups to this directory, so it must be
+            # writeable even though you will almost never need to use it.
+            '/drush-backups':
+                source: instance
+                source_path: 'drush-backups'
+            # Drupal Console will try to save backups to this directory, so it must be
+            # writeable even though you will almost never need to use it.
+            '/.console':
+                source: instance
+                source_path: 'console'
+        # Configuration of the build of this application.
+        build:
+            flavor: composer
+        # The hooks executed at various points in the lifecycle of the application.
+        hooks:
+            # The build hook runs after Composer to finish preparing up your code.
+            # No services are available but the disk is writeable.
+            build: |
+                set -e
+                cd $PLATFORM_APP_DIR
+                npx corepack enable
+                npx corepack prepare yarn@4.9.2 --activate
+                export PATH="$HOME/.yarn/bin:$PATH"
+                corepack yarn --version
+                corepack yarn install
+            # The deploy hook runs after your application has been deployed and started.
+            # Code cannot be modified at this point but the database is available.
+            # The site is not accepting requests while this script runs so keep it
+            # fast.
+            deploy: |
+                set -e
+                php ./drush/platformsh_generate_drush_yml.php
+                # if drupal is installed, will call the following drush commands:
+                #   - `cache-rebuild`
+                #   - `updatedb`
+                #   - and if config files are present, `config-import`
+                cd docroot
+                bash $PLATFORM_APP_DIR/drush/platformsh_deploy_drupal.sh
+        # The configuration of app when it is exposed to the web.
+        web:
+            locations:
+                # All requests not otherwise specified follow these rules.
+                '/':
+                    # The folder from which to serve static assets, for this location.
+                    #
+                    # This is a filesystem path, relative to the application root.
+                    root: 'docroot'
+                    # How long to allow static assets from this location to be cached.
+                    #
+                    # Can be a time in seconds, or -1 for no caching. Times can be
+                    # suffixed with "s" (seconds), "m" (minutes), "h" (hours), "d"
+                    # (days), "w" (weeks), "M" (months, as 30 days) or "y" (years, as
+                    # 365 days).
+                    expires: 5m
+                    # Redirect any incoming request to Drupal's front controller.
+                    passthru: '/index.php'
+                    # Deny access to all static files, except those specifically allowed below.
+                    allow: false
+                    # Rules for specific URI patterns.
+                    rules:
+                        # Allow access to common static files.
+                        '\.(avif|webp|jpe?g|png|gif|svgz?|css|js|map|ico|bmp|eot|woff2?|otf|ttf|webm|mp3|mp4|vp8|ogv|docx?|pdf|txt|xlsx?|pptx?)$':
+                            allow: true
+                        '^/robots\.txt$':
+                            allow: true
+                        '^/sitemap\.xml$':
+                            allow: true
+                        # Deny direct access to configuration files.
+                        '^/sites/sites\.php$':
+                            scripts: false
+                        '^/sites/[^/]+/settings.*?\.php$':
+                            scripts: false
+                    # -------------------------------------------------------------
+                    #   Comment the following NOT to have a Storybook on production environment.
+                    #   Uncomment when starting a storybook in development or staging.
+                    #
+                    #   Follow with Integration of Varbase with Storybook
+                    #   https://docs.varbase.vardot.com/v/10.0.x/developers/theme-development-with-varbase/integration-of-varbase-with-storybook
+                    #
+                    #   This will allow for origin
+                    # -------------------------------------------------------------
+                    headers:
+                        Access-Control-Allow-Origin: "*"
+                        Access-Control-Expose-Headers: "true"
+                        Access-Control-Max-Age: "false"
+                        Access-Control-Allow-Credentials: "true"
+                # The files directory has its own special configuration rules.
+                '/sites/default/files':
+                    # Allow access to all files in the public files directory.
+                    allow: true
+                    expires: 5m
+                    passthru: '/index.php'
+                    root: 'docroot/sites/default/files'
+                    # Do not execute PHP scripts from the writeable mount.
+                    scripts: false
+                    rules:
+                        # Provide a longer TTL (2 weeks) for aggregated CSS and JS files.
+                        '^/sites/default/files/(css|js)':
+                            expires: 2w
+        crons:
+            varbase:
+                # Run Drupal's cron tasks every 19 minutes.
+                spec: '*/19 * * * *'
+                commands:
+                    start: 'cd docroot ; drush core-cron'
+    storybook:
+        # -------------------------------------------------------------
+        #   Comment the following NOT to have a Storybook on production environment.
+        #   Uncomment when starting a storybook in development or staging.
+        #
+        #   Follow with Integration of Varbase with Storybook
+        #   https://docs.varbase.vardot.com/v/10.0.x/developers/theme-development-with-varbase/integration-of-varbase-with-storybook
+        #
+        #   This will allow for a start of a storybook:http upstream
+        # -------------------------------------------------------------
+        type: 'nodejs:20'
+        source:
+            root: "/"
+        dependencies:
+            nodejs:
+                npm: ">=11.5.2"
+            php:
+                "composer/composer": "~2.8.0"
+        build:
+            flavor: none
+        variables:
+            env:
+                NODE_OPTIONS: --max-old-space-size=4096
+                STORYBOOK_SERVER_RENDER_URL: 'https://demo.varbase.vardot.com'
+        hooks:
+            build: "set -e\ncd $PLATFORM_APP_DIR\ncomposer install --ignore-platform-reqs --no-scripts \nnpx corepack enable\nnpx corepack prepare yarn@4.9.2 --activate\nexport PATH=\"$HOME/.yarn/bin:$PATH\"\ncorepack yarn --version\ncorepack yarn install\ncorepack yarn storybook:build\n"
+            post_deploy: |
+                cd $PLATFORM_APP_DIR
+                export STORYBOOK_SERVER_RENDER_URL=$(node .storybook/setup-storybook.js)
+                echo "STORYBOOK_SERVER_RENDER_URL: $STORYBOOK_SERVER_RENDER_URL"
+        web:
+            locations:
+                '/':
+                    root: 'storybook'
+                    passthru: true
+                    index: ["index.html"]
+                    allow: true
+                    headers:
+                        Access-Control-Allow-Origin: "*"
+                        Access-Control-Expose-Headers: "true"
+                        Access-Control-Max-Age: "false"
+                        Access-Control-Allow-Credentials: "true"
+            commands:
+                start: |
+                    sleep infinity
+services:
+    db:
+        type: mariadb:10.11
+routes:
+    "https://{default}/":
+        type: upstream
+        upstream: "varbase:http"
+        cache:
+            enabled: true
+            # Base the cache on the session cookie and custom Drupal cookies. Ignore all other cookies.
+            cookies: ['/^SS?ESS/', '/^Drupal.visitor/']
+    "https://www.{default}/":
+        type: redirect
+        to: "https://{default}/"
+    # ---------------------------------------------------------------------------
+    #   Comment the following NOT to have a Storybook on production environment.
+    #   Uncomment when starting a storybook in development or staging.
+    #
+    #   Follow with Integration of Varbase with Storybook
+    #   https://docs.varbase.vardot.com/v/10.0.x/developers/theme-development-with-varbase/integration-of-varbase-with-storybook
+    #
+    #   This will allow for a storybook sub domain to point
+    #   at the storybook:http upstream
+    # ---------------------------------------------------------------------------
+    "https://storybook.{default}":
+        type: upstream
+        upstream: "storybook:http"
