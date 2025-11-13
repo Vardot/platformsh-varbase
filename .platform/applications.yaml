@@ -193,6 +193,8 @@
     dependencies:
         nodejs:
             npm: ">=11.5.2"
+        php:
+            "composer/composer": "~2.8.0"
     disk: 512
     build:
         flavor: none
