@@ -20,7 +20,7 @@
 .ace-dreamweaver .ace_cursor {
   color: black;
 }
-
+        
 .ace-dreamweaver .ace_invisible {
   color: rgb(191, 191, 191);
 }
@@ -177,4 +177,4 @@
 
 .ace-dreamweaver .ace_indent-guide-active {
   background: url("../dreamweaver-2.png") right repeat-y;
-}
+} 

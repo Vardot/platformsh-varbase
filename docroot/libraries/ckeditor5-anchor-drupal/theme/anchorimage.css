@@ -4,16 +4,16 @@
  */
 
 .ck.ck-anchor-image_icon {
-    position: absolute;
-    top: var(--ck-spacing-medium);
-    right: var(--ck-spacing-medium);
-    width: 28px;
-    height: 28px;
-    padding: 4px;
-    box-sizing: border-box;
-    border-radius: var(--ck-border-radius);
+	position: absolute;
+	top: var(--ck-spacing-medium);
+	right: var(--ck-spacing-medium);
+	width: 28px;
+	height: 28px;
+	padding: 4px;
+	box-sizing: border-box;
+	border-radius: var(--ck-border-radius);
 
-    & svg {
-        fill: currentColor;
-    }
+	& svg {
+		fill: currentColor;
+	}
 }

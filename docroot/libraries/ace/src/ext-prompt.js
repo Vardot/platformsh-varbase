@@ -322,6 +322,7 @@ var AcePopup = /** @class */ (function () {
             }
             popup.anchorPos = pos;
             popup.anchor = anchor;
+            dom.$fixPositionBug(el);
             return true;
         };
         popup.show = function (pos, lineHeight, topdownOnly) {

@@ -710,6 +710,37 @@ exports.importCssString = importCssString;
 exports.importCssStylsheet = function (uri, doc) {
     exports.buildDom(["link", { rel: "stylesheet", href: uri }], exports.getDocumentHead(doc));
 };
+exports.$fixPositionBug = function (el) {
+    var rect = el.getBoundingClientRect();
+    if (el.style.left) {
+        var target = parseFloat(el.style.left);
+        var result = +rect.left;
+        if (Math.abs(target - result) > 1) {
+            el.style.left = 2 * target - result + "px";
+        }
+    }
+    if (el.style.right) {
+        var target = parseFloat(el.style.right);
+        var result = window.innerWidth - rect.right;
+        if (Math.abs(target - result) > 1) {
+            el.style.right = 2 * target - result + "px";
+        }
+    }
+    if (el.style.top) {
+        var target = parseFloat(el.style.top);
+        var result = +rect.top;
+        if (Math.abs(target - result) > 1) {
+            el.style.top = 2 * target - result + "px";
+        }
+    }
+    if (el.style.bottom) {
+        var target = parseFloat(el.style.bottom);
+        var result = window.innerHeight - rect.bottom;
+        if (Math.abs(target - result) > 1) {
+            el.style.bottom = 2 * target - result + "px";
+        }
+    }
+};
 exports.scrollbarWidth = function (doc) {
     var inner = exports.createElement("ace_inner");
     inner.style.width = "100%";
@@ -1320,7 +1351,7 @@ var reportErrorIfPathIsNotConfigured = function () {
         reportErrorIfPathIsNotConfigured = function () { };
     }
 };
-exports.version = "1.43.2";
+exports.version = "1.43.4";
 
 });
 
@@ -2081,6 +2112,7 @@ var TextInput = /** @class */ (function () {
         this.text = dom.createElement("textarea");
         this.text.className = "ace_text-input";
         this.text.setAttribute("wrap", "off");
+        this.text.setAttribute("autocomplete", "off");
         this.text.setAttribute("autocorrect", "off");
         this.text.setAttribute("autocapitalize", "off");
         this.text.setAttribute("spellcheck", "false");
@@ -2868,7 +2900,7 @@ var DefaultHandlers = /** @class */ (function () {
                 anchor = this.$clickSelection.start;
             }
             else {
-                var orientedRange = calcRangeOrientation(this.$clickSelection, cursor);
+                var orientedRange = calcRangeOrientation(this.$clickSelection, cursor, editor.session);
                 cursor = orientedRange.cursor;
                 anchor = orientedRange.anchor;
             }
@@ -2899,7 +2931,7 @@ var DefaultHandlers = /** @class */ (function () {
                 anchor = range.start;
             }
             else {
-                var orientedRange = calcRangeOrientation(this.$clickSelection, cursor);
+                var orientedRange = calcRangeOrientation(this.$clickSelection, cursor, editor.session);
                 cursor = orientedRange.cursor;
                 anchor = orientedRange.anchor;
             }
@@ -3013,11 +3045,11 @@ exports.DefaultHandlers = DefaultHandlers;
 function calcDistance(ax, ay, bx, by) {
     return Math.sqrt(Math.pow(bx - ax, 2) + Math.pow(by - ay, 2));
 }
-function calcRangeOrientation(range, cursor) {
+function calcRangeOrientation(range, cursor, session) {
     if (range.start.row == range.end.row)
         var cmp = 2 * cursor.column - range.start.column - range.end.column;
     else if (range.start.row == range.end.row - 1 && !range.start.column && !range.end.column)
-        var cmp = cursor.column - 4;
+        var cmp = 3 * cursor.column - 2 * session.getLine(range.start.row).length;
     else
         var cmp = 2 * cursor.row - range.start.row - range.end.row;
     if (cmp < 0)
@@ -3025,6 +3057,72 @@ function calcRangeOrientation(range, cursor) {
     else
         return { cursor: range.end, anchor: range.start };
 }
+
+});
+
+define("ace/mouse/mouse_event",["require","exports","module","ace/lib/event","ace/lib/useragent"], function(require, exports, module){"use strict";
+var event = require("../lib/event");
+var useragent = require("../lib/useragent");
+var MouseEvent = /** @class */ (function () {
+    function MouseEvent(domEvent, editor) { this.speed; this.wheelX; this.wheelY;
+        this.domEvent = domEvent;
+        this.editor = editor;
+        this.x = this.clientX = domEvent.clientX;
+        this.y = this.clientY = domEvent.clientY;
+        this.$pos = null;
+        this.$inSelection = null;
+        this.propagationStopped = false;
+        this.defaultPrevented = false;
+    }
+    MouseEvent.prototype.stopPropagation = function () {
+        event.stopPropagation(this.domEvent);
+        this.propagationStopped = true;
+    };
+    MouseEvent.prototype.preventDefault = function () {
+        event.preventDefault(this.domEvent);
+        this.defaultPrevented = true;
+    };
+    MouseEvent.prototype.stop = function () {
+        this.stopPropagation();
+        this.preventDefault();
+    };
+    MouseEvent.prototype.getDocumentPosition = function () {
+        if (this.$pos)
+            return this.$pos;
+        this.$pos = this.editor.renderer.screenToTextCoordinates(this.clientX, this.clientY);
+        return this.$pos;
+    };
+    MouseEvent.prototype.getGutterRow = function () {
+        var documentRow = this.getDocumentPosition().row;
+        var screenRow = this.editor.session.documentToScreenRow(documentRow, 0);
+        var screenTopRow = this.editor.session.documentToScreenRow(this.editor.renderer.$gutterLayer.$lines.get(0).row, 0);
+        return screenRow - screenTopRow;
+    };
+    MouseEvent.prototype.inSelection = function () {
+        if (this.$inSelection !== null)
+            return this.$inSelection;
+        var editor = this.editor;
+        var selectionRange = editor.getSelectionRange();
+        if (selectionRange.isEmpty())
+            this.$inSelection = false;
+        else {
+            var pos = this.getDocumentPosition();
+            this.$inSelection = selectionRange.contains(pos.row, pos.column);
+        }
+        return this.$inSelection;
+    };
+    MouseEvent.prototype.getButton = function () {
+        return event.getButton(this.domEvent);
+    };
+    MouseEvent.prototype.getShiftKey = function () {
+        return this.domEvent.shiftKey;
+    };
+    MouseEvent.prototype.getAccelKey = function () {
+        return useragent.isMac ? this.domEvent.metaKey : this.domEvent.ctrlKey;
+    };
+    return MouseEvent;
+}());
+exports.MouseEvent = MouseEvent;
 
 });
 
@@ -3101,8 +3199,20 @@ var Tooltip = /** @class */ (function () {
         dom.addCssClass(this.getElement(), className);
     };
     Tooltip.prototype.setTheme = function (theme) {
-        this.$element.className = CLASSNAME + " " +
-            (theme.isDark ? "ace_dark " : "") + (theme.cssClass || "");
+        if (this.theme) {
+            this.theme.isDark && dom.removeCssClass(this.getElement(), "ace_dark");
+            this.theme.cssClass && dom.removeCssClass(this.getElement(), this.theme.cssClass);
+        }
+        if (theme.isDark) {
+            dom.addCssClass(this.getElement(), "ace_dark");
+        }
+        if (theme.cssClass) {
+            dom.addCssClass(this.getElement(), theme.cssClass);
+        }
+        this.theme = {
+            isDark: theme.isDark,
+            cssClass: theme.cssClass
+        };
     };
     Tooltip.prototype.show = function (text, x, y) {
         if (text != null)
@@ -3229,12 +3339,18 @@ var HoverTooltip = /** @class */ (function (_super) {
     HoverTooltip.prototype.addToEditor = function (editor) {
         editor.on("mousemove", this.onMouseMove);
         editor.on("mousedown", this.hide);
-        editor.renderer.getMouseEventTarget().addEventListener("mouseout", this.onMouseOut, true);
+        var target = editor.renderer.getMouseEventTarget();
+        if (target && typeof target.removeEventListener === "function") {
+            target.addEventListener("mouseout", this.onMouseOut, true);
+        }
     };
     HoverTooltip.prototype.removeFromEditor = function (editor) {
         editor.off("mousemove", this.onMouseMove);
         editor.off("mousedown", this.hide);
-        editor.renderer.getMouseEventTarget().removeEventListener("mouseout", this.onMouseOut, true);
+        var target = editor.renderer.getMouseEventTarget();
+        if (target && typeof target.removeEventListener === "function") {
+            target.removeEventListener("mouseout", this.onMouseOut, true);
+        }
         if (this.timeout) {
             clearTimeout(this.timeout);
             this.timeout = null;
@@ -3289,7 +3405,6 @@ var HoverTooltip = /** @class */ (function (_super) {
         this.$gatherData = value;
     };
     HoverTooltip.prototype.showForRange = function (editor, range, domNode, startingEvent) {
-        var MARGIN = 10;
         if (startingEvent && startingEvent != this.lastEvent)
             return;
         if (this.isOpen && document.activeElement == this.getElement())
@@ -3301,7 +3416,6 @@ var HoverTooltip = /** @class */ (function (_super) {
             this.setTheme(renderer.theme);
         }
         this.isOpen = true;
-        this.addMarker(range, editor.session);
         this.range = Range.fromPoints(range.start, range.end);
         var position = renderer.textToScreenCoordinates(range.start.row, range.start.column);
         var rect = renderer.scroller.getBoundingClientRect();
@@ -3312,17 +3426,27 @@ var HoverTooltip = /** @class */ (function (_super) {
         element.appendChild(domNode);
         element.style.maxHeight = "";
         element.style.display = "block";
-        var labelHeight = element.clientHeight;
-        var labelWidth = element.clientWidth;
-        var spaceBelow = window.innerHeight - position.pageY - renderer.lineHeight;
-        var isAbove = true;
-        if (position.pageY - labelHeight < 0 && position.pageY < spaceBelow) {
-            isAbove = false;
-        }
-        element.style.maxHeight = (isAbove ? position.pageY : spaceBelow) - MARGIN + "px";
-        element.style.top = isAbove ? "" : position.pageY + renderer.lineHeight + "px";
-        element.style.bottom = isAbove ? window.innerHeight - position.pageY + "px" : "";
-        element.style.left = Math.min(position.pageX, window.innerWidth - labelWidth - MARGIN) + "px";
+        this.$setPosition(editor, position, true, range);
+        dom.$fixPositionBug(element);
+    };
+    HoverTooltip.prototype.$setPosition = function (editor, position, withMarker, range) {
+        var MARGIN = 10;
+        withMarker && this.addMarker(range, editor.session);
+        var renderer = editor.renderer;
+        var element = this.getElement();
+        var labelHeight = element.offsetHeight;
+        var labelWidth = element.offsetWidth;
+        var anchorTop = position.pageY;
+        var anchorLeft = position.pageX;
+        var spaceBelow = window.innerHeight - anchorTop - renderer.lineHeight;
+        var isAbove = this.$shouldPlaceAbove(labelHeight, anchorTop, spaceBelow - MARGIN);
+        element.style.maxHeight = (isAbove ? anchorTop : spaceBelow) - MARGIN + "px";
+        element.style.top = isAbove ? "" : anchorTop + renderer.lineHeight + "px";
+        element.style.bottom = isAbove ? window.innerHeight - anchorTop + "px" : "";
+        element.style.left = Math.min(anchorLeft, window.innerWidth - labelWidth - MARGIN) + "px";
+    };
+    HoverTooltip.prototype.$shouldPlaceAbove = function (labelHeight, anchorTop, spaceBelow) {
+        return !(anchorTop - labelHeight < 0 && anchorTop < spaceBelow);
     };
     HoverTooltip.prototype.addMarker = function (range, session) {
         if (this.marker) {
@@ -3332,6 +3456,11 @@ var HoverTooltip = /** @class */ (function (_super) {
         this.marker = session && session.addMarker(range, "ace_highlight-marker", "text");
     };
     HoverTooltip.prototype.hide = function (e) {
+        if (e && this.$fromKeyboard && e.type == "keydown") {
+            if (e.code == "Escape") {
+                return;
+            }
+        }
         if (!e && document.activeElement == this.getElement())
             return;
         if (e && e.target && (e.type != "keydown" || e.ctrlKey || e.metaKey) && this.$element.contains(e.target))
@@ -3342,6 +3471,7 @@ var HoverTooltip = /** @class */ (function (_super) {
         this.timeout = null;
         this.addMarker(null);
         if (this.isOpen) {
+            this.$fromKeyboard = false;
             this.$removeCloseEvents();
             this.getElement().style.display = "none";
             this.isOpen = false;
@@ -3379,7 +3509,7 @@ exports.HoverTooltip = HoverTooltip;
 
 });
 
-define("ace/mouse/default_gutter_handler",["require","exports","module","ace/lib/dom","ace/lib/event","ace/tooltip","ace/config"], function(require, exports, module){"use strict";
+define("ace/mouse/default_gutter_handler",["require","exports","module","ace/lib/dom","ace/mouse/mouse_event","ace/tooltip","ace/config","ace/range"], function(require, exports, module){"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -3407,17 +3537,19 @@ var __values = (this && this.__values) || function(o) {
     throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 };
 var dom = require("../lib/dom");
-var event = require("../lib/event");
-var Tooltip = require("../tooltip").Tooltip;
+var MouseEvent = require("./mouse_event").MouseEvent;
+var HoverTooltip = require("../tooltip").HoverTooltip;
 var nls = require("../config").nls;
-var GUTTER_TOOLTIP_LEFT_OFFSET = 5;
-var GUTTER_TOOLTIP_TOP_OFFSET = 3;
-exports.GUTTER_TOOLTIP_LEFT_OFFSET = GUTTER_TOOLTIP_LEFT_OFFSET;
-exports.GUTTER_TOOLTIP_TOP_OFFSET = GUTTER_TOOLTIP_TOP_OFFSET;
+var Range = require("../range").Range;
 function GutterHandler(mouseHandler) {
     var editor = mouseHandler.editor;
     var gutter = editor.renderer.$gutterLayer;
-    var tooltip = new GutterTooltip(editor, true);
+    mouseHandler.$tooltip = new GutterTooltip(editor);
+    mouseHandler.$tooltip.addToEditor(editor);
+    mouseHandler.$tooltip.setDataProvider(function (e, editor) {
+        var row = e.getDocumentPosition().row;
+        mouseHandler.$tooltip.showTooltip(row);
+    });
     mouseHandler.editor.setDefaultHandler("guttermousedown", function (e) {
         if (!editor.isFocused() || e.getButton() != 0)
             return;
@@ -3439,87 +3571,11 @@ function GutterHandler(mouseHandler) {
         mouseHandler.captureMouse(e);
         return e.preventDefault();
     });
-    var tooltipTimeout, mouseEvent;
-    function showTooltip() {
-        var row = mouseEvent.getDocumentPosition().row;
-        var maxRow = editor.session.getLength();
-        if (row == maxRow) {
-            var screenRow = editor.renderer.pixelToScreenCoordinates(0, mouseEvent.y).row;
-            var pos = mouseEvent.$pos;
-            if (screenRow > editor.session.documentToScreenRow(pos.row, pos.column))
-                return hideTooltip();
-        }
-        tooltip.showTooltip(row);
-        if (!tooltip.isOpen)
-            return;
-        editor.on("mousewheel", hideTooltip);
-        editor.on("changeSession", hideTooltip);
-        window.addEventListener("keydown", hideTooltip, true);
-        if (mouseHandler.$tooltipFollowsMouse) {
-            moveTooltip(mouseEvent);
-        }
-        else {
-            var gutterRow = mouseEvent.getGutterRow();
-            var gutterCell = gutter.$lines.get(gutterRow);
-            if (gutterCell) {
-                var gutterElement = gutterCell.element.querySelector(".ace_gutter_annotation");
-                var rect = gutterElement.getBoundingClientRect();
-                var style = tooltip.getElement().style;
-                style.left = (rect.right - GUTTER_TOOLTIP_LEFT_OFFSET) + "px";
-                style.top = (rect.bottom - GUTTER_TOOLTIP_TOP_OFFSET) + "px";
-            }
-            else {
-                moveTooltip(mouseEvent);
-            }
-        }
-    }
-    function hideTooltip(e) {
-        if (e && e.type === "keydown" && (e.ctrlKey || e.metaKey))
-            return;
-        if (e && e.type === "mouseout" && (!e.relatedTarget || tooltip.getElement().contains(e.relatedTarget)))
-            return;
-        if (tooltipTimeout)
-            tooltipTimeout = clearTimeout(tooltipTimeout);
-        if (tooltip.isOpen) {
-            tooltip.hideTooltip();
-            editor.off("mousewheel", hideTooltip);
-            editor.off("changeSession", hideTooltip);
-            window.removeEventListener("keydown", hideTooltip, true);
-        }
-    }
-    function moveTooltip(e) {
-        tooltip.setPosition(e.x, e.y);
-    }
-    mouseHandler.editor.setDefaultHandler("guttermousemove", function (e) {
-        var target = e.domEvent.target || e.domEvent.srcElement;
-        if (dom.hasCssClass(target, "ace_fold-widget") || dom.hasCssClass(target, "ace_custom-widget"))
-            return hideTooltip();
-        if (tooltip.isOpen && mouseHandler.$tooltipFollowsMouse)
-            moveTooltip(e);
-        mouseEvent = e;
-        if (tooltipTimeout)
-            return;
-        tooltipTimeout = setTimeout(function () {
-            tooltipTimeout = null;
-            if (mouseEvent && !mouseHandler.isMousePressed)
-                showTooltip();
-        }, 50);
-    });
-    event.addListener(editor.renderer.$gutter, "mouseout", function (e) {
-        mouseEvent = null;
-        if (!tooltip.isOpen)
-            return;
-        tooltipTimeout = setTimeout(function () {
-            tooltipTimeout = null;
-            hideTooltip(e);
-        }, 50);
-    }, editor);
 }
 exports.GutterHandler = GutterHandler;
 var GutterTooltip = /** @class */ (function (_super) {
     __extends(GutterTooltip, _super);
-    function GutterTooltip(editor, isHover) {
-        if (isHover === void 0) { isHover = false; }
+    function GutterTooltip(editor) {
         var _this = _super.call(this, editor.container) || this;
         _this.id = "gt" + (++GutterTooltip.$uid);
         _this.editor = editor;
@@ -3528,35 +3584,37 @@ var GutterTooltip = /** @class */ (function (_super) {
         el.setAttribute("role", "tooltip");
         el.setAttribute("id", _this.id);
         el.style.pointerEvents = "auto";
-        if (isHover) {
-            _this.onMouseOut = _this.onMouseOut.bind(_this);
-            el.addEventListener("mouseout", _this.onMouseOut);
-        }
+        _this.idleTime = 50;
+        _this.onDomMouseMove = _this.onDomMouseMove.bind(_this);
+        _this.onDomMouseOut = _this.onDomMouseOut.bind(_this);
+        _this.setClassName("ace_gutter-tooltip");
         return _this;
     }
-    GutterTooltip.prototype.onMouseOut = function (e) {
-        if (!this.isOpen)
-            return;
-        if (!e.relatedTarget || this.getElement().contains(e.relatedTarget))
-            return;
-        if (e && e.currentTarget.contains(e.relatedTarget))
-            return;
-        this.hideTooltip();
+    GutterTooltip.prototype.onDomMouseMove = function (domEvent) {
+        var aceEvent = new MouseEvent(domEvent, this.editor);
+        this.onMouseMove(aceEvent, this.editor);
     };
-    GutterTooltip.prototype.setPosition = function (x, y) {
-        var windowWidth = window.innerWidth || document.documentElement.clientWidth;
-        var windowHeight = window.innerHeight || document.documentElement.clientHeight;
-        var width = this.getWidth();
-        var height = this.getHeight();
-        x += 15;
-        y += 15;
-        if (x + width > windowWidth) {
-            x -= (x + width) - windowWidth;
+    GutterTooltip.prototype.onDomMouseOut = function (domEvent) {
+        var aceEvent = new MouseEvent(domEvent, this.editor);
+        this.onMouseOut(aceEvent);
+    };
+    GutterTooltip.prototype.addToEditor = function (editor) {
+        var gutter = editor.renderer.$gutter;
+        gutter.addEventListener("mousemove", this.onDomMouseMove);
+        gutter.addEventListener("mouseout", this.onDomMouseOut);
+        _super.prototype.addToEditor.call(this, editor);
+    };
+    GutterTooltip.prototype.removeFromEditor = function (editor) {
+        var gutter = editor.renderer.$gutter;
+        gutter.removeEventListener("mousemove", this.onDomMouseMove);
+        gutter.removeEventListener("mouseout", this.onDomMouseOut);
+        _super.prototype.removeFromEditor.call(this, editor);
+    };
+    GutterTooltip.prototype.destroy = function () {
+        if (this.editor) {
+            this.removeFromEditor(this.editor);
         }
-        if (y + height > windowHeight) {
-            y -= 20 + height;
-        }
-        Tooltip.prototype.setPosition.call(this, x, y);
+        _super.prototype.destroy.call(this);
     };
     Object.defineProperty(GutterTooltip, "annotationLabels", {
         get: function () {
@@ -3622,7 +3680,7 @@ var GutterTooltip = /** @class */ (function (_super) {
             }
         }
         if (annotation.displayText.length === 0)
-            return this.hideTooltip();
+            return this.hide();
         var annotationMessages = { error: [], security: [], warning: [], info: [], hint: [] };
         var iconClassName = gutter.$useSvgGutterIcons ? "ace_icon_svg" : "ace_icon";
         for (var i = 0; i < annotation.displayText.length; i++) {
@@ -3637,25 +3695,41 @@ var GutterTooltip = /** @class */ (function (_super) {
             lineElement.appendChild(dom.createElement("br"));
             annotationMessages[annotation.type[i].replace("_fold", "")].push(lineElement);
         }
-        var tooltipElement = this.getElement();
-        dom.removeChildren(tooltipElement);
+        var tooltipElement = dom.createElement("span");
         annotationMessages.error.forEach(function (el) { return tooltipElement.appendChild(el); });
         annotationMessages.security.forEach(function (el) { return tooltipElement.appendChild(el); });
         annotationMessages.warning.forEach(function (el) { return tooltipElement.appendChild(el); });
         annotationMessages.info.forEach(function (el) { return tooltipElement.appendChild(el); });
         annotationMessages.hint.forEach(function (el) { return tooltipElement.appendChild(el); });
         tooltipElement.setAttribute("aria-live", "polite");
-        if (!this.isOpen) {
-            this.setTheme(this.editor.renderer.theme);
-            this.setClassName("ace_gutter-tooltip");
-        }
         var annotationNode = this.$findLinkedAnnotationNode(row);
         if (annotationNode) {
             annotationNode.setAttribute("aria-describedby", this.id);
         }
-        this.show();
+        var range = Range.fromPoints({ row: row, column: 0 }, { row: row, column: 0 });
+        this.showForRange(this.editor, range, tooltipElement);
         this.visibleTooltipRow = row;
         this.editor._signal("showGutterTooltip", this);
+    };
+    GutterTooltip.prototype.$setPosition = function (editor, _ignoredPosition, _withMarker, range) {
+        var gutterCell = this.$findCellByRow(range.start.row);
+        if (!gutterCell)
+            return;
+        var el = gutterCell && gutterCell.element;
+        var anchorEl = el && (el.querySelector(".ace_gutter_annotation"));
+        if (!anchorEl)
+            return;
+        var r = anchorEl.getBoundingClientRect();
+        if (!r)
+            return;
+        var position = {
+            pageX: r.right,
+            pageY: r.top
+        };
+        return _super.prototype.$setPosition.call(this, editor, position, false, range);
+    };
+    GutterTooltip.prototype.$shouldPlaceAbove = function (labelHeight, anchorTop, spaceBelow) {
+        return spaceBelow < labelHeight;
     };
     GutterTooltip.prototype.$findLinkedAnnotationNode = function (row) {
         var cell = this.$findCellByRow(row);
@@ -3669,12 +3743,11 @@ var GutterTooltip = /** @class */ (function (_super) {
     GutterTooltip.prototype.$findCellByRow = function (row) {
         return this.editor.renderer.$gutterLayer.$lines.cells.find(function (el) { return el.row === row; });
     };
-    GutterTooltip.prototype.hideTooltip = function () {
+    GutterTooltip.prototype.hide = function (e) {
         if (!this.isOpen) {
             return;
         }
         this.$element.removeAttribute("aria-live");
-        this.hide();
         if (this.visibleTooltipRow != undefined) {
             var annotationNode = this.$findLinkedAnnotationNode(this.visibleTooltipRow);
             if (annotationNode) {
@@ -3683,6 +3756,7 @@ var GutterTooltip = /** @class */ (function (_super) {
         }
         this.visibleTooltipRow = undefined;
         this.editor._signal("hideGutterTooltip", this);
+        _super.prototype.hide.call(this, e);
     };
     GutterTooltip.annotationsToSummaryString = function (annotations) {
         var e_1, _a;
@@ -3706,76 +3780,16 @@ var GutterTooltip = /** @class */ (function (_super) {
         }
         return summary.join(", ");
     };
+    GutterTooltip.prototype.isOutsideOfText = function (e) {
+        var editor = e.editor;
+        var rect = editor.renderer.$gutter.getBoundingClientRect();
+        return !(e.clientX >= rect.left && e.clientX <= rect.right &&
+            e.clientY >= rect.top && e.clientY <= rect.bottom);
+    };
     return GutterTooltip;
-}(Tooltip));
+}(HoverTooltip));
 GutterTooltip.$uid = 0;
 exports.GutterTooltip = GutterTooltip;
-
-});
-
-define("ace/mouse/mouse_event",["require","exports","module","ace/lib/event","ace/lib/useragent"], function(require, exports, module){"use strict";
-var event = require("../lib/event");
-var useragent = require("../lib/useragent");
-var MouseEvent = /** @class */ (function () {
-    function MouseEvent(domEvent, editor) { this.speed; this.wheelX; this.wheelY;
-        this.domEvent = domEvent;
-        this.editor = editor;
-        this.x = this.clientX = domEvent.clientX;
-        this.y = this.clientY = domEvent.clientY;
-        this.$pos = null;
-        this.$inSelection = null;
-        this.propagationStopped = false;
-        this.defaultPrevented = false;
-    }
-    MouseEvent.prototype.stopPropagation = function () {
-        event.stopPropagation(this.domEvent);
-        this.propagationStopped = true;
-    };
-    MouseEvent.prototype.preventDefault = function () {
-        event.preventDefault(this.domEvent);
-        this.defaultPrevented = true;
-    };
-    MouseEvent.prototype.stop = function () {
-        this.stopPropagation();
-        this.preventDefault();
-    };
-    MouseEvent.prototype.getDocumentPosition = function () {
-        if (this.$pos)
-            return this.$pos;
-        this.$pos = this.editor.renderer.screenToTextCoordinates(this.clientX, this.clientY);
-        return this.$pos;
-    };
-    MouseEvent.prototype.getGutterRow = function () {
-        var documentRow = this.getDocumentPosition().row;
-        var screenRow = this.editor.session.documentToScreenRow(documentRow, 0);
-        var screenTopRow = this.editor.session.documentToScreenRow(this.editor.renderer.$gutterLayer.$lines.get(0).row, 0);
-        return screenRow - screenTopRow;
-    };
-    MouseEvent.prototype.inSelection = function () {
-        if (this.$inSelection !== null)
-            return this.$inSelection;
-        var editor = this.editor;
-        var selectionRange = editor.getSelectionRange();
-        if (selectionRange.isEmpty())
-            this.$inSelection = false;
-        else {
-            var pos = this.getDocumentPosition();
-            this.$inSelection = selectionRange.contains(pos.row, pos.column);
-        }
-        return this.$inSelection;
-    };
-    MouseEvent.prototype.getButton = function () {
-        return event.getButton(this.domEvent);
-    };
-    MouseEvent.prototype.getShiftKey = function () {
-        return this.domEvent.shiftKey;
-    };
-    MouseEvent.prototype.getAccelKey = function () {
-        return useragent.isMac ? this.domEvent.metaKey : this.domEvent.ctrlKey;
-    };
-    return MouseEvent;
-}());
-exports.MouseEvent = MouseEvent;
 
 });
 
@@ -4590,6 +4604,8 @@ var MouseHandler = /** @class */ (function () {
     MouseHandler.prototype.destroy = function () {
         if (this.releaseMouse)
             this.releaseMouse();
+        if (this.$tooltip)
+            this.$tooltip.destroy();
     };
     return MouseHandler;
 }());
@@ -4599,7 +4615,6 @@ config.defineOptions(MouseHandler.prototype, "mouseHandler", {
     dragDelay: { initialValue: (useragent.isMac ? 150 : 0) },
     dragEnabled: { initialValue: true },
     focusTimeout: { initialValue: 0 },
-    tooltipFollowsMouse: { initialValue: true }
 });
 exports.MouseHandler = MouseHandler;
 
@@ -13844,9 +13859,8 @@ for (var i = 1; i < 9; i++) {
 
 });
 
-define("ace/keyboard/gutter_handler",["require","exports","module","ace/lib/keys","ace/mouse/default_gutter_handler"], function(require, exports, module){"use strict";
+define("ace/keyboard/gutter_handler",["require","exports","module","ace/lib/keys"], function(require, exports, module){"use strict";
 var keys = require('../lib/keys');
-var GutterTooltip = require("../mouse/default_gutter_handler").GutterTooltip;
 var GutterKeyboardHandler = /** @class */ (function () {
     function GutterKeyboardHandler(editor) {
         this.editor = editor;
@@ -13855,7 +13869,7 @@ var GutterKeyboardHandler = /** @class */ (function () {
         this.lines = editor.renderer.$gutterLayer.$lines;
         this.activeRowIndex = null;
         this.activeLane = null;
-        this.annotationTooltip = new GutterTooltip(this.editor);
+        this.annotationTooltip = this.editor.$mouseHandler.$tooltip;
     }
     GutterKeyboardHandler.prototype.addListener = function () {
         this.element.addEventListener("keydown", this.$onGutterKeyDown.bind(this));
@@ -13871,7 +13885,7 @@ var GutterKeyboardHandler = /** @class */ (function () {
         if (this.annotationTooltip.isOpen) {
             e.preventDefault();
             if (e.keyCode === keys["escape"])
-                this.annotationTooltip.hideTooltip();
+                this.annotationTooltip.hide();
             return;
         }
         if (e.target === this.element) {
@@ -13990,12 +14004,8 @@ var GutterKeyboardHandler = /** @class */ (function () {
                     }
                     return;
                 case "annotation":
-                    var gutterElement = this.lines.cells[this.activeRowIndex].element.childNodes[2];
-                    var rect = gutterElement.getBoundingClientRect();
-                    var style = this.annotationTooltip.getElement().style;
-                    style.left = rect.right + "px";
-                    style.top = rect.bottom + "px";
                     this.annotationTooltip.showTooltip(this.$rowIndexToRow(this.activeRowIndex));
+                    this.annotationTooltip.$fromKeyboard = true;
                     break;
             }
             return;
@@ -14014,7 +14024,7 @@ var GutterKeyboardHandler = /** @class */ (function () {
             }
         }
         if (this.annotationTooltip.isOpen)
-            this.annotationTooltip.hideTooltip();
+            this.annotationTooltip.hide();
         return;
     };
     GutterKeyboardHandler.prototype.$isFoldWidgetVisible = function (index) {
@@ -16302,7 +16312,6 @@ config.defineOptions(Editor.prototype, "editor", {
     dragDelay: "$mouseHandler",
     dragEnabled: "$mouseHandler",
     focusTimeout: "$mouseHandler",
-    tooltipFollowsMouse: "$mouseHandler",
     firstLineNumber: "session",
     overwrite: "session",
     newLineMode: "session",
@@ -16454,6 +16463,7 @@ var Lines = require("./lines").Lines;
 var nls = require("../config").nls;
 var Gutter = /** @class */ (function () {
     function Gutter(parentEl) {
+        this.$showCursorMarker = null;
         this.element = dom.createElement("div");
         this.element.className = "ace_layer ace_gutter-layer";
         parentEl.appendChild(this.element);
@@ -16575,6 +16585,8 @@ var Gutter = /** @class */ (function () {
         }
         this._signal("afterRender");
         this.$updateGutterWidth(config);
+        if (this.$showCursorMarker && this.$highlightGutterLine)
+            this.$updateCursorMarker();
     };
     Gutter.prototype.$updateGutterWidth = function (config) {
         var session = this.session;
@@ -16603,6 +16615,8 @@ var Gutter = /** @class */ (function () {
         this.$cursorRow = position.row;
     };
     Gutter.prototype.updateLineHighlight = function () {
+        if (this.$showCursorMarker)
+            this.$updateCursorMarker();
         if (!this.$highlightGutterLine)
             return;
         var row = this.session.selection.cursor.row;
@@ -16628,6 +16642,26 @@ var Gutter = /** @class */ (function () {
                 break;
             }
         }
+    };
+    Gutter.prototype.$updateCursorMarker = function () {
+        if (!this.session)
+            return;
+        var session = this.session;
+        if (!this.$highlightElement) {
+            this.$highlightElement = dom.createElement("div");
+            this.$highlightElement.className = "ace_gutter-cursor";
+            this.$highlightElement.style.pointerEvents = "none";
+            this.element.appendChild(this.$highlightElement);
+        }
+        var pos = session.selection.cursor;
+        var config = this.config;
+        var lines = this.$lines;
+        var screenTop = config.firstRowScreen * config.lineHeight;
+        var screenPage = Math.floor(screenTop / lines.canvasHeight);
+        var lineTop = session.documentToScreenRow(pos) * config.lineHeight;
+        var top = lineTop - (screenPage * lines.canvasHeight);
+        dom.setStyle(this.$highlightElement.style, "height", config.lineHeight + "px");
+        dom.setStyle(this.$highlightElement.style, "top", top + "px");
     };
     Gutter.prototype.scrollLines = function (config) {
         var oldConfig = this.config;
@@ -16872,6 +16906,10 @@ var Gutter = /** @class */ (function () {
     };
     Gutter.prototype.setHighlightGutterLine = function (highlightGutterLine) {
         this.$highlightGutterLine = highlightGutterLine;
+        if (!highlightGutterLine && this.$highlightElement) {
+            this.$highlightElement.remove();
+            this.$highlightElement = null;
+        }
     };
     Gutter.prototype.setShowLineNumbers = function (show) {
         this.$renderer = !show && {
@@ -16913,8 +16951,24 @@ var Gutter = /** @class */ (function () {
     };
     Gutter.prototype.$getGutterCell = function (row) {
         var cells = this.$lines.cells;
-        var visibileRow = this.session.documentToScreenRow(row, 0);
-        return cells[row - this.config.firstRowScreen - (row - visibileRow)];
+        var min = 0;
+        var max = cells.length - 1;
+        if (row < cells[0].row || row > cells[max].row)
+            return;
+        while (min <= max) {
+            var mid = Math.floor((min + max) / 2);
+            var cell = cells[mid];
+            if (cell.row > row) {
+                max = mid - 1;
+            }
+            else if (cell.row < row) {
+                min = mid + 1;
+            }
+            else {
+                return cell;
+            }
+        }
+        return cell;
     };
     Gutter.prototype.$addCustomWidget = function (row, _a, cell) {
         var className = _a.className, label = _a.label, title = _a.title, callbacks = _a.callbacks;
@@ -16977,7 +17031,7 @@ var Gutter = /** @class */ (function () {
 }());
 Gutter.prototype.$fixedWidth = false;
 Gutter.prototype.$highlightGutterLine = true;
-Gutter.prototype.$renderer = "";
+Gutter.prototype.$renderer = undefined;
 Gutter.prototype.$showLineNumbers = true;
 Gutter.prototype.$showFoldWidgets = true;
 oop.implement(Gutter.prototype, EventEmitter);
@@ -19991,6 +20045,15 @@ var VirtualRenderer = /** @class */ (function () {
                 : "padding" in (_self.theme || {}) ? 4 : _self.$padding;
             if (_self.$padding && padding != _self.$padding)
                 _self.setPadding(padding);
+            if (_self.$gutterLayer) {
+                var showGutterCursor = module["$showGutterCursorMarker"];
+                if (showGutterCursor && !_self.$gutterLayer.$showCursorMarker) {
+                    _self.$gutterLayer.$showCursorMarker = "theme";
+                }
+                else if (!showGutterCursor && _self.$gutterLayer.$showCursorMarker == "theme") {
+                    _self.$gutterLayer.$showCursorMarker = null;
+                }
+            }
             _self.$theme = module.cssClass;
             _self.theme = module;
             dom.addCssClass(_self.container, module.cssClass);
