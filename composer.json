@@ -29,7 +29,6 @@
     "cweagans/composer-patches": "~1",
     "webflo/drupal-finder": "~1.0",
     "vardot/varbase": "~10.1.0",
-    "vardot/varbase-patches": "~10.1.0",
     "drupal/gleap-gleap": "~1",
     "drupal/redis": "~1",
     "drush/drush": "~13",
@@ -87,8 +86,7 @@
   "extra": {
     "drupal-scaffold": {
       "allowed-packages": [
-        "drupal/core",
-        "vardot/varbase"
+        "drupal/core"
       ],
       "gitignore": true,
       "locations": {
