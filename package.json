@@ -25,9 +25,6 @@
     "drupal-libraries-sync": "node ./docroot/profiles/contrib/varbase/scripts/drupal-libraries-sync.js",
     "postinstall": "node ./docroot/profiles/contrib/varbase/scripts/drupal-libraries-sync.js"
   },
-  "resolutions": {
-    "webpack": "^5"
-  },
   "dependencies": {
     "@ckeditor/ckeditor5-media-embed": "~45.2.0",
     "ace-builds": "~1",
@@ -59,7 +56,7 @@
       },
       {
         "name": "dropzone",
-        "package": "dropzone"
+        "package": "dropzone/dist"
       },
       {
         "name": "jquery.fancytree",
@@ -94,32 +91,24 @@
     "@storybook/test": "^8.6.0",
     "@storybook/theming": "~8",
     "@storybook/types": "~8",
-    "cspell": "^8.16.1",
-    "eslint": "^8.57.1",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-jsx-a11y": "^6.10.2",
-    "eslint-plugin-prettier": "^5.5.4",
-    "eslint-plugin-react": "^7.37.3",
-    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint": "^8.0.0",
     "eslint-plugin-storybook": "^0.11.3",
-    "eslint-plugin-yml": "^1.16.0",
     "fork-ts-checker-webpack-plugin": "~8 || ~9",
-    "prettier": "^3.4.2",
+    "jquery": "^3.7.0",
+    "prettier": "^2.1.2",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
     "storybook": "~8",
     "storybook-addon-root-attributes": "~2",
     "stylelint": "~16",
     "stylelint-checkstyle-formatter": "^0.1.2",
-    "stylelint-config-prettier": "^9.0.5",
-    "stylelint-config-standard": "^36.0.1",
-    "stylelint-no-browser-hacks": "^1.2.1",
     "stylelint-order": "~6.0",
-    "stylelint-prettier": "^5.0.3",
+    "typescript": "^5.0.0",
     "webpack": "~5",
-    "webpack-cli": "~5",
-    "yarn": "^1.22.22"
+    "webpack-cli": "~5"
+  },
+  "resolutions": {
+    "webpack": "^5"
   },
   "packageManager": "yarn@4.9.3"
 }
