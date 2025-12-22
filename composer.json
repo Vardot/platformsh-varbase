@@ -32,7 +32,7 @@
     "drupal/gleap-gleap": "~1",
     "drupal/redis": "~1",
     "drush/drush": "~13",
-    "platformsh/config-reader": "~2.4.0"
+    "platformsh/config-reader": "~3"
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
