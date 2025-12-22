@@ -143,6 +143,11 @@
     "patchLevel": {
       "drupal/core": "-p2"
     },
-    "patches": { }
+    "patches": {
+      "e0ipso/twig-storybook": {
+        "Support Twig 4.x with YieldReady #18":
+        "https://patch-diff.githubusercontent.com/raw/e0ipso/twig-storybook/pull/18.diff"
+      }
+    }
   }
 }
