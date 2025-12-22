@@ -6,6 +6,7 @@ parameters:
   twig.config:
     debug: true
     cache: false
+    use_yield: false
   http.response.debug_cacheability_headers: true
   storybook.development: true
   cors.config:
