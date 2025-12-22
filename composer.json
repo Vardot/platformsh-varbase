@@ -29,6 +29,7 @@
     "cweagans/composer-patches": "~1",
     "webflo/drupal-finder": "~1.0",
     "vardot/varbase": "~10.1.0",
+    "vardot/varbase-patches": "~10.1.0",
     "drupal/gleap-gleap": "~1",
     "drupal/redis": "~1",
     "drush/drush": "~13",
@@ -143,11 +144,6 @@
     "patchLevel": {
       "drupal/core": "-p2"
     },
-    "patches": {
-      "e0ipso/twig-storybook": {
-        "Support Twig 4.x with YieldReady #18":
-        "https://patch-diff.githubusercontent.com/raw/e0ipso/twig-storybook/pull/18.diff"
-      }
-    }
+    "patches": {  }
   }
 }

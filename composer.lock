@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "14cf4aa849cfc0cedd6f89cfffeb0762",
+    "content-hash": "5a0af4c2f6012efa9be89aa645737f11",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -26543,16 +26543,16 @@
         },
         {
             "name": "vardot/varbase-patches",
-            "version": "10.1.44",
+            "version": "10.1.45",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Vardot/varbase-patches.git",
-                "reference": "605a913cf3f750c204bd122dd92c0b9283bf22fe"
+                "reference": "d51df4d10b0f06d860cda9239b59a74aa4491c33"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Vardot/varbase-patches/zipball/605a913cf3f750c204bd122dd92c0b9283bf22fe",
-                "reference": "605a913cf3f750c204bd122dd92c0b9283bf22fe",
+                "url": "https://api.github.com/repos/Vardot/varbase-patches/zipball/d51df4d10b0f06d860cda9239b59a74aa4491c33",
+                "reference": "d51df4d10b0f06d860cda9239b59a74aa4491c33",
                 "shasum": ""
             },
             "require": {
@@ -26702,6 +26702,9 @@
                         "fix: #3562479 PHP 8.4 - Implicit nullable SectionStorageInterface parameter": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/layout_library--2025-12-10--3562479--mr-22.patch",
                         "Issue #3561874 : Add missing isSupported method to Library class for SupportAwareSectionStorageInterface compatibility with Drupal ~11.3.0": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/layout_library--2025-12-07--3561874--mr-21.patch"
                     },
+                    "e0ipso/twig-storybook": {
+                        "Twig Storybook - Support Twig 4.x with YieldReady #18": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/twig-storybook--2025-12-23--pr18.patch"
+                    },
                     "drupal/content_planner": {
                         "fix: #3542886 PHP 8.4 Support fixes": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/content_planner--2025-12-09--3542886--mr-63.patch",
                         "Issue #3545519: Fix Prevent fatal error when entity cannot be loaded": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/content_planner--2025-09-08--3545519--mr-62.patch"
@@ -26795,9 +26798,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Vardot/varbase-patches/issues",
-                "source": "https://github.com/Vardot/varbase-patches/tree/10.1.44"
+                "source": "https://github.com/Vardot/varbase-patches/tree/10.1.45"
             },
-            "time": "2025-12-21T08:43:56+00:00"
+            "time": "2025-12-22T22:39:17+00:00"
         },
         {
             "name": "vardot/varbase-replaces",
