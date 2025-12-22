@@ -12,7 +12,7 @@
 # The name of this app. Must be unique within a project.
 -   name: varbase
     # The runtime the application uses.
-    type: php:8.3
+    type: php:8.4
     source:
         root: "/"
     dependencies:

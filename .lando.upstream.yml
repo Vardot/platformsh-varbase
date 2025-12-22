@@ -12,7 +12,7 @@ recipe: platformsh
 
 config:
   webroot: docroot
-  php: '8.3'
+  php: '8.4'
   drush: ^13
   # This section overrides Platform.sh configuration with values that make more
   # sense for local development.
