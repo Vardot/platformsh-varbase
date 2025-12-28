@@ -5610,17 +5610,17 @@
         },
         {
             "name": "drupal/ds",
-            "version": "3.32.0",
+            "version": "3.34.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/ds.git",
-                "reference": "8.x-3.32"
+                "reference": "8.x-3.34"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/ds-8.x-3.32.zip",
-                "reference": "8.x-3.32",
-                "shasum": "d4aace7ceb2ac1af6e3c3afda47d6b1c9189cb16"
+                "url": "https://ftp.drupal.org/files/projects/ds-8.x-3.34.zip",
+                "reference": "8.x-3.34",
+                "shasum": "08a8b7ee991888b5e4290c03a25786d642d3eb25"
             },
             "require": {
                 "drupal/core": "^10.2 || ^11"
@@ -5632,8 +5632,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-3.32",
-                    "datestamp": "1765271987",
+                    "version": "8.x-3.34",
+                    "datestamp": "1766853218",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -5680,7 +5680,7 @@
         },
         {
             "name": "drupal/ds_extras",
-            "version": "3.32.0",
+            "version": "3.34.0",
             "require": {
                 "drupal/core": "^10.2 || ^11",
                 "drupal/ds": "*"
@@ -5688,8 +5688,8 @@
             "type": "metapackage",
             "extra": {
                 "drupal": {
-                    "version": "8.x-3.32",
-                    "datestamp": "1765271987",
+                    "version": "8.x-3.34",
+                    "datestamp": "1766853218",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -14902,17 +14902,17 @@
         },
         {
             "name": "drupal/trash",
-            "version": "3.0.22",
+            "version": "3.0.23",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/trash.git",
-                "reference": "3.0.22"
+                "reference": "3.0.23"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/trash-3.0.22.zip",
-                "reference": "3.0.22",
-                "shasum": "7b5556ddca21f2aef2348d77473202fb6cecefec"
+                "url": "https://ftp.drupal.org/files/projects/trash-3.0.23.zip",
+                "reference": "3.0.23",
+                "shasum": "e9dee6e607a309f1ee178447e5e3e84e6a6aa007"
             },
             "require": {
                 "drupal/core": "^10.3 | ^11"
@@ -14930,8 +14930,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "3.0.22",
-                    "datestamp": "1762506912",
+                    "version": "3.0.23",
+                    "datestamp": "1766447805",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -15437,7 +15437,7 @@
         },
         {
             "name": "drupal/varbase_accordion_block",
-            "version": "10.2.0",
+            "version": "10.2.1",
             "require": {
                 "drupal/core": "~11.3.0",
                 "drupal/paragraphs": "*",
@@ -15446,8 +15446,8 @@
             "type": "metapackage",
             "extra": {
                 "drupal": {
-                    "version": "10.2.0",
-                    "datestamp": "1766400769",
+                    "version": "10.2.1",
+                    "datestamp": "1766567354",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -16066,7 +16066,7 @@
         },
         {
             "name": "drupal/varbase_buttons_block",
-            "version": "10.2.0",
+            "version": "10.2.1",
             "require": {
                 "drupal/core": "~11.3.0",
                 "drupal/varbase_layout_builder": "*"
@@ -16074,8 +16074,8 @@
             "type": "metapackage",
             "extra": {
                 "drupal": {
-                    "version": "10.2.0",
-                    "datestamp": "1766400769",
+                    "version": "10.2.1",
+                    "datestamp": "1766567354",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -16410,7 +16410,7 @@
         },
         {
             "name": "drupal/varbase_cta_block",
-            "version": "10.2.0",
+            "version": "10.2.1",
             "require": {
                 "drupal/core": "~11.3.0",
                 "drupal/varbase_buttons_block": "*",
@@ -16419,8 +16419,8 @@
             "type": "metapackage",
             "extra": {
                 "drupal": {
-                    "version": "10.2.0",
-                    "datestamp": "1766400769",
+                    "version": "10.2.1",
+                    "datestamp": "1766567354",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -16724,7 +16724,7 @@
         },
         {
             "name": "drupal/varbase_featured_card_block",
-            "version": "10.2.0",
+            "version": "10.2.1",
             "require": {
                 "drupal/core": "~11.3.0",
                 "drupal/varbase_layout_builder": "*"
@@ -16732,8 +16732,8 @@
             "type": "metapackage",
             "extra": {
                 "drupal": {
-                    "version": "10.2.0",
-                    "datestamp": "1766400769",
+                    "version": "10.2.1",
+                    "datestamp": "1766567354",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -16770,7 +16770,7 @@
         },
         {
             "name": "drupal/varbase_gallery_block",
-            "version": "10.2.0",
+            "version": "10.2.1",
             "require": {
                 "drupal/core": "~11.3.0",
                 "drupal/varbase_layout_builder": "*"
@@ -16778,8 +16778,8 @@
             "type": "metapackage",
             "extra": {
                 "drupal": {
-                    "version": "10.2.0",
-                    "datestamp": "1766400769",
+                    "version": "10.2.1",
+                    "datestamp": "1766567354",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -16816,7 +16816,7 @@
         },
         {
             "name": "drupal/varbase_heading_block",
-            "version": "10.2.0",
+            "version": "10.2.1",
             "require": {
                 "drupal/core": "~11.3.0",
                 "drupal/varbase_layout_builder": "*"
@@ -16824,8 +16824,8 @@
             "type": "metapackage",
             "extra": {
                 "drupal": {
-                    "version": "10.2.0",
-                    "datestamp": "1766400769",
+                    "version": "10.2.1",
+                    "datestamp": "1766567354",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -16930,7 +16930,7 @@
         },
         {
             "name": "drupal/varbase_html_code_block",
-            "version": "10.2.0",
+            "version": "10.2.1",
             "require": {
                 "drupal/core": "~11.3.0",
                 "drupal/varbase_layout_builder": "*"
@@ -16938,8 +16938,8 @@
             "type": "metapackage",
             "extra": {
                 "drupal": {
-                    "version": "10.2.0",
-                    "datestamp": "1766400769",
+                    "version": "10.2.1",
+                    "datestamp": "1766567354",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -16976,7 +16976,7 @@
         },
         {
             "name": "drupal/varbase_impressed_card_block",
-            "version": "10.2.0",
+            "version": "10.2.1",
             "require": {
                 "drupal/core": "~11.3.0",
                 "drupal/varbase_layout_builder": "*"
@@ -16984,8 +16984,8 @@
             "type": "metapackage",
             "extra": {
                 "drupal": {
-                    "version": "10.2.0",
-                    "datestamp": "1766400769",
+                    "version": "10.2.1",
+                    "datestamp": "1766567354",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -17090,17 +17090,17 @@
         },
         {
             "name": "drupal/varbase_layout_builder",
-            "version": "10.2.0",
+            "version": "10.2.1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/varbase_layout_builder.git",
-                "reference": "10.2.0"
+                "reference": "10.2.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/varbase_layout_builder-10.2.0.zip",
-                "reference": "10.2.0",
-                "shasum": "91d440b76c881c1782f459262316fd9ece798a03"
+                "url": "https://ftp.drupal.org/files/projects/varbase_layout_builder-10.2.1.zip",
+                "reference": "10.2.1",
+                "shasum": "5118dba895419e3eab842aeda9599abb28fb591b"
             },
             "require": {
                 "drupal/block_form_alter": "~2",
@@ -17149,8 +17149,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "10.2.0",
-                    "datestamp": "1766400769",
+                    "version": "10.2.1",
+                    "datestamp": "1766567354",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -17287,7 +17287,7 @@
         },
         {
             "name": "drupal/varbase_media_block",
-            "version": "10.2.0",
+            "version": "10.2.1",
             "require": {
                 "drupal/core": "~11.3.0",
                 "drupal/varbase_layout_builder": "*"
@@ -17295,8 +17295,8 @@
             "type": "metapackage",
             "extra": {
                 "drupal": {
-                    "version": "10.2.0",
-                    "datestamp": "1766400769",
+                    "version": "10.2.1",
+                    "datestamp": "1766567354",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -17392,7 +17392,7 @@
         },
         {
             "name": "drupal/varbase_overlay_card_block",
-            "version": "10.2.0",
+            "version": "10.2.1",
             "require": {
                 "drupal/core": "~11.3.0",
                 "drupal/varbase_layout_builder": "*"
@@ -17400,8 +17400,8 @@
             "type": "metapackage",
             "extra": {
                 "drupal": {
-                    "version": "10.2.0",
-                    "datestamp": "1766400769",
+                    "version": "10.2.1",
+                    "datestamp": "1766567354",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -17485,7 +17485,7 @@
         },
         {
             "name": "drupal/varbase_rich_text_block",
-            "version": "10.2.0",
+            "version": "10.2.1",
             "require": {
                 "drupal/core": "~11.3.0",
                 "drupal/varbase_layout_builder": "*"
@@ -17493,8 +17493,8 @@
             "type": "metapackage",
             "extra": {
                 "drupal": {
-                    "version": "10.2.0",
-                    "datestamp": "1766400769",
+                    "version": "10.2.1",
+                    "datestamp": "1766567354",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -18170,7 +18170,7 @@
         },
         {
             "name": "drupal/vlplb",
-            "version": "10.2.0",
+            "version": "10.2.1",
             "require": {
                 "drupal/advanced_text_formatter": "*",
                 "drupal/core": "~11.3.0",
@@ -18195,8 +18195,8 @@
             "type": "metapackage",
             "extra": {
                 "drupal": {
-                    "version": "10.2.0",
-                    "datestamp": "1766400769",
+                    "version": "10.2.1",
+                    "datestamp": "1766567354",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -26543,16 +26543,16 @@
         },
         {
             "name": "vardot/varbase-patches",
-            "version": "10.1.45",
+            "version": "10.1.46",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Vardot/varbase-patches.git",
-                "reference": "d51df4d10b0f06d860cda9239b59a74aa4491c33"
+                "reference": "883b32604df7c121745b1adb43a5899e4a603392"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Vardot/varbase-patches/zipball/d51df4d10b0f06d860cda9239b59a74aa4491c33",
-                "reference": "d51df4d10b0f06d860cda9239b59a74aa4491c33",
+                "url": "https://api.github.com/repos/Vardot/varbase-patches/zipball/883b32604df7c121745b1adb43a5899e4a603392",
+                "reference": "883b32604df7c121745b1adb43a5899e4a603392",
                 "shasum": ""
             },
             "require": {
@@ -26566,9 +26566,6 @@
             "type": "library",
             "extra": {
                 "patches": {
-                    "drupal/ds": {
-                        "Issue #3507312: Fix array_unshift() Error in ds_theme_registry_alter() when running Field Group pre-process before ds_entity_view": "https://www.drupal.org/files/issues/2025-02-18/ds--2025-02-18--3507312--mr-43.patch"
-                    },
                     "drupal/gin": {
                         "Issue #3398040: Fix issue with changing between responsive views and Gin Toolbar over menus": "https://www.drupal.org/files/issues/2023-10-31/3398040-8.patch",
                         "Issue #3325263: Fix user.data ServiceNotFoundException when using Gin as distribution installer theme": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/gin--2024-11-12--3325263.patch"
@@ -26798,9 +26795,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Vardot/varbase-patches/issues",
-                "source": "https://github.com/Vardot/varbase-patches/tree/10.1.45"
+                "source": "https://github.com/Vardot/varbase-patches/tree/10.1.46"
             },
-            "time": "2025-12-22T22:39:17+00:00"
+            "time": "2025-12-28T15:42:40+00:00"
         },
         {
             "name": "vardot/varbase-replaces",
