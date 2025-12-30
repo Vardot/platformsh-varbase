@@ -166,7 +166,7 @@ applications:
             nodejs:
                 npm: ">=11.5.2"
             php:
-                "composer/composer": "~2.8.0"
+                "composer/composer": "^2.9.3"
         build:
             flavor: none
         variables:
