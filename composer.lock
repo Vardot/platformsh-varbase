@@ -3370,21 +3370,21 @@
         },
         {
             "name": "drupal/ckeditor5_plugin_pack",
-            "version": "1.4.2",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/ckeditor5_plugin_pack.git",
-                "reference": "1.4.2"
+                "reference": "1.5.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/ckeditor5_plugin_pack-1.4.2.zip",
-                "reference": "1.4.2",
-                "shasum": "c80d2e1a1c7e67494bf1a7eaedb506d7198cd57a"
+                "url": "https://ftp.drupal.org/files/projects/ckeditor5_plugin_pack-1.5.0.zip",
+                "reference": "1.5.0",
+                "shasum": "da0933ffdf035e3c21044aa1af70658b55d542e3"
             },
             "require": {
                 "drupal/ckeditor5_premium_features": "^1.5",
-                "drupal/core": "^9.4 || ^10.0 || ^11.0",
+                "drupal/core": "^10.3 || ^11.0",
                 "php": "^8.0"
             },
             "require-dev": {
@@ -3393,8 +3393,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.4.2",
-                    "datestamp": "1764157218",
+                    "version": "1.5.0",
+                    "datestamp": "1767812270",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -16584,24 +16584,24 @@
         },
         {
             "name": "drupal/varbase_editor",
-            "version": "10.1.1",
+            "version": "10.1.2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/varbase_editor.git",
-                "reference": "10.1.1"
+                "reference": "10.1.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/varbase_editor-10.1.1.zip",
-                "reference": "10.1.1",
-                "shasum": "a9997ee1414140484014940c3d78ba15aeb89a4a"
+                "url": "https://ftp.drupal.org/files/projects/varbase_editor-10.1.2.zip",
+                "reference": "10.1.2",
+                "shasum": "bf44d7758fcefd4d5c7bddd5c3e5dc5e1f66a6b9"
             },
             "require": {
                 "drupal/ace_editor": "~2",
                 "drupal/anchor_link": "~3",
                 "drupal/blazy": "~3",
                 "drupal/ckeditor5_paste_filter": "~1",
-                "drupal/ckeditor5_plugin_pack": "~1.4.0",
+                "drupal/ckeditor5_plugin_pack": "~1.5.0",
                 "drupal/ckeditor_bidi": "~5",
                 "drupal/ckeditor_emoji": "~2",
                 "drupal/ckeditor_media_embed": "~2",
@@ -16621,8 +16621,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "10.1.1",
-                    "datestamp": "1767645511",
+                    "version": "10.1.2",
+                    "datestamp": "1767881159",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
