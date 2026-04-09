@@ -1,9 +1,9 @@
 # Varbase Project Template for Platform.sh
 
-This project provides a starter kit for Varbase 10.1.x projects hosted on [Platform.sh](http://platform.sh). It
+This project provides a starter kit for Varbase 11.0.x projects hosted on [Platform.sh](http://platform.sh). It
 is very closely based on the [Varbase Composer project](https://github.com/Vardot/varbase-project).
 
-This template builds Varbase ~10.1.0 using the Varbase Composer project template.  It also includes configuration to use Redis for caching, although that must be enabled post-install in `.platform/applications.yaml`.
+This template builds Varbase ~11.0.0 using the Varbase Composer project template.  It also includes configuration to use Redis for caching, although that must be enabled post-install in `.platform/applications.yaml`.
 
 Drupal is a flexible and extensible PHP-based CMS framework.
 
@@ -163,7 +163,7 @@ $ git remote add upstream https://github.com/Vardot/platformsh-varbase.git
 $ git branch -m main
 $ git fetch --all --depth=2
 $ git fetch --all --tags
-$ git merge --allow-unrelated-histories -X theirs 10.0.0
+$ git merge --allow-unrelated-histories -X theirs 11.0.0
 ```
 
 
@@ -472,7 +472,7 @@ drush cache-rebuild
 <details>
 <summary><strong>Default <code>hash_salt</code> behavior</strong></summary><br/>
 
-Drupal's [default settings set](https://github.com/drupal/drupal/blob/10.1.x/core/assets/scaffold/files/default.settings.php#L252) `hash_salt` to an empty string:
+Drupal's [default settings set](https://github.com/drupal/drupal/blob/11.0.x/core/assets/scaffold/files/default.settings.php#L252) `hash_salt` to an empty string:
 
 ```php
 $settings['hash_salt'] = '';

@@ -121,7 +121,7 @@ applications:
                     #   Uncomment when starting a storybook in development or staging.
                     #
                     #   Follow with Integration of Varbase with Storybook
-                    #   https://docs.varbase.vardot.com/v/10.0.x/developers/theme-development-with-varbase/integration-of-varbase-with-storybook
+                    #   https://docs.varbase.vardot.com/v/11.0.x/developers/theme-development-with-varbase/integration-of-varbase-with-storybook
                     #
                     #   This will allow for origin
                     # -------------------------------------------------------------
@@ -155,7 +155,7 @@ applications:
         #   Uncomment when starting a storybook in development or staging.
         #
         #   Follow with Integration of Varbase with Storybook
-        #   https://docs.varbase.vardot.com/v/10.0.x/developers/theme-development-with-varbase/integration-of-varbase-with-storybook
+        #   https://docs.varbase.vardot.com/v/11.0.x/developers/theme-development-with-varbase/integration-of-varbase-with-storybook
         #
         #   This will allow for a start of a storybook:http upstream
         # -------------------------------------------------------------
@@ -250,7 +250,7 @@ routes:
     #   Uncomment when starting a storybook in development or staging.
     #
     #   Follow with Integration of Varbase with Storybook
-    #   https://docs.varbase.vardot.com/v/10.0.x/developers/theme-development-with-varbase/integration-of-varbase-with-storybook
+    #   https://docs.varbase.vardot.com/v/11.0.x/developers/theme-development-with-varbase/integration-of-varbase-with-storybook
     #
     #   This will allow for a storybook sub domain to point
     #   at the storybook:http upstream
