@@ -1,0 +1,148 @@
+#!/bin/bash
+
+## Description: Full initialization for automated testing - installs Varbase if needed, applies optional recipes, adds testing users, and prepares the site
+## Usage: init-full-automated-testing
+## Example: ddev init-full-automated-testing
+## Aliases: varbase:init-full-automated-testing
+
+echo "=== Full automated testing initialization for Varbase ==="
+
+# ------------------------------------------------------------------
+# 0. Check and install Drupal if not already installed
+# ------------------------------------------------------------------
+echo ""
+echo "--- Checking if Drupal is installed ---"
+
+BOOTSTRAP=$(drush status --field=bootstrap 2>/dev/null)
+if [ "$BOOTSTRAP" != "Successful" ]; then
+  echo "  Drupal is not installed. Running full Varbase install..."
+  echo ""
+
+  drush site:install varbase --yes \
+    --account-name=webmaster \
+    --account-pass="dD.123123ddd" \
+    --account-mail="webmaster@vardot.com" \
+    --site-name="$DDEV_PROJECT" \
+    --no-interaction \
+    --debug \
+    -vvv
+
+  if [[ $? -ne 0 ]]; then
+    echo "  Error: Varbase installation failed."
+    exit 1
+  fi
+
+  echo ""
+  echo "  Rebuilding cache after install..."
+  drush cache:rebuild
+
+  # ------------------------------------------------------------------
+  # 1. Apply optional Varbase recipes
+  # ------------------------------------------------------------------
+  echo ""
+  echo "--- Applying optional Varbase recipes ---"
+
+  echo ""
+  echo "  Applying recipe: varbase_users_base"
+  drush recipe /var/www/html/recipes/varbase_users_base --yes
+
+  echo ""
+  echo "  Applying recipe: varbase_dev_base"
+  drush recipe /var/www/html/recipes/varbase_dev_base --yes
+
+  echo ""
+  echo "  Applying recipe: varbase_i18n_base"
+  drush recipe /var/www/html/recipes/varbase_i18n_base --yes
+
+  echo ""
+  echo "  Applying recipe: varbase_api_base"
+  drush recipe /var/www/html/recipes/varbase_api_base --yes
+
+  echo ""
+  echo "  Applying recipe: varbase_auth_base"
+  drush recipe /var/www/html/recipes/varbase_auth_base --yes
+
+  echo ""
+  echo "--- Enabling social auth modules ---"
+  drush pm:enable social_auth_facebook --yes
+  drush pm:enable social_auth_linkedin --yes
+
+  echo ""
+  echo "  Applying recipe: varbase_ai_base"
+  drush recipe /var/www/html/recipes/varbase_ai_base --yes
+
+  echo ""
+  echo "--- Rebuilding cache after recipes ---"
+  drush cache:rebuild
+else
+  echo "  Drupal is already installed. Skipping site install."
+fi
+
+
+# ------------------------------------------------------------------
+# 2. Add testing users
+# ------------------------------------------------------------------
+echo ""
+echo "--- Adding testing users ---"
+
+current_path=$(pwd);
+
+# Include the Bash YAML library.
+source ${current_path}/.ddev/commands/web/libs/bash-yaml.sh || exit 1 ;
+
+# Load the list of default users for Varbase.
+eval $(parse_yaml ${current_path}/.ddev/commands/web/assets/varbase.users.yml);
+
+for user in ${users[@]}
+do
+  user_name="user_${user}_name";
+  user_mail="user_${user}_mail";
+  user_password="user_${user}_password";
+  user_role="user_${user}_role";
+
+  echo " ---------------------------------------------------------------- ";
+  echo "      User name: ${!user_name}";
+  echo "      User mail: ${!user_mail}";
+  echo "  User password: ${!user_password}";
+  echo "      User role: ${!user_role}";
+  echo " ================================================================= ";
+
+  drush user:create "${!user_name}" --mail="${!user_mail}" --password="${!user_password}" ;
+  if [ "${!user_role}" == '_none_' ] ; then
+    echo "   No user role for this user" ;
+  else
+    drush user:role:add "${!user_role}" "${!user_name}" ;
+  fi
+
+done
+
+# ------------------------------------------------------------------
+# 3. Prepare site for automated testing
+# ------------------------------------------------------------------
+echo ""
+echo "--- Disabling antibot module ---"
+drush pm:uninstall antibot --yes 2>/dev/null || echo "  Antibot module not found or already disabled"
+
+echo ""
+echo "--- Disabling CSS/JS aggregation ---"
+drush config:set system.performance css.preprocess 0 --yes
+drush config:set system.performance js.preprocess 0 --yes
+
+echo ""
+echo "--- Setting verbose error logging ---"
+drush config:set system.logging error_level all --yes
+
+echo ""
+echo "--- Rebuilding cache ---"
+drush cache:rebuild
+
+
+echo ""
+echo "=== Full automated testing initialization complete ==="
+echo ""
+echo "Now run on the host:"
+echo "  ddev yarn install"
+echo "  ddev npx playwright install-deps"
+echo "  ddev npx playwright install"
+echo "  ddev yarn test:chromium"
+echo ""

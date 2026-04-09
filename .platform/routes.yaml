@@ -1,0 +1,31 @@
+# The routes of the project.
+#
+# Each route describes how an incoming URL is going
+# to be processed by Platform.sh.
+
+"https://{default}/":
+    type: upstream
+    upstream: "varbase:http"
+    cache:
+      enabled: true
+
+      # Base the cache on the session cookie and custom Drupal cookies. Ignore all other cookies.
+      cookies: ['/^SS?ESS/', '/^Drupal.visitor/']
+
+"https://www.{default}/":
+    type: redirect
+    to: "https://{default}/"
+
+# ---------------------------------------------------------------------------
+#   Comment the following NOT to have a Storybook on production environment.
+#   Uncomment when starting a storybook in development or staging.
+#
+#   Follow with Integration of Varbase with Storybook
+#   https://docs.varbase.vardot.com/v/10.0.x/developers/theme-development-with-varbase/integration-of-varbase-with-storybook
+#
+#   This will allow for a storybook sub domain to point
+#   at the storybook:http upstream
+# ---------------------------------------------------------------------------
+"https://storybook.{default}":
+    type: upstream
+    upstream: "storybook:http"

@@ -1,0 +1,96 @@
+{
+  "name": "varbase-project",
+  "description": "Varbase project is a composer starterkit for new projects.",
+  "license": "GPL-2.0-or-later",
+  "private": true,
+  "engines": {
+    "yarn": ">= 4.9.3",
+    "node": ">= 20.0"
+  },
+  "scripts": {
+    "storybook:generate-all-stories": "drush storybook:generate-all-stories --omit-server-url --force",
+    "storybook:gen": "drush storybook:generate-all-stories --omit-server-url --force",
+    "storybook:gen-new": "drush storybook:generate-all-stories --omit-server-url",
+    "storybook:dev": "npx kill-port --port 6006; npx storybook dev --disable-telemetry -p 6006",
+    "storybook:build": "npx storybook build --disable-telemetry --output-dir storybook",
+    "storybook:kill": "npx kill-port --port 6006;",
+    "storybook": "storybook:dev",
+    "build-storybook": "storybook:build",
+    "phpcs": "phpcs --standard=./.phpcs.xml .",
+    "phpcbf": "phpcbf --standard=./.phpcs.xml .",
+    "lint:yaml": "node ./node_modules/eslint/bin/eslint.js --config=.eslintrc.json --ext .yml .",
+    "lint:js": "node ./node_modules/eslint/bin/eslint.js --config=.eslintrc.json --ext .js .",
+    "lint:css": "npx stylelint --config=.stylelintrc.json",
+    "test:chromium": "BROWSER=chromium node ./node_modules/@cucumber/cucumber/bin/cucumber.js --config cucumber.js",
+    "test:firefox": "BROWSER=firefox node ./node_modules/@cucumber/cucumber/bin/cucumber.js --config cucumber.js",
+    "test:webkit": "BROWSER=webkit node ./node_modules/@cucumber/cucumber/bin/cucumber.js --config cucumber.js",
+    "drupal-libraries-sync": "node ./recipes/varbase_starter/scripts/drupal-libraries-sync.js",
+    "postinstall": "node ./recipes/varbase_starter/scripts/drupal-libraries-sync.js"
+  },
+  "dependencies": {
+    "@ckeditor/ckeditor5-media-embed": "^47.6.0",
+    "ace-builds": "~1",
+    "dropzone": "~5",
+    "jquery.fancytree": "~2",
+    "swagger-ui-dist": "~3"
+  },
+  "drupal-libraries": {
+    "library-directory": "web/libraries",
+    "libraries": [
+      {
+        "name": "ckeditor5/plugins/media-embed",
+        "package": "@ckeditor/ckeditor5-media-embed"
+      },
+      {
+        "name": "ace",
+        "package": "ace-builds"
+      },
+      {
+        "name": "dropzone",
+        "package": "dropzone/dist"
+      },
+      {
+        "name": "jquery.fancytree",
+        "package": "jquery.fancytree"
+      },
+      {
+        "name": "swagger-ui/dist",
+        "package": "swagger-ui-dist"
+      }
+    ]
+  },
+  "devDependencies": {
+    "@chromatic-com/storybook": "^5",
+    "@storybook/addon-a11y": "^10",
+    "@storybook/addon-docs": "^10",
+    "@storybook/addon-links": "^10",
+    "@storybook/addon-webpack5-compiler-swc": "^4",
+    "@storybook/builder-webpack5": "^10",
+    "@storybook/cli": "^10",
+    "@storybook/server": "^10",
+    "@storybook/server-webpack5": "^10",
+    "@types/node": "^25.5.0",
+    "eslint": "^8.0.0",
+    "eslint-plugin-storybook": "^10",
+    "fork-ts-checker-webpack-plugin": "~8 || ~9",
+    "jquery": "^3.7.0",
+    "platformsh-config": "~2",
+    "prettier": "^2.1.2",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "safe-identifier": "^0.4.2",
+    "storybook": "^10",
+    "stylelint": "~16",
+    "stylelint-checkstyle-formatter": "^0.1.2",
+    "stylelint-order": "~6.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.2",
+    "webpack": "~5",
+    "webpack-cli": "~5",
+    "webship-js": "^2"
+  },
+  "resolutions": {
+    "webpack": "^5"
+  },
+  "packageManager": "yarn@4.13.0"
+}

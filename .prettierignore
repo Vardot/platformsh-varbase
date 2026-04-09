@@ -1,0 +1,11 @@
+assets/vendor/**/*
+node_modules/**/*
+*.yml
+vendor/**/*
+web/core/**/*
+web/modules/contrib/**/*
+web/themes/contrib/**/*
+web/profiles/contrib/**/*
+web/libraries/**/*
+.yarn/**/*
+storybook/**/*
