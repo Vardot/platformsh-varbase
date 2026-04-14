@@ -17,7 +17,7 @@
         root: "/"
     dependencies:
         php:
-            "composer/composer": "^2.9.3"
+            "composer/composer": "^2.9.7"
             "drush/drush": "~13"
         nodejs:
             npm: ">=11.5.2"
@@ -195,7 +195,7 @@
         nodejs:
             npm: ">=11.5.2"
         php:
-            "composer/composer": "^2.9.3"
+            "composer/composer": "^2.9.7"
     disk: 512
     build:
         flavor: none
