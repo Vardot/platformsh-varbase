@@ -34,7 +34,7 @@
     "dropzone": "~5",
     "jquery.fancytree": "~2",
     "swagger-ui-dist": "~3",
-    "aos": "^2.3.1"
+    "aos": "~2"
   },
   "drupal-libraries": {
     "library-directory": "web/libraries",
