@@ -35,8 +35,8 @@
     "drupal/redis": "~1",
     "drush/drush": "~13",
     "platformsh/config-reader": "~3",
-    "vardot/varbase": "11.0.x-dev",
-    "vardot/varbase-patches": "11.0.x-dev"
+    "vardot/varbase": "~11.0.0",
+    "vardot/varbase-patches": "~11.0.0"
   },
   "conflict": {
     "drupal/drupal": "*"

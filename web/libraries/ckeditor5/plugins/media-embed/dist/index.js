@@ -3,7 +3,7 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-licensing-options
  */
 import { Command, Plugin } from '@ckeditor/ckeditor5-core/dist/index.js';
-import { toWidget, isWidget, findOptimalInsertionRange, Widget, WidgetToolbarRepository } from '@ckeditor/ckeditor5-widget/dist/index.js';
+import { isWidget, toWidget, findOptimalInsertionRange, Widget, WidgetToolbarRepository } from '@ckeditor/ckeditor5-widget/dist/index.js';
 import { logWarning, toArray, first, global, FocusTracker, KeystrokeHandler } from '@ckeditor/ckeditor5-utils/dist/index.js';
 import { IconView, Template, View, submitHandler, LabeledFieldView, createLabeledInputText, Dialog, ButtonView, MenuBarMenuListItemButtonView, CssTransitionDisablerMixin } from '@ckeditor/ckeditor5-ui/dist/index.js';
 import { IconMediaPlaceholder, IconMedia } from '@ckeditor/ckeditor5-icons/dist/index.js';
