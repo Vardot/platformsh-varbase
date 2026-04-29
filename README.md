@@ -10,7 +10,7 @@ Drupal is a flexible and extensible PHP-based CMS framework.
 ## Quick start
 
 ```bash
-git clone https://github.com/Vardot/upsun-varbase11x00 myproject
+git clone https://github.com/Vardot/platformsh-varbase myproject
 cd myproject
 upsun project:create
 upsun push

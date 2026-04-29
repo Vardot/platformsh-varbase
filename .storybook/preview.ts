@@ -45,7 +45,10 @@ async function fetchStoryHtml(
     html = html.replace(
       /(href|src|action)="(\/[^"]*?)"/g,
       (_match, attr, assetPath) => {
-        if ((assetPath as string).startsWith('//')) return _match;
+        const path = assetPath as string;
+        if (path.startsWith('//')) return _match;
+        // Storybook staticDirs — keep same-origin on storybook host.
+        if (path.startsWith('/components/')) return _match;
         return `${attr}="${drupalBase}${assetPath}"`;
       }
     );
