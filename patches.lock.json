@@ -1,5 +1,5 @@
 {
-    "_hash": "ed51e744be7acf3c4363cec86a44a13578b6900a3d4fb618df81dbd5bff249d2",
+    "_hash": "5c4086853ff5d632903abd1b3084f99bbc50648dec076465d90a4541810ebc1a",
     "patches": {
         "drupal/core": [
             {
@@ -203,6 +203,16 @@
                 "description": "feat: #3584713 Add Allow Edit Global Regions permission to restrict editing of global page regions",
                 "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/canvas--2026-04-21--3584713--mr-911.patch",
                 "sha256": "002d18be35ed2a7d90c48d5d022aa7584ed67d8a8683ae77eaf0df410021d4c1",
+                "depth": 1,
+                "extra": {
+                    "provenance": "dependency:drupal/canvas"
+                }
+            },
+            {
+                "package": "drupal/canvas",
+                "description": "fix: #3563139 Strip JSON Schema draft-04 id keyword from prop schemas to prevent Ajv strict-mode crash on blur",
+                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/canvas--2026-05-03--3563139--mr-1046.patch",
+                "sha256": "0341e9a0459ae44c742ebf73b68bcc696e1ea14a24762538fa83e5347c13c3e5",
                 "depth": 1,
                 "extra": {
                     "provenance": "dependency:drupal/canvas"
