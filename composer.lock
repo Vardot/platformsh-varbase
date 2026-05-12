@@ -2120,6 +2120,98 @@
             }
         },
         {
+            "name": "drupal/ai_context",
+            "version": "1.0.0-beta2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/ai_context.git",
+                "reference": "1.0.0-beta2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/ai_context-1.0.0-beta2.zip",
+                "reference": "1.0.0-beta2",
+                "shasum": "e3927e8cb4388ec49be5d1d5e404e009e85b0537"
+            },
+            "require": {
+                "drupal/ai": ">=1.3.0-rc2@RC || ^2",
+                "drupal/ai_agents": "^1.2",
+                "drupal/core": "^10.5 || ^11.2",
+                "drupal/scheduler": "^2.2",
+                "drupal/scheduler_content_moderation_integration": "^3.0",
+                "league/commonmark": "^2.4"
+            },
+            "require-dev": {
+                "drupal/ai_agents_debugger": "^1.0@beta",
+                "drupal/diff": "^1.0",
+                "drupal/dynamic_entity_reference": "^3.2",
+                "drush/drush": "^12|^13"
+            },
+            "suggest": {
+                "drupal/diff": "Allows to compare revisions of context items",
+                "drupal/dynamic_entity_reference": "Enable target entity scope and per-item target entity restrictions."
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.0-beta2",
+                    "datestamp": "1778471733",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "scripts": {
+                "lint": [
+                    "@lint:cspell",
+                    "@lint:phpcs",
+                    "@lint:phpstan",
+                    "@lint:eslint",
+                    "@lint:stylelint"
+                ],
+                "lint:cspell": [
+                    "npx --yes cspell \"**/*.{php,js,yml,md}\" --config .cspell.json"
+                ],
+                "lint:phpcs": [
+                    "cd ../../../.. && vendor/bin/phpcs --standard=Drupal,DrupalPractice --extensions=php,module,inc,install,test,profile,theme,css,info,txt,md,yml web/modules/contrib/ai_context/src/ web/modules/contrib/ai_context/tests/"
+                ],
+                "lint:phpstan": [
+                    "cd ../../../.. && php -d memory_limit=512M vendor/bin/phpstan analyze web/modules/contrib/ai_context --configuration=web/modules/contrib/ai_context/phpstan.neon.dist"
+                ],
+                "lint:eslint": [
+                    "npx --yes eslint js/**/*.js"
+                ],
+                "lint:stylelint": [
+                    "npx --yes stylelint \"css/**/*.css\""
+                ]
+            },
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "ahmedjabar",
+                    "homepage": "https://www.drupal.org/user/3150677"
+                },
+                {
+                    "name": "kristen pol",
+                    "homepage": "https://www.drupal.org/user/8389"
+                },
+                {
+                    "name": "kurtfoster",
+                    "homepage": "https://www.drupal.org/user/403040"
+                }
+            ],
+            "description": "Manage AI context used in agent prompts for better AI outcomes.",
+            "homepage": "https://www.drupal.org/project/ai_context",
+            "support": {
+                "source": "https://git.drupalcode.org/project/ai_context",
+                "issues": "https://drupal.org/project/issues/ai_context"
+            }
+        },
+        {
             "name": "drupal/ai_dashboard",
             "version": "1.0.3",
             "source": {
@@ -2542,6 +2634,88 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/ai_provider_openai"
             }
+        },
+        {
+            "name": "drupal/ai_recipe_guardrails_pii",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/ai_recipe_guardrails_pii.git",
+                "reference": "5867e5910e8022a0526f0e9c78731ef60b033259"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fai_recipe_guardrails_pii/repository/archive.zip?sha=5867e5910e8022a0526f0e9c78731ef60b033259",
+                "reference": "5867e5910e8022a0526f0e9c78731ef60b033259",
+                "shasum": ""
+            },
+            "require": {
+                "drupal/ai": "^1.3",
+                "drupal/core": "^11.2"
+            },
+            "type": "drupal-recipe",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Artem Dmitriiev",
+                    "homepage": "https://www.drupal.org/u/admitriiev"
+                },
+                {
+                    "name": "Christoph Breidert",
+                    "homepage": "https://www.drupal.org/u/breidert"
+                }
+            ],
+            "description": "AI Guardrails PII recipe for the Drupal AI module. Installs guardrails to detect and block PII such as email addresses, credit card numbers, IBANs, and phone numbers.",
+            "homepage": "https://www.drupal.org/project/ai_recipe_guardrails_pii",
+            "support": {
+                "issues": "https://www.drupal.org/project/issues/ai_recipe_guardrails_pii",
+                "source": "https://git.drupalcode.org/project/ai_recipe_guardrails_pii/-/tree/1.0.0"
+            },
+            "time": "2026-03-18T19:28:41+00:00"
+        },
+        {
+            "name": "drupal/ai_recipe_guardrails_prompt_safety",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/ai_recipe_guardrails_prompt_safety.git",
+                "reference": "56d68a5bd9dd3742f6d23f7d9f04cfec026ee537"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fai_recipe_guardrails_prompt_safety/repository/archive.zip?sha=56d68a5bd9dd3742f6d23f7d9f04cfec026ee537",
+                "reference": "56d68a5bd9dd3742f6d23f7d9f04cfec026ee537",
+                "shasum": ""
+            },
+            "require": {
+                "drupal/ai": "^1.3",
+                "drupal/core": "^11.2"
+            },
+            "type": "drupal-recipe",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Artem Dmitriiev",
+                    "homepage": "https://www.drupal.org/u/admitriiev"
+                },
+                {
+                    "name": "Christoph Breidert",
+                    "homepage": "https://www.drupal.org/u/breidert"
+                }
+            ],
+            "description": "AI Guardrails Prompt Safety recipe for the Drupal AI module. Installs guardrails to block injection attacks, XSS patterns, and liability-triggering topics such as legal advice, medical advice, and sensitive subjects.",
+            "homepage": "https://www.drupal.org/project/ai_recipe_guardrails_prompt_safety",
+            "support": {
+                "issues": "https://www.drupal.org/project/issues/ai_recipe_guardrails_prompt_safety",
+                "source": "https://git.drupalcode.org/project/ai_recipe_guardrails_prompt_safety/-/tree/1.0.0"
+            },
+            "time": "2026-03-18T20:09:59+00:00"
         },
         {
             "name": "drupal/anchor_link",
@@ -14035,16 +14209,16 @@
         },
         {
             "name": "drupal/varbase_ai_base",
-            "version": "1.0.0-alpha1",
+            "version": "1.0.0-beta1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/varbase_ai_base.git",
-                "reference": "543b63fe7e946b2d92e7f7f2f3b137a21533999b"
+                "reference": "bd1e6cd7563cf9d6144f5800d304b67f591b1533"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fvarbase_ai_base/repository/archive.zip?sha=543b63fe7e946b2d92e7f7f2f3b137a21533999b",
-                "reference": "543b63fe7e946b2d92e7f7f2f3b137a21533999b",
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fvarbase_ai_base/repository/archive.zip?sha=bd1e6cd7563cf9d6144f5800d304b67f591b1533",
+                "reference": "bd1e6cd7563cf9d6144f5800d304b67f591b1533",
                 "shasum": ""
             },
             "require": {
@@ -14052,9 +14226,11 @@
                 "drupal/core": "~11.3.0",
                 "drupal/drupal_cms_ai": "~2",
                 "drupal/eca": "~3",
-                "drupal/varbase_ai_editor_assistant": "~2.0 || 2.0.x-dev",
-                "drupal/varbase_ai_image_alt": "~2.0 || 2.0.x-dev",
-                "drupal/varbase_ai_taxonomy_tagging": "~2.0 || 2.0.x-dev"
+                "drupal/varbase_ai_context": "~1.0",
+                "drupal/varbase_ai_editor_assistant": "~2.0",
+                "drupal/varbase_ai_image_alt": "~2.0",
+                "drupal/varbase_ai_safety": "~1.0",
+                "drupal/varbase_ai_taxonomy_tagging": "~2.0"
             },
             "type": "drupal-recipe",
             "notification-url": "https://packagist.org/downloads/",
@@ -14082,9 +14258,60 @@
                 "varbase recipe"
             ],
             "support": {
-                "source": "https://git.drupalcode.org/project/varbase_ai_base/-/tree/1.0.0-alpha1"
+                "source": "https://git.drupalcode.org/project/varbase_ai_base/-/tree/1.0.0-beta1"
             },
-            "time": "2026-04-27T18:55:24+00:00"
+            "time": "2026-05-12T18:18:27+00:00"
+        },
+        {
+            "name": "drupal/varbase_ai_context",
+            "version": "1.0.0-alpha2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/varbase_ai_context.git",
+                "reference": "51e07211340ba0ff7e83655f8b7ed41df27ce38e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fvarbase_ai_context/repository/archive.zip?sha=51e07211340ba0ff7e83655f8b7ed41df27ce38e",
+                "reference": "51e07211340ba0ff7e83655f8b7ed41df27ce38e",
+                "shasum": ""
+            },
+            "require": {
+                "drupal/ai_context": "~1.0",
+                "drupal/core": "~11.3.0"
+            },
+            "type": "drupal-recipe",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Vardot",
+                    "homepage": "https://www.drupal.org/vardot",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "Pre-populates starter context items (Brand & Identity Guidelines, AI Editorial Rules, AI Safety Guardrails) for every Varbase site via the Context Control Center (CCC) module.",
+            "homepage": "https://www.drupal.org/project/varbase_ai_context",
+            "keywords": [
+                "AI Context",
+                "Context Control Center",
+                "Drupal AI",
+                "Varbase AI",
+                "Varbase recipes",
+                "ai",
+                "ccc",
+                "drupal recipe",
+                "drupal recipes",
+                "recipe",
+                "varbase recipe"
+            ],
+            "support": {
+                "issues": "https://www.drupal.org/project/issues/varbase_ai_context",
+                "source": "https://git.drupalcode.org/project/varbase_ai_context/-/tree/1.0.0-alpha2"
+            },
+            "time": "2026-05-12T19:14:49+00:00"
         },
         {
             "name": "drupal/varbase_ai_editor_assistant",
@@ -14180,6 +14407,63 @@
                 "source": "https://git.drupalcode.org/project/varbase_ai_image_alt/-/tree/2.0.0-alpha1"
             },
             "time": "2026-04-27T18:26:57+00:00"
+        },
+        {
+            "name": "drupal/varbase_ai_safety",
+            "version": "1.0.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/varbase_ai_safety.git",
+                "reference": "773295ffe15ffbf5b4205342e81816815311d98d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fvarbase_ai_safety/repository/archive.zip?sha=773295ffe15ffbf5b4205342e81816815311d98d",
+                "reference": "773295ffe15ffbf5b4205342e81816815311d98d",
+                "shasum": ""
+            },
+            "require": {
+                "drupal/ai": "~1",
+                "drupal/ai_recipe_guardrails_pii": "~1",
+                "drupal/ai_recipe_guardrails_prompt_safety": "~1",
+                "drupal/core": "~11.3.0"
+            },
+            "default-branch": true,
+            "type": "drupal-recipe",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Vardot",
+                    "homepage": "https://www.drupal.org/vardot",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "Bundles the complete AI safety stack for Varbase: Prompt Safety Liability set, Prompt Safety Security set, PII Protection set, AI Logging with 90-day retention, and AI Observability.",
+            "homepage": "https://www.drupal.org/project/varbase_ai_safety",
+            "keywords": [
+                "AI Guardrails",
+                "AI Logging",
+                "AI Observability",
+                "AI Safety",
+                "Drupal AI",
+                "Prompt Safety",
+                "Varbase AI",
+                "Varbase recipes",
+                "ai",
+                "drupal recipe",
+                "drupal recipes",
+                "pii",
+                "recipe",
+                "varbase recipe"
+            ],
+            "support": {
+                "issues": "https://www.drupal.org/project/issues/varbase_ai_safety",
+                "source": "https://git.drupalcode.org/project/varbase_ai_safety/-/tree/1.0.x"
+            },
+            "time": "2026-05-12T19:48:00+00:00"
         },
         {
             "name": "drupal/varbase_ai_taxonomy_tagging",
