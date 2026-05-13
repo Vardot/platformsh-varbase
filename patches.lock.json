@@ -1,5 +1,5 @@
 {
-    "_hash": "456806e7694a96f41fd2cdabd333db770c830f7384355872f73aed43947c71d2",
+    "_hash": "6220df7c5592d142ffd916435c77f4ad20d212bcf8171fec43505dbabbb4e257",
     "patches": {
         "drupal/core": [
             {
@@ -544,6 +544,18 @@
                 "depth": null,
                 "extra": {
                     "provenance": "dependency:drupal/layout_library"
+                }
+            }
+        ],
+        "drupal/easy_encryption": [
+            {
+                "package": "drupal/easy_encryption",
+                "description": "fix: #3589914 Remove global _custom_access registration from Easy Encryption admin access checker",
+                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/easy_encryption--2026-05-13--3589914--mr-9.patch",
+                "sha256": null,
+                "depth": null,
+                "extra": {
+                    "provenance": "dependency:drupal/easy_encryption"
                 }
             }
         ],

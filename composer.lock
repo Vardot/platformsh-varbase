@@ -1890,17 +1890,17 @@
         },
         {
             "name": "drupal/ai",
-            "version": "1.3.4",
+            "version": "1.3.5",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/ai.git",
-                "reference": "1.3.4"
+                "reference": "1.3.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/ai-1.3.4.zip",
-                "reference": "1.3.4",
-                "shasum": "bb35c2caa6b83b37bffcb0f95da150a6d79c6f57"
+                "url": "https://ftp.drupal.org/files/projects/ai-1.3.5.zip",
+                "reference": "1.3.5",
+                "shasum": "d2ba6097135f36961b64d2cd2eb5ccf3e8fe77b0"
             },
             "require": {
                 "drupal/core": "^10.5 || ^11.2",
@@ -1930,8 +1930,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.3.4",
-                    "datestamp": "1777473459",
+                    "version": "1.3.5",
+                    "datestamp": "1778681493",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -7309,17 +7309,17 @@
         },
         {
             "name": "drupal/entity_usage",
-            "version": "2.0.0-beta28",
+            "version": "2.0.0-beta29",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/entity_usage.git",
-                "reference": "8.x-2.0-beta28"
+                "reference": "8.x-2.0-beta29"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/entity_usage-8.x-2.0-beta28.zip",
-                "reference": "8.x-2.0-beta28",
-                "shasum": "7e97367d1c583a41dfab91226e4f688309ae2ce7"
+                "url": "https://ftp.drupal.org/files/projects/entity_usage-8.x-2.0-beta29.zip",
+                "reference": "8.x-2.0-beta29",
+                "shasum": "41e3fe3f23472bb66cecafa5371d0e1b2202efaf"
             },
             "require": {
                 "drupal/core": "^10.3 || ^11"
@@ -7340,8 +7340,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-2.0-beta28",
-                    "datestamp": "1771495229",
+                    "version": "8.x-2.0-beta29",
+                    "datestamp": "1778682392",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
@@ -14410,16 +14410,16 @@
         },
         {
             "name": "drupal/varbase_ai_safety",
-            "version": "1.0.x-dev",
+            "version": "1.0.0-alpha2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/varbase_ai_safety.git",
-                "reference": "773295ffe15ffbf5b4205342e81816815311d98d"
+                "reference": "111890a55d0a3c307610d73ba11c54c4f1fcd6e7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fvarbase_ai_safety/repository/archive.zip?sha=773295ffe15ffbf5b4205342e81816815311d98d",
-                "reference": "773295ffe15ffbf5b4205342e81816815311d98d",
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fvarbase_ai_safety/repository/archive.zip?sha=111890a55d0a3c307610d73ba11c54c4f1fcd6e7",
+                "reference": "111890a55d0a3c307610d73ba11c54c4f1fcd6e7",
                 "shasum": ""
             },
             "require": {
@@ -14428,7 +14428,6 @@
                 "drupal/ai_recipe_guardrails_prompt_safety": "~1",
                 "drupal/core": "~11.3.0"
             },
-            "default-branch": true,
             "type": "drupal-recipe",
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -14461,9 +14460,9 @@
             ],
             "support": {
                 "issues": "https://www.drupal.org/project/issues/varbase_ai_safety",
-                "source": "https://git.drupalcode.org/project/varbase_ai_safety/-/tree/1.0.x"
+                "source": "https://git.drupalcode.org/project/varbase_ai_safety/-/tree/1.0.0-alpha2"
             },
-            "time": "2026-05-12T19:48:00+00:00"
+            "time": "2026-05-12T19:24:29+00:00"
         },
         {
             "name": "drupal/varbase_ai_taxonomy_tagging",
@@ -15870,17 +15869,17 @@
         },
         {
             "name": "drupal/views_bulk_operations",
-            "version": "4.4.4",
+            "version": "4.4.5",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/views_bulk_operations.git",
-                "reference": "4.4.4"
+                "reference": "4.4.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/views_bulk_operations-4.4.4.zip",
-                "reference": "4.4.4",
-                "shasum": "bd8e9c1af14526cd67be91390696b0e0d614ca7e"
+                "url": "https://ftp.drupal.org/files/projects/views_bulk_operations-4.4.5.zip",
+                "reference": "4.4.5",
+                "shasum": "0f4a674e79149ad7306209ac90890d9ba6f60d14"
             },
             "require": {
                 "drupal/core": "^10.3 || ^11"
@@ -15900,8 +15899,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "4.4.4",
-                    "datestamp": "1761317826",
+                    "version": "4.4.5",
+                    "datestamp": "1778674066",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -24225,16 +24224,16 @@
         },
         {
             "name": "vardot/varbase-patches",
-            "version": "11.0.4",
+            "version": "11.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Vardot/varbase-patches.git",
-                "reference": "0f19c9aa2c8894dd4ad1cb912c1764a060dd2cbc"
+                "reference": "3e2b33cd730f08bc9daf17d04676e4c7a262d3bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Vardot/varbase-patches/zipball/0f19c9aa2c8894dd4ad1cb912c1764a060dd2cbc",
-                "reference": "0f19c9aa2c8894dd4ad1cb912c1764a060dd2cbc",
+                "url": "https://api.github.com/repos/Vardot/varbase-patches/zipball/3e2b33cd730f08bc9daf17d04676e4c7a262d3bf",
+                "reference": "3e2b33cd730f08bc9daf17d04676e4c7a262d3bf",
                 "shasum": ""
             },
             "require": {
@@ -24345,6 +24344,9 @@
                         "fix: #3562479 PHP 8.4 - Implicit nullable SectionStorageInterface parameter": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/layout_library--2025-12-10--3562479--mr-22.patch",
                         "Issue #3561874 : Add missing isSupported method to Library class for SupportAwareSectionStorageInterface compatibility with Drupal ~11.3.0": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/layout_library--2026-01-21--3561874--mr-21.patch"
                     },
+                    "drupal/easy_encryption": {
+                        "fix: #3589914 Remove global _custom_access registration from Easy Encryption admin access checker": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/easy_encryption--2026-05-13--3589914--mr-9.patch"
+                    },
                     "drupal/openapi_jsonapi": {
                         "fix: #3539722 PHP 8.4: Implicitly nullable parameter declarations deprecated": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/openapi_jsonapi--2025-12-09--3539722--mr-20.patch"
                     },
@@ -24421,9 +24423,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Vardot/varbase-patches/issues",
-                "source": "https://github.com/Vardot/varbase-patches/tree/11.0.4"
+                "source": "https://github.com/Vardot/varbase-patches/tree/11.0.5"
             },
-            "time": "2026-05-11T15:42:41+00:00"
+            "time": "2026-05-13T13:23:50+00:00"
         },
         {
             "name": "yethee/tiktoken",
