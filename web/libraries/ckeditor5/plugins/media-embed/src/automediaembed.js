@@ -118,7 +118,8 @@ export class AutoMediaEmbed extends Plugin {
             return;
         }
         const mediaEmbedCommand = editor.commands.get('mediaEmbed');
-        // Do not anything if media element cannot be inserted at the current position (#47).
+        // Do not anything if media element cannot be inserted at the current position.
+        // See https://github.com/ckeditor/ckeditor5-media-embed/issues/47.
         if (!mediaEmbedCommand.isEnabled) {
             urlRange.detach();
             return;

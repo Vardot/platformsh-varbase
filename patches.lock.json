@@ -1,6 +1,18 @@
 {
-    "_hash": "6220df7c5592d142ffd916435c77f4ad20d212bcf8171fec43505dbabbb4e257",
+    "_hash": "c067b60108b6c57be0d065d48acf04b090ef3139cd3784f4a970378d09d9c9d3",
     "patches": {
+        "drupal/gin": [
+            {
+                "package": "drupal/gin",
+                "description": "fix: #3590827 Sticky form actions appear on node revision revert/delete confirm forms (incomplete exclusion pattern)",
+                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/gin--2026-05-19--3590827--mp-787.patch",
+                "sha256": null,
+                "depth": null,
+                "extra": {
+                    "provenance": "dependency:drupal/gin"
+                }
+            }
+        ],
         "drupal/core": [
             {
                 "package": "drupal/core",
