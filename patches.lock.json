@@ -1,5 +1,5 @@
 {
-    "_hash": "bb39b24cb8f27df89bdb6e3a209fdf3a73293b2707a3748905483f42a5db1f71",
+    "_hash": "2cfdceac35ffc08f1fa9aaebbc433723d46f9b64d6c626363b4379b2ce9de300",
     "patches": {
         "drupal/gin": [
             {
@@ -190,6 +190,16 @@
             }
         ],
         "drupal/canvas": [
+            {
+                "package": "drupal/canvas",
+                "description": "fix(ui): #3591716 boolean props auto-enable when another prop is changed",
+                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/canvas--2026-06-23--3591716--mr-1285.patch",
+                "sha256": null,
+                "depth": null,
+                "extra": {
+                    "provenance": "dependency:drupal/canvas"
+                }
+            },
             {
                 "package": "drupal/canvas",
                 "description": "feat: #3567225 Allow per-node override of Content Template via checkbox in node selector",
