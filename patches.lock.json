@@ -1,5 +1,5 @@
 {
-    "_hash": "c067b60108b6c57be0d065d48acf04b090ef3139cd3784f4a970378d09d9c9d3",
+    "_hash": "bb39b24cb8f27df89bdb6e3a209fdf3a73293b2707a3748905483f42a5db1f71",
     "patches": {
         "drupal/gin": [
             {
@@ -193,7 +193,7 @@
             {
                 "package": "drupal/canvas",
                 "description": "feat: #3567225 Allow per-node override of Content Template via checkbox in node selector",
-                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/canvas--2026-05-07--3567225--mr-948.patch",
+                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/canvas--2026-06-07--3567225--mr-948.patch",
                 "sha256": null,
                 "depth": null,
                 "extra": {
@@ -213,17 +213,7 @@
             {
                 "package": "drupal/canvas",
                 "description": "feat: #3584713 Add Allow Edit Global Regions permission to restrict editing of global page regions",
-                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/canvas--2026-04-21--3584713--mr-911.patch",
-                "sha256": null,
-                "depth": null,
-                "extra": {
-                    "provenance": "dependency:drupal/canvas"
-                }
-            },
-            {
-                "package": "drupal/canvas",
-                "description": "fix: #3563139 Strip JSON Schema draft-04 id keyword from prop schemas to prevent Ajv strict-mode crash on blur",
-                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/canvas--2026-05-03--3563139--mr-1046.patch",
+                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/canvas--2026-06-09--3584713--mr-911.patch",
                 "sha256": null,
                 "depth": null,
                 "extra": {
@@ -431,17 +421,7 @@
             {
                 "package": "drupal/content_lock",
                 "description": "feat: #3544019 Form Actions Stay Cached and Disabled After Breaking Lock in Gin Admin Theme",
-                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/content_lock--2026-04-23--3544019--mr-93.patch",
-                "sha256": null,
-                "depth": null,
-                "extra": {
-                    "provenance": "dependency:drupal/content_lock"
-                }
-            },
-            {
-                "package": "drupal/content_lock",
-                "description": "fix: #3568535 SQLSTATE[42S02]: Base table or view not found: 1146 Table db.sessions doesn't exist",
-                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/content_lock--2026-04-23--3568535--mr-100.patch",
+                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/content_lock--2026-06-14--3544019--mr-93.patch",
                 "sha256": null,
                 "depth": null,
                 "extra": {
@@ -556,18 +536,6 @@
                 "depth": null,
                 "extra": {
                     "provenance": "dependency:drupal/layout_library"
-                }
-            }
-        ],
-        "drupal/easy_encryption": [
-            {
-                "package": "drupal/easy_encryption",
-                "description": "fix: #3589914 Remove global _custom_access registration from Easy Encryption admin access checker",
-                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/easy_encryption--2026-05-13--3589914--mr-9.patch",
-                "sha256": null,
-                "depth": null,
-                "extra": {
-                    "provenance": "dependency:drupal/easy_encryption"
                 }
             }
         ],
@@ -689,7 +657,7 @@
             {
                 "package": "drupal/inline_entity_form",
                 "description": "Issue #2913571: Add a setting to enable/disable inline editing for existing entities",
-                "url": "https://www.drupal.org/files/issues/2024-12-27/inline_entity_form--2024-12-27--2913571--mr-127.patch",
+                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/inline_entity_form--2026-06-07--2913571--mr-127.patch",
                 "sha256": null,
                 "depth": null,
                 "extra": {
@@ -764,18 +732,6 @@
                 "depth": null,
                 "extra": {
                     "provenance": "dependency:drupal/social_auth_linkedin"
-                }
-            }
-        ],
-        "drupal/layout_builder_component_attributes": [
-            {
-                "package": "drupal/layout_builder_component_attributes",
-                "description": "fix: #3498301 PHP 8.4 compatibility implicit nullable SectionStorageInterface parameter",
-                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/layout_builder_component_attributes--2025-12-08--3498301--mr-17.patch",
-                "sha256": null,
-                "depth": null,
-                "extra": {
-                    "provenance": "dependency:drupal/layout_builder_component_attributes"
                 }
             }
         ]
