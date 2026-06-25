@@ -1,5 +1,5 @@
 {
-    "_hash": "2cfdceac35ffc08f1fa9aaebbc433723d46f9b64d6c626363b4379b2ce9de300",
+    "_hash": "cd3faa82dbc73f785e15d845e477202429047a77377f8ce4472435ad1c17d43a",
     "patches": {
         "drupal/gin": [
             {
@@ -347,38 +347,6 @@
                 }
             }
         ],
-        "drupal/paragraphs": [
-            {
-                "package": "drupal/paragraphs",
-                "description": "Issue #3138609: Fixe Field group support broken",
-                "url": "https://www.drupal.org/files/issues/2020-06-03/3138609-24.patch",
-                "sha256": null,
-                "depth": null,
-                "extra": {
-                    "provenance": "dependency:drupal/paragraphs"
-                }
-            },
-            {
-                "package": "drupal/paragraphs",
-                "description": "Issue #2924774: Let Editors add/delete/clone paragraphs When [Editing a translation]",
-                "url": "https://www.drupal.org/files/issues/2018-06-03/2924774-29.patch",
-                "sha256": null,
-                "depth": null,
-                "extra": {
-                    "provenance": "dependency:drupal/paragraphs"
-                }
-            },
-            {
-                "package": "drupal/paragraphs",
-                "description": "Issue #3090200: Paragraph access check using incorrect revision of its parent, leading to issues editing and viewing paragraphs when content moderation is involved.",
-                "url": "https://www.drupal.org/files/issues/2023-01-31/3084934-13_combine_3090200-22-update_0.patch",
-                "sha256": null,
-                "depth": null,
-                "extra": {
-                    "provenance": "dependency:drupal/paragraphs"
-                }
-            }
-        ],
         "openai-php/client": [
             {
                 "package": "openai-php/client",
@@ -504,48 +472,6 @@
                 "depth": null,
                 "extra": {
                     "provenance": "dependency:neilime/php-css-lint"
-                }
-            }
-        ],
-        "drupal/layout_library": [
-            {
-                "package": "drupal/layout_library",
-                "description": "Issue #3273160: Support inline blocks in layout",
-                "url": "https://www.drupal.org/files/issues/2022-12-14/3273160-9.patch",
-                "sha256": null,
-                "depth": null,
-                "extra": {
-                    "provenance": "dependency:drupal/layout_library"
-                }
-            },
-            {
-                "package": "drupal/layout_library",
-                "description": "Issue #3075067: Duplicate entry for key 'block_content_field__uuid__value'",
-                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/layout_library--2026-01-21--3075067--mr-1.patch",
-                "sha256": null,
-                "depth": null,
-                "extra": {
-                    "provenance": "dependency:drupal/layout_library"
-                }
-            },
-            {
-                "package": "drupal/layout_library",
-                "description": "fix: #3562479 PHP 8.4 - Implicit nullable SectionStorageInterface parameter",
-                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/layout_library--2025-12-10--3562479--mr-22.patch",
-                "sha256": null,
-                "depth": null,
-                "extra": {
-                    "provenance": "dependency:drupal/layout_library"
-                }
-            },
-            {
-                "package": "drupal/layout_library",
-                "description": "Issue #3561874 : Add missing isSupported method to Library class for SupportAwareSectionStorageInterface compatibility with Drupal ~11.3.0",
-                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/layout_library--2026-01-21--3561874--mr-21.patch",
-                "sha256": null,
-                "depth": null,
-                "extra": {
-                    "provenance": "dependency:drupal/layout_library"
                 }
             }
         ],

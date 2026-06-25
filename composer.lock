@@ -813,24 +813,24 @@
         },
         {
             "name": "consolidation/site-process",
-            "version": "5.4.2",
+            "version": "6.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/consolidation/site-process.git",
-                "reference": "e7fafc40ebfddc1a5ee99ee66e5d186fc1bed4da"
+                "reference": "4a7438fac393b5127b6a032aa4f593ec917dfab7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/consolidation/site-process/zipball/e7fafc40ebfddc1a5ee99ee66e5d186fc1bed4da",
-                "reference": "e7fafc40ebfddc1a5ee99ee66e5d186fc1bed4da",
+                "url": "https://api.github.com/repos/consolidation/site-process/zipball/4a7438fac393b5127b6a032aa4f593ec917dfab7",
+                "reference": "4a7438fac393b5127b6a032aa4f593ec917dfab7",
                 "shasum": ""
             },
             "require": {
                 "consolidation/config": "^2 || ^3",
                 "consolidation/site-alias": "^3 || ^4",
-                "php": ">=8.0.14",
-                "symfony/console": "^5.4 || ^6 || ^7",
-                "symfony/process": "^6 || ^7"
+                "php": ">=8.2",
+                "symfony/console": "^5.4 || ^6 || ^7 || ^8",
+                "symfony/process": "^5 || ^6 || ^7 || ^8"
             },
             "require-dev": {
                 "phpunit/phpunit": "^9",
@@ -864,9 +864,9 @@
             "description": "A thin wrapper around the Symfony Process Component that allows applications to use the Site Alias library to specify the target for a remote call.",
             "support": {
                 "issues": "https://github.com/consolidation/site-process/issues",
-                "source": "https://github.com/consolidation/site-process/tree/5.4.2"
+                "source": "https://github.com/consolidation/site-process/tree/6.1.0"
             },
-            "time": "2024-12-13T19:25:56+00:00"
+            "time": "2026-06-07T03:26:06+00:00"
         },
         {
             "name": "cweagans/composer-configurable-plugin",
@@ -1896,17 +1896,17 @@
         },
         {
             "name": "drupal/ai",
-            "version": "1.4.2",
+            "version": "1.4.3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/ai.git",
-                "reference": "1.4.2"
+                "reference": "1.4.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/ai-1.4.2.zip",
-                "reference": "1.4.2",
-                "shasum": "a72bb24fc6e025c6feaabb68b1ccecc0ab636b8d"
+                "url": "https://ftp.drupal.org/files/projects/ai-1.4.3.zip",
+                "reference": "1.4.3",
+                "shasum": "b4370be47117ef3dbfadaa1356b310c21acab58e"
             },
             "require": {
                 "drupal/core": "^10.5 || ^11.2",
@@ -1936,8 +1936,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.4.2",
-                    "datestamp": "1781100863",
+                    "version": "1.4.3",
+                    "datestamp": "1782325927",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2038,17 +2038,17 @@
         },
         {
             "name": "drupal/ai_agents",
-            "version": "1.3.0",
+            "version": "1.3.1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/ai_agents.git",
-                "reference": "1.3.0"
+                "reference": "1.3.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/ai_agents-1.3.0.zip",
-                "reference": "1.3.0",
-                "shasum": "676787dc830587fde80bde4658d1428ed5616333"
+                "url": "https://ftp.drupal.org/files/projects/ai_agents-1.3.1.zip",
+                "reference": "1.3.1",
+                "shasum": "8414040f9510470c228b77c93683d8b86f8a9630"
             },
             "require": {
                 "drupal/ai": "^1.4.0",
@@ -2066,8 +2066,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.3.0",
-                    "datestamp": "1779962575",
+                    "version": "1.3.1",
+                    "datestamp": "1782326004",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2569,17 +2569,17 @@
         },
         {
             "name": "drupal/ai_provider_openai",
-            "version": "1.2.1",
+            "version": "1.2.2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/ai_provider_openai.git",
-                "reference": "1.2.1"
+                "reference": "1.2.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/ai_provider_openai-1.2.1.zip",
-                "reference": "1.2.1",
-                "shasum": "9f1d467d7e8f78cb4e29b53741eda96df9de8e59"
+                "url": "https://ftp.drupal.org/files/projects/ai_provider_openai-1.2.2.zip",
+                "reference": "1.2.2",
+                "shasum": "0f6b7d7631fddff38b128edb53f3fed4860719a4"
             },
             "require": {
                 "drupal/ai": "^1.2.0",
@@ -2589,8 +2589,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.2.1",
-                    "datestamp": "1772029063",
+                    "version": "1.2.2",
+                    "datestamp": "1782325859",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -14748,17 +14748,17 @@
         },
         {
             "name": "drupal/varbase_components",
-            "version": "4.0.0-alpha2",
+            "version": "4.0.0-beta1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/varbase_components.git",
-                "reference": "4.0.0-alpha2"
+                "reference": "4.0.0-beta1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/varbase_components-4.0.0-alpha2.zip",
-                "reference": "4.0.0-alpha2",
-                "shasum": "a481733ece98526a436b8d8eb2617aae5b554302"
+                "url": "https://ftp.drupal.org/files/projects/varbase_components-4.0.0-beta1.zip",
+                "reference": "4.0.0-beta1",
+                "shasum": "9c068f1e7b07d64e86e880c0b202798a836391bb"
             },
             "require": {
                 "drupal/core": "~11.3.0",
@@ -14767,11 +14767,11 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "4.0.0-alpha2",
-                    "datestamp": "1782133222",
+                    "version": "4.0.0-beta1",
+                    "datestamp": "1782358709",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Alpha releases are not covered by Drupal security advisories."
+                        "message": "Beta releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -15706,17 +15706,17 @@
         },
         {
             "name": "drupal/vartheme_bs5",
-            "version": "5.0.0-alpha3",
+            "version": "5.0.0-beta1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/vartheme_bs5.git",
-                "reference": "5.0.0-alpha3"
+                "reference": "5.0.0-beta1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/vartheme_bs5-5.0.0-alpha3.zip",
-                "reference": "5.0.0-alpha3",
-                "shasum": "d3b987e2f730a5bf08f37e004e828723e8dcfee1"
+                "url": "https://ftp.drupal.org/files/projects/vartheme_bs5-5.0.0-beta1.zip",
+                "reference": "5.0.0-beta1",
+                "shasum": "7ad003d3ab7dbeb846af0ac6b6db7c1baeac1211"
             },
             "require": {
                 "drupal/canvas": "~1",
@@ -15726,11 +15726,11 @@
             "type": "drupal-theme",
             "extra": {
                 "drupal": {
-                    "version": "5.0.0-alpha3",
-                    "datestamp": "1782131540",
+                    "version": "5.0.0-beta1",
+                    "datestamp": "1782357491",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Alpha releases are not covered by Drupal security advisories."
+                        "message": "Beta releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -16378,16 +16378,16 @@
         },
         {
             "name": "drush/drush",
-            "version": "13.7.3",
+            "version": "13.7.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drush-ops/drush.git",
-                "reference": "a4974fabbd14337fbfdc2918184e6ef773cfeb78"
+                "reference": "90123a96db5a4d2e0faa97242eef69785aa0e67d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drush-ops/drush/zipball/a4974fabbd14337fbfdc2918184e6ef773cfeb78",
-                "reference": "a4974fabbd14337fbfdc2918184e6ef773cfeb78",
+                "url": "https://api.github.com/repos/drush-ops/drush/zipball/90123a96db5a4d2e0faa97242eef69785aa0e67d",
+                "reference": "90123a96db5a4d2e0faa97242eef69785aa0e67d",
                 "shasum": ""
             },
             "require": {
@@ -16400,7 +16400,7 @@
                 "consolidation/output-formatters": "^4.6.1",
                 "consolidation/robo": "^4.0.6 || ^5.1.0",
                 "consolidation/site-alias": "^4.1.1",
-                "consolidation/site-process": "^5.4.2",
+                "consolidation/site-process": "^5.4.2 || ^6.1",
                 "dflydev/dot-access-data": "^3.0.2",
                 "ext-dom": "*",
                 "grasmash/yaml-cli": "^3.2",
@@ -16515,7 +16515,7 @@
                 "issues": "https://github.com/drush-ops/drush/issues",
                 "security": "https://github.com/drush-ops/drush/security/advisories",
                 "slack": "https://drupal.slack.com/messages/C62H9CWQM",
-                "source": "https://github.com/drush-ops/drush/tree/13.7.3"
+                "source": "https://github.com/drush-ops/drush/tree/13.7.4"
             },
             "funding": [
                 {
@@ -16523,7 +16523,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-05-11T10:48:11+00:00"
+            "time": "2026-06-15T20:22:19+00:00"
         },
         {
             "name": "e0ipso/shaper",
@@ -17570,16 +17570,16 @@
         },
         {
             "name": "laravel/prompts",
-            "version": "v0.3.18",
+            "version": "v0.3.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/prompts.git",
-                "reference": "a19af51bb144bf87f08397921fa619f85c7d4e72"
+                "reference": "6d53c826dfd33ec5f4ac91f816ff327727c7988b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/prompts/zipball/a19af51bb144bf87f08397921fa619f85c7d4e72",
-                "reference": "a19af51bb144bf87f08397921fa619f85c7d4e72",
+                "url": "https://api.github.com/repos/laravel/prompts/zipball/6d53c826dfd33ec5f4ac91f816ff327727c7988b",
+                "reference": "6d53c826dfd33ec5f4ac91f816ff327727c7988b",
                 "shasum": ""
             },
             "require": {
@@ -17623,9 +17623,9 @@
             "description": "Add beautiful and user-friendly forms to your command-line applications.",
             "support": {
                 "issues": "https://github.com/laravel/prompts/issues",
-                "source": "https://github.com/laravel/prompts/tree/v0.3.18"
+                "source": "https://github.com/laravel/prompts/tree/v0.3.20"
             },
-            "time": "2026-05-19T00:47:18+00:00"
+            "time": "2026-06-24T19:16:38+00:00"
         },
         {
             "name": "lcobucci/clock",
@@ -18773,16 +18773,16 @@
         },
         {
             "name": "masterminds/html5",
-            "version": "2.10.0",
+            "version": "2.10.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Masterminds/html5-php.git",
-                "reference": "fcf91eb64359852f00d921887b219479b4f21251"
+                "reference": "fd5018f6815fff903946d0564977b44ce8010e29"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Masterminds/html5-php/zipball/fcf91eb64359852f00d921887b219479b4f21251",
-                "reference": "fcf91eb64359852f00d921887b219479b4f21251",
+                "url": "https://api.github.com/repos/Masterminds/html5-php/zipball/fd5018f6815fff903946d0564977b44ce8010e29",
+                "reference": "fd5018f6815fff903946d0564977b44ce8010e29",
                 "shasum": ""
             },
             "require": {
@@ -18790,7 +18790,7 @@
                 "php": ">=5.3.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.8.35 || ^5.7.21 || ^6 || ^7 || ^8 || ^9"
+                "phpunit/phpunit": "^4.8.35 || ^5.7.21 || ^6 || ^7 || ^8 || ^9 || ^10"
             },
             "type": "library",
             "extra": {
@@ -18834,9 +18834,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Masterminds/html5-php/issues",
-                "source": "https://github.com/Masterminds/html5-php/tree/2.10.0"
+                "source": "https://github.com/Masterminds/html5-php/tree/2.10.1"
             },
-            "time": "2025-07-25T09:04:22+00:00"
+            "time": "2026-06-23T18:43:15+00:00"
         },
         {
             "name": "mck89/peast",
@@ -24318,16 +24318,16 @@
         },
         {
             "name": "vardot/varbase-patches",
-            "version": "11.0.15",
+            "version": "11.0.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Vardot/varbase-patches.git",
-                "reference": "de024f4a63dfcf9672856ff8b3d086a40775caa4"
+                "reference": "13c611890fa2b8513c2ddd8079f0f7644e3f90e8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Vardot/varbase-patches/zipball/de024f4a63dfcf9672856ff8b3d086a40775caa4",
-                "reference": "de024f4a63dfcf9672856ff8b3d086a40775caa4",
+                "url": "https://api.github.com/repos/Vardot/varbase-patches/zipball/13c611890fa2b8513c2ddd8079f0f7644e3f90e8",
+                "reference": "13c611890fa2b8513c2ddd8079f0f7644e3f90e8",
                 "shasum": ""
             },
             "require": {
@@ -24400,11 +24400,6 @@
                     "drupal/dropzonejs": {
                         "Issue #3542463: Fix TypeError: count(): Argument #1 ($value) must be of type Countable|array, null given in DropzoneJsUploadForm::validateUploadElement()": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/dropzonejs--2025-08-21--3542463--mr-24.patch"
                     },
-                    "drupal/paragraphs": {
-                        "Issue #3138609: Fixe Field group support broken": "https://www.drupal.org/files/issues/2020-06-03/3138609-24.patch",
-                        "Issue #2924774: Let Editors add/delete/clone paragraphs When [Editing a translation]": "https://www.drupal.org/files/issues/2018-06-03/2924774-29.patch",
-                        "Issue #3090200: Paragraph access check using incorrect revision of its parent, leading to issues editing and viewing paragraphs when content moderation is involved.": "https://www.drupal.org/files/issues/2023-01-31/3084934-13_combine_3090200-22-update_0.patch"
-                    },
                     "openai-php/client": {
                         "fix: PHP 8.4 compatibility - TypeError when API returns null for results array #725": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/openai-php--client--2025-12-30--pr-725.patch"
                     },
@@ -24433,12 +24428,6 @@
                     },
                     "neilime/php-css-lint": {
                         "fix: #3498301 PHP 8.4 compatibility to fix PHP 8.4 deprecation warning for implicit nullable parameter in CssLint Linter": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/php-css-lint--2025-12-21--3498301.patch"
-                    },
-                    "drupal/layout_library": {
-                        "Issue #3273160: Support inline blocks in layout": "https://www.drupal.org/files/issues/2022-12-14/3273160-9.patch",
-                        "Issue #3075067: Duplicate entry for key 'block_content_field__uuid__value'": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/layout_library--2026-01-21--3075067--mr-1.patch",
-                        "fix: #3562479 PHP 8.4 - Implicit nullable SectionStorageInterface parameter": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/layout_library--2025-12-10--3562479--mr-22.patch",
-                        "Issue #3561874 : Add missing isSupported method to Library class for SupportAwareSectionStorageInterface compatibility with Drupal ~11.3.0": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/layout_library--2026-01-21--3561874--mr-21.patch"
                     },
                     "drupal/openapi_jsonapi": {
                         "fix: #3539722 PHP 8.4: Implicitly nullable parameter declarations deprecated": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/openapi_jsonapi--2025-12-09--3539722--mr-20.patch"
@@ -24513,9 +24502,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Vardot/varbase-patches/issues",
-                "source": "https://github.com/Vardot/varbase-patches/tree/11.0.15"
+                "source": "https://github.com/Vardot/varbase-patches/tree/11.0.16"
             },
-            "time": "2026-06-23T17:17:25+00:00"
+            "time": "2026-06-25T01:24:49+00:00"
         },
         {
             "name": "yethee/tiktoken",
