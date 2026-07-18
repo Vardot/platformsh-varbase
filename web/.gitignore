@@ -2,3 +2,5 @@
 /.ht.router.php
 /autoload_runtime.php
 /.ddev/traefik/
+/index.php
+/update.php

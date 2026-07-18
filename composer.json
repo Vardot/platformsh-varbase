@@ -23,7 +23,7 @@
       }
   },
   "require": {
-    "composer/installers": "~2",
+    "composer/installers": "^2.3",
     "cweagans/composer-patches": "~2.0",
     "drupal/core": "~11.4.0",
     "drupal/core-composer-scaffold": "~11.4",
@@ -72,7 +72,8 @@
   },
     "extra": {
         "drupal-lenient": {
-            "allowed-list": ["drupal/ckeditor_media_resize"]
+            "allowed-list": ["drupal/ckeditor_media_resize"],
+            "constraint": "^11.4 || ^12"
         },
         "drupal-scaffold": {
             "locations": {

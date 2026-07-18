@@ -9729,7 +9729,7 @@ __metadata:
     typescript: "npm:^6.0.2"
     webpack: "npm:~5"
     webpack-cli: "npm:~5"
-    webship-js: "npm:^2"
+    webship-js: "npm:^2.0.4"
   languageName: unknown
   linkType: soft
 
@@ -9890,7 +9890,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webship-js@npm:^2":
+"webship-js@npm:^2.0.4":
   version: 2.0.4
   resolution: "webship-js@npm:2.0.4"
   dependencies:
