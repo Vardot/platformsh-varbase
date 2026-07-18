@@ -1,5 +1,5 @@
 {
-    "_hash": "94b9bc3feeaf02af160321f2b7632601ffe3b4ea5bc690bc77e894a68e601b76",
+    "_hash": "919d9d376acbe53cffba97e5725f3454f1189066fd72436e7327c8f93a0bc3ff",
     "patches": {
         "drupal/core": [
             {
@@ -220,6 +220,18 @@
                 "depth": null,
                 "extra": {
                     "provenance": "dependency:drupal/core"
+                }
+            }
+        ],
+        "drupal/ai": [
+            {
+                "package": "drupal/ai",
+                "description": "fix: #3586589 Do not assume action definitions have a type when deriving action plugin functions",
+                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/ai--2026-07-14--3586589--mr-1799.patch",
+                "sha256": null,
+                "depth": null,
+                "extra": {
+                    "provenance": "dependency:drupal/ai"
                 }
             }
         ],
@@ -762,6 +774,18 @@
                 "depth": null,
                 "extra": {
                     "provenance": "dependency:drupal/ai_provider_anthropic"
+                }
+            }
+        ],
+        "drupal/ckeditor_media_resize": [
+            {
+                "package": "drupal/ckeditor_media_resize",
+                "description": "chore: #3607786 Add Drupal Core ~11.4.0 support in the CKEditor Media Resize module on the 1.1.x branch",
+                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/ckeditor_media_resize--2026-07-16--3607786--mr-30.patch",
+                "sha256": null,
+                "depth": null,
+                "extra": {
+                    "provenance": "dependency:drupal/ckeditor_media_resize"
                 }
             }
         ]
