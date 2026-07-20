@@ -1,5 +1,5 @@
 {
-    "_hash": "919d9d376acbe53cffba97e5725f3454f1189066fd72436e7327c8f93a0bc3ff",
+    "_hash": "b919876c16d13e75635f8c00946d8147ea275bdcdd8bd06a61aaea0444437e15",
     "patches": {
         "drupal/core": [
             {
@@ -429,6 +429,18 @@
                 }
             }
         ],
+        "drupal/ai_context": [
+            {
+                "package": "drupal/ai_context",
+                "description": "fix: #3586336 Remove the Drupal Canvas patch from the package",
+                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/ai_context--2026-07-19--3586336--mr-222.patch",
+                "sha256": null,
+                "depth": null,
+                "extra": {
+                    "provenance": "dependency:drupal/ai_context"
+                }
+            }
+        ],
         "drupal/dropzonejs": [
             {
                 "package": "drupal/dropzonejs",
@@ -774,18 +786,6 @@
                 "depth": null,
                 "extra": {
                     "provenance": "dependency:drupal/ai_provider_anthropic"
-                }
-            }
-        ],
-        "drupal/ckeditor_media_resize": [
-            {
-                "package": "drupal/ckeditor_media_resize",
-                "description": "chore: #3607786 Add Drupal Core ~11.4.0 support in the CKEditor Media Resize module on the 1.1.x branch",
-                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/ckeditor_media_resize--2026-07-16--3607786--mr-30.patch",
-                "sha256": null,
-                "depth": null,
-                "extra": {
-                    "provenance": "dependency:drupal/ckeditor_media_resize"
                 }
             }
         ]
