@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "17e633aa95f8b59a7ad60341095dbfa6",
+    "content-hash": "008688c469d187b890f18183bb63cc8a",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2173,7 +2173,7 @@
             "extra": {
                 "drupal": {
                     "version": "1.0.0-beta3",
-                    "datestamp": "1784349133",
+                    "datestamp": "1784427287",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
@@ -3884,59 +3884,6 @@
             "support": {
                 "source": "https://drupal.org/project/ckeditor_media_embed",
                 "issues": "https://drupal.org/project/issues/ckeditor_media_embed"
-            }
-        },
-        {
-            "name": "drupal/ckeditor_media_resize",
-            "version": "1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/ckeditor_media_resize.git",
-                "reference": "1.1.0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/ckeditor_media_resize-1.1.0.zip",
-                "reference": "1.1.0",
-                "shasum": "b158f58590054f0e69a9bdbb106738323e4d3bea"
-            },
-            "require": {
-                "drupal/core": "^8 || ^9 || ^10 || ^11 || ^12"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "1.1.0",
-                    "datestamp": "1759230011",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Sebastian Leu",
-                    "homepage": "https://www.drupal.org/u/s_leu",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "s_leu",
-                    "homepage": "https://www.drupal.org/user/1336864"
-                },
-                {
-                    "name": "tim bozeman",
-                    "homepage": "https://www.drupal.org/user/2241356"
-                }
-            ],
-            "description": "Provides a ckeditor5 plugin that allows resizing of embedded image media.",
-            "homepage": "https://drupal.org/project/ckeditor_media_resize",
-            "support": {
-                "source": "https://git.drupalcode.org/project/ckeditor_media_resize"
             }
         },
         {
@@ -6544,17 +6491,17 @@
         },
         {
             "name": "drupal/easy_encryption",
-            "version": "1.0.3",
+            "version": "1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/easy_encryption.git",
-                "reference": "1.0.3"
+                "reference": "1.0.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/easy_encryption-1.0.3.zip",
-                "reference": "1.0.3",
-                "shasum": "bf4eceb25c63877a30f572a3eda0d21cc24bc85c"
+                "url": "https://ftp.drupal.org/files/projects/easy_encryption-1.0.4.zip",
+                "reference": "1.0.4",
+                "shasum": "a0b0202bad66f3dab9b62ad15e62e5878ef8b74a"
             },
             "require": {
                 "drupal/core": "^11.2",
@@ -6571,8 +6518,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.0.3",
-                    "datestamp": "1779804309",
+                    "version": "1.0.4",
+                    "datestamp": "1784532831",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -14341,16 +14288,16 @@
         },
         {
             "name": "drupal/varbase_ai_context",
-            "version": "1.0.0-beta1",
+            "version": "1.0.0-beta2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/varbase_ai_context.git",
-                "reference": "d45d80dad371c7046b5f5788fba934da4d16b9dd"
+                "reference": "9e420acfb437bcc388b3448ef4dbbb799acde53f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fvarbase_ai_context/repository/archive.zip?sha=d45d80dad371c7046b5f5788fba934da4d16b9dd",
-                "reference": "d45d80dad371c7046b5f5788fba934da4d16b9dd",
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fvarbase_ai_context/repository/archive.zip?sha=9e420acfb437bcc388b3448ef4dbbb799acde53f",
+                "reference": "9e420acfb437bcc388b3448ef4dbbb799acde53f",
                 "shasum": ""
             },
             "require": {
@@ -14386,9 +14333,9 @@
             ],
             "support": {
                 "issues": "https://www.drupal.org/project/issues/varbase_ai_context",
-                "source": "https://git.drupalcode.org/project/varbase_ai_context/-/tree/1.0.0-beta1"
+                "source": "https://git.drupalcode.org/project/varbase_ai_context/-/tree/1.0.0-beta2"
             },
-            "time": "2026-07-09T23:34:00+00:00"
+            "time": "2026-07-19T08:42:45+00:00"
         },
         {
             "name": "drupal/varbase_ai_editor_assistant",
@@ -15018,16 +14965,16 @@
         },
         {
             "name": "drupal/varbase_editor_base",
-            "version": "1.0.0-beta2",
+            "version": "1.0.0-beta3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/varbase_editor_base.git",
-                "reference": "530718513984310b1e1017343422b76ecdbe4834"
+                "reference": "ff632edd79a6f72b762db292444876a7798e96fe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fvarbase_editor_base/repository/archive.zip?sha=530718513984310b1e1017343422b76ecdbe4834",
-                "reference": "530718513984310b1e1017343422b76ecdbe4834",
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fvarbase_editor_base/repository/archive.zip?sha=ff632edd79a6f72b762db292444876a7798e96fe",
+                "reference": "ff632edd79a6f72b762db292444876a7798e96fe",
                 "shasum": ""
             },
             "require": {
@@ -15038,7 +14985,6 @@
                 "drupal/ckeditor_bidi": "~5",
                 "drupal/ckeditor_emoji": "~2",
                 "drupal/ckeditor_media_embed": "~2",
-                "drupal/ckeditor_media_resize": "~1.1.0",
                 "drupal/core": "~11.4.0",
                 "drupal/edit_media_modal": "~2.1.0",
                 "drupal/editor_advanced_link": "~2.3.0",
@@ -15047,7 +14993,8 @@
                 "drupal/linkit": "~7",
                 "drupal/pathologic": "~2",
                 "drupal/token": "~1",
-                "drupal/token_filter": "~2"
+                "drupal/token_filter": "~2",
+                "vardot/ckeditor_media_resize": "~2.0.0"
             },
             "type": "drupal-recipe",
             "notification-url": "https://packagist.org/downloads/",
@@ -15076,7 +15023,7 @@
                 "issues": "https://www.drupal.org/project/issues/varbase_editor_base",
                 "source": "http://cgit.drupalcode.org/varbase_editor_base"
             },
-            "time": "2026-07-17T01:59:41+00:00"
+            "time": "2026-07-20T17:21:44+00:00"
         },
         {
             "name": "drupal/varbase_i18n_base",
@@ -18880,64 +18827,6 @@
             "time": "2026-04-24T08:04:05+00:00"
         },
         {
-            "name": "mglaman/composer-drupal-lenient",
-            "version": "1.0.7",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/mglaman/composer-drupal-lenient.git",
-                "reference": "bcb9be7f2d3160be43cd1d13a44580734a5afee0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/mglaman/composer-drupal-lenient/zipball/bcb9be7f2d3160be43cd1d13a44580734a5afee0",
-                "reference": "bcb9be7f2d3160be43cd1d13a44580734a5afee0",
-                "shasum": ""
-            },
-            "require": {
-                "composer-plugin-api": "^2.0",
-                "php": ">=8.1"
-            },
-            "require-dev": {
-                "composer/composer": "^2.3",
-                "phpstan/extension-installer": "^1.1",
-                "phpstan/phpstan": "^1.6",
-                "phpstan/phpstan-phpunit": "^1.1",
-                "phpstan/phpstan-strict-rules": "^1.2",
-                "phpunit/phpunit": "^9.5",
-                "squizlabs/php_codesniffer": "^3.6"
-            },
-            "type": "composer-plugin",
-            "extra": {
-                "class": "ComposerDrupalLenient\\Plugin"
-            },
-            "autoload": {
-                "psr-4": {
-                    "ComposerDrupalLenient\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Matt Glaman",
-                    "email": "nmd.matt@gmail.com"
-                }
-            ],
-            "support": {
-                "issues": "https://github.com/mglaman/composer-drupal-lenient/issues",
-                "source": "https://github.com/mglaman/composer-drupal-lenient/tree/1.0.7"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/mglaman",
-                    "type": "github"
-                }
-            ],
-            "time": "2024-11-21T15:59:26+00:00"
-        },
-        {
             "name": "mkalkbrenner/php-htmldiff-advanced",
             "version": "0.0.8",
             "source": {
@@ -19306,16 +19195,16 @@
         },
         {
             "name": "openai-php/client",
-            "version": "v0.20.0",
+            "version": "v0.20.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/openai-php/client.git",
-                "reference": "b5c0e1e0f210e6b9aca5ee048157fcf3039ca91f"
+                "reference": "de32ca459d5810d3c80989bc16fb0412f5095ae4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/openai-php/client/zipball/b5c0e1e0f210e6b9aca5ee048157fcf3039ca91f",
-                "reference": "b5c0e1e0f210e6b9aca5ee048157fcf3039ca91f",
+                "url": "https://api.github.com/repos/openai-php/client/zipball/de32ca459d5810d3c80989bc16fb0412f5095ae4",
+                "reference": "de32ca459d5810d3c80989bc16fb0412f5095ae4",
                 "shasum": ""
             },
             "require": {
@@ -19377,7 +19266,7 @@
             ],
             "support": {
                 "issues": "https://github.com/openai-php/client/issues",
-                "source": "https://github.com/openai-php/client/tree/v0.20.0"
+                "source": "https://github.com/openai-php/client/tree/v0.20.1"
             },
             "funding": [
                 {
@@ -19393,7 +19282,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-06-13T12:14:23+00:00"
+            "time": "2026-07-20T11:03:21+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -24494,6 +24383,51 @@
             "time": "2025-12-09T10:59:53+00:00"
         },
         {
+            "name": "vardot/ckeditor_media_resize",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Vardot/ckeditor_media_resize.git",
+                "reference": "71bd6077a03ffad4b4a94ae506100cbb29bca839"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Vardot/ckeditor_media_resize/zipball/71bd6077a03ffad4b4a94ae506100cbb29bca839",
+                "reference": "71bd6077a03ffad4b4a94ae506100cbb29bca839",
+                "shasum": ""
+            },
+            "require": {
+                "drupal/core": "^11.2"
+            },
+            "replace": {
+                "drupal/ckeditor_media_resize": "*"
+            },
+            "type": "drupal-module",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Sebastian Leu",
+                    "homepage": "https://www.drupal.org/u/s_leu",
+                    "role": "Original maintainer"
+                },
+                {
+                    "name": "Vardot",
+                    "homepage": "https://github.com/vardot",
+                    "role": "Fork maintainer"
+                }
+            ],
+            "description": "Provides a CKEditor 5 plugin that allows resizing of embedded image media. Vardot fork of drupal/ckeditor_media_resize with Drupal core ~11.4 support (drupal.org issue #3607786).",
+            "homepage": "https://github.com/vardot/ckeditor_media_resize",
+            "support": {
+                "issues": "https://github.com/Vardot/ckeditor_media_resize/issues",
+                "source": "https://github.com/Vardot/ckeditor_media_resize/tree/2.0.0"
+            },
+            "time": "2026-07-20T16:54:15+00:00"
+        },
+        {
             "name": "vardot/drupal-core-patches",
             "version": "11.4.0.6",
             "source": {
@@ -24609,16 +24543,16 @@
         },
         {
             "name": "vardot/varbase-patches",
-            "version": "11.0.26",
+            "version": "11.0.28",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Vardot/varbase-patches.git",
-                "reference": "ddd0ee76b5bfc7c80046f58891f39d5213255fed"
+                "reference": "cdd1107e1f0e2884b2b1c34f3ef1ed124c4f3c39"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Vardot/varbase-patches/zipball/ddd0ee76b5bfc7c80046f58891f39d5213255fed",
-                "reference": "ddd0ee76b5bfc7c80046f58891f39d5213255fed",
+                "url": "https://api.github.com/repos/Vardot/varbase-patches/zipball/cdd1107e1f0e2884b2b1c34f3ef1ed124c4f3c39",
+                "reference": "cdd1107e1f0e2884b2b1c34f3ef1ed124c4f3c39",
                 "shasum": ""
             },
             "require": {
@@ -24676,6 +24610,9 @@
                     },
                     "drupal/ai_agents": {
                         "fix: #3586043 Array to string conversion in Token::doReplace() when a dynamical token value is an array (applyTokens)": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/ai_agents--2026-06-30--3586043--mr-287.patch"
+                    },
+                    "drupal/ai_context": {
+                        "fix: #3586336 Remove the Drupal Canvas patch from the package": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/ai_context--2026-07-19--3586336--mr-222.patch"
                     },
                     "drupal/dropzonejs": {
                         "Issue #3542463: Fix TypeError: count(): Argument #1 ($value) must be of type Countable|array, null given in DropzoneJsUploadForm::validateUploadElement()": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/dropzonejs--2025-08-21--3542463--mr-24.patch"
@@ -24754,9 +24691,6 @@
                     },
                     "drupal/ai_provider_anthropic": {
                         "fix: #3607044 Chat: requests rejected when the conversation ends with a non-user (assistant/system) message": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/ai_provider_anthropic--2026-06-30--3607044--mr-30.patch"
-                    },
-                    "drupal/ckeditor_media_resize": {
-                        "chore: #3607786 Add Drupal Core ~11.4.0 support in the CKEditor Media Resize module on the 1.1.x branch": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/ckeditor_media_resize--2026-07-16--3607786--mr-30.patch"
                     }
                 }
             },
@@ -24788,9 +24722,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Vardot/varbase-patches/issues",
-                "source": "https://github.com/Vardot/varbase-patches/tree/11.0.26"
+                "source": "https://github.com/Vardot/varbase-patches/tree/11.0.28"
             },
-            "time": "2026-07-16T19:45:33+00:00"
+            "time": "2026-07-20T18:06:46+00:00"
         },
         {
             "name": "yethee/tiktoken",

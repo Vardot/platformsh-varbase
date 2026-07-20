@@ -34,7 +34,6 @@
     "drupal/gleap-gleap": "~1",
     "drupal/redis": "~1",
     "drush/drush": "~13",
-    "mglaman/composer-drupal-lenient": "^1.0",
     "platformsh/config-reader": "~3",
     "vardot/varbase": "~11.0.0",
     "vardot/varbase-patches": "~11.0.0"
@@ -66,15 +65,10 @@
       "drupal/core-recipe-unpack": true,
       "drupal/core-vendor-hardening": true,
       "vardot/drupal-core-patches": true,
-      "mglaman/composer-drupal-lenient": true,
       "symfony/runtime": true
     }
   },
     "extra": {
-        "drupal-lenient": {
-            "allowed-list": ["drupal/ckeditor_media_resize"],
-            "constraint": "^11.4 || ^12"
-        },
         "drupal-scaffold": {
             "locations": {
                 "web-root": "web/"
@@ -114,7 +108,8 @@
         "enable-patching": true,
         "composer-exit-on-patch-failure": true,
         "composer-patches": {
-            "allowed-dependency-patches": ["vardot/varbase-patches", "vardot/drupal-core-patches"]
+            "allowed-dependency-patches": ["vardot/varbase-patches", "vardot/drupal-core-patches"],
+            "ignore-dependency-patches": ["drupal/*", "drupal/ai_context"]
         },
         "patches-ignore": { },
         "patches": { }
