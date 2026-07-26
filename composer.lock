@@ -14420,16 +14420,16 @@
         },
         {
             "name": "drupal/varbase_ai_context",
-            "version": "1.0.0-beta2",
+            "version": "1.0.0-beta3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/varbase_ai_context.git",
-                "reference": "9e420acfb437bcc388b3448ef4dbbb799acde53f"
+                "reference": "6f2b666f21139e690b841ca8721f189ff243df3e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fvarbase_ai_context/repository/archive.zip?sha=9e420acfb437bcc388b3448ef4dbbb799acde53f",
-                "reference": "9e420acfb437bcc388b3448ef4dbbb799acde53f",
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fvarbase_ai_context/repository/archive.zip?sha=6f2b666f21139e690b841ca8721f189ff243df3e",
+                "reference": "6f2b666f21139e690b841ca8721f189ff243df3e",
                 "shasum": ""
             },
             "require": {
@@ -14465,9 +14465,9 @@
             ],
             "support": {
                 "issues": "https://www.drupal.org/project/issues/varbase_ai_context",
-                "source": "https://git.drupalcode.org/project/varbase_ai_context/-/tree/1.0.0-beta2"
+                "source": "https://git.drupalcode.org/project/varbase_ai_context/-/tree/1.0.0-beta3"
             },
-            "time": "2026-07-19T08:42:45+00:00"
+            "time": "2026-07-26T17:54:02+00:00"
         },
         {
             "name": "drupal/varbase_ai_editor_assistant",
@@ -14519,17 +14519,17 @@
         },
         {
             "name": "drupal/varbase_ai_figma",
-            "version": "1.0.0-alpha1",
+            "version": "1.0.0-alpha2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/varbase_ai_figma.git",
-                "reference": "1.0.0-alpha1"
+                "reference": "1.0.0-alpha2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/varbase_ai_figma-1.0.0-alpha1.zip",
-                "reference": "1.0.0-alpha1",
-                "shasum": "22196cd4e8a0daa1fbbb91bef4c3e58b31df1f77"
+                "url": "https://ftp.drupal.org/files/projects/varbase_ai_figma-1.0.0-alpha2.zip",
+                "reference": "1.0.0-alpha2",
+                "shasum": "708c81d90d0e034017001fa6d0d42cff2b7c0284"
             },
             "require": {
                 "drupal/ai": "^1.1",
@@ -14553,8 +14553,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.0.0-alpha1",
-                    "datestamp": "1784742742",
+                    "version": "1.0.0-alpha2",
+                    "datestamp": "1785088769",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -14603,16 +14603,16 @@
         },
         {
             "name": "drupal/varbase_ai_figma_base",
-            "version": "1.0.0-alpha1",
+            "version": "1.0.0-alpha2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/varbase_ai_figma_base.git",
-                "reference": "8051421758e0ff2811bc8f432ebe8a47dbea23c3"
+                "reference": "42aa78779db94d49e0282593bf33f2f5c1bdfb2f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fvarbase_ai_figma_base/repository/archive.zip?sha=8051421758e0ff2811bc8f432ebe8a47dbea23c3",
-                "reference": "8051421758e0ff2811bc8f432ebe8a47dbea23c3",
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fvarbase_ai_figma_base/repository/archive.zip?sha=42aa78779db94d49e0282593bf33f2f5c1bdfb2f",
+                "reference": "42aa78779db94d49e0282593bf33f2f5c1bdfb2f",
                 "shasum": ""
             },
             "require": {
@@ -14623,8 +14623,10 @@
                 "drupal/ai_figma": "~1.0.0",
                 "drupal/canvas": "^1.6",
                 "drupal/core": "~11.4.0",
+                "drupal/drupal_cms_ai": "~2",
                 "drupal/easy_encryption": "^1.0",
                 "drupal/key": "^1.18",
+                "drupal/varbase_ai_context": "~1.0.0",
                 "drupal/varbase_ai_figma": "~1.0.0"
             },
             "require-dev": {
@@ -14638,9 +14640,9 @@
             ],
             "description": "Base recipe for Varbase AI Figma (vartheme_bs5 / Bootstrap 5.3) - applies Varbase AI Base, installs ai_figma + varbase_ai_figma, Context Control Center, and the targeted Figma AI Context items, and wires the Figma tools into the Drupal Canvas AI Orchestrator.",
             "support": {
-                "source": "https://git.drupalcode.org/project/varbase_ai_figma_base/-/tree/1.0.0-alpha1"
+                "source": "https://git.drupalcode.org/project/varbase_ai_figma_base/-/tree/1.0.0-alpha2"
             },
-            "time": "2026-07-23T00:19:22+00:00"
+            "time": "2026-07-26T18:34:47+00:00"
         },
         {
             "name": "drupal/varbase_ai_image_alt",
