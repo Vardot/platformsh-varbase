@@ -24800,16 +24800,16 @@
         },
         {
             "name": "vardot/varbase-patches",
-            "version": "11.0.30",
+            "version": "11.0.31",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Vardot/varbase-patches.git",
-                "reference": "ed579241e3ea288694fab76277e8c4c21967153b"
+                "reference": "16882911f6e446a5f6801581e3f1662953ffd482"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Vardot/varbase-patches/zipball/ed579241e3ea288694fab76277e8c4c21967153b",
-                "reference": "ed579241e3ea288694fab76277e8c4c21967153b",
+                "url": "https://api.github.com/repos/Vardot/varbase-patches/zipball/16882911f6e446a5f6801581e3f1662953ffd482",
+                "reference": "16882911f6e446a5f6801581e3f1662953ffd482",
                 "shasum": ""
             },
             "require": {
@@ -24834,10 +24834,13 @@
                         "Issue #3517882: The namespace of EmbedCKEditor5PluginBase does not respect PSR4": "https://www.drupal.org/files/issues/2025-06-30/embed--2025-06-30--3517882--mr-26.patch"
                     },
                     "drupal/canvas": {
+                        "fix: #3591751 Compile on serve when a code component's compiled JS is empty": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/canvas--2026-07-26--3591751--mr-1424.patch",
                         "feat: #3567225 Allow per-node override of Content Template via checkbox in node selector": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/canvas--2026-07-10--3567225--mr-948.patch",
                         "feat: #3585221 Fall back to active version when stored component version is not available": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/canvas--2026-04-21--3585221--mr-927.patch",
                         "feat: #3584713 Add Allow Edit Global Regions permission to restrict editing of global page regions": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/canvas--2026-06-09--3584713--mr-911.patch",
                         "fix: #3591751 Compile JSX server-side for AI-created/edited code components (fixes [object Object])": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/canvas--2026-07-10--3591751--mr-1315.patch",
+                        "fix: #3560889 JsComponent crash renders Canvas Editor unusable when Image Props have relative example URLs": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/canvas--2026-07-26--3560889--mr-1425.patch",
+                        "fix: #3591876 Canvas AI: page builder discards the whole build when the LLM names a region that does not exist": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/canvas--2026-07-26--3591876--mr-1423.patch",
                         "fix: #3584883 Undefined array key placeholder warning in Component::getSlotDefinitions() when versioned_properties lacks last_active_version key": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/canvas--2026-04-15--3584883--mr-916.patch"
                     },
                     "drupal/coffee": {
@@ -24972,9 +24975,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Vardot/varbase-patches/issues",
-                "source": "https://github.com/Vardot/varbase-patches/tree/11.0.30"
+                "source": "https://github.com/Vardot/varbase-patches/tree/11.0.31"
             },
-            "time": "2026-07-26T09:47:45+00:00"
+            "time": "2026-07-26T15:05:48+00:00"
         },
         {
             "name": "yethee/tiktoken",

@@ -1,5 +1,5 @@
 {
-    "_hash": "1d669a789d92baa78ca0331168da2648922a07278f99f24b85e58037f771d714",
+    "_hash": "e1e032095e22baa2356715cde2fc79471d402da8f3890654fcf2b0df293f9f0e",
     "patches": {
         "drupal/core": [
             {
@@ -262,6 +262,16 @@
         "drupal/canvas": [
             {
                 "package": "drupal/canvas",
+                "description": "fix: #3591751 Compile on serve when a code component's compiled JS is empty",
+                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/canvas--2026-07-26--3591751--mr-1424.patch",
+                "sha256": null,
+                "depth": null,
+                "extra": {
+                    "provenance": "dependency:drupal/canvas"
+                }
+            },
+            {
+                "package": "drupal/canvas",
                 "description": "feat: #3567225 Allow per-node override of Content Template via checkbox in node selector",
                 "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/canvas--2026-07-10--3567225--mr-948.patch",
                 "sha256": null,
@@ -294,6 +304,26 @@
                 "package": "drupal/canvas",
                 "description": "fix: #3591751 Compile JSX server-side for AI-created/edited code components (fixes [object Object])",
                 "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/canvas--2026-07-10--3591751--mr-1315.patch",
+                "sha256": null,
+                "depth": null,
+                "extra": {
+                    "provenance": "dependency:drupal/canvas"
+                }
+            },
+            {
+                "package": "drupal/canvas",
+                "description": "fix: #3560889 JsComponent crash renders Canvas Editor unusable when Image Props have relative example URLs",
+                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/canvas--2026-07-26--3560889--mr-1425.patch",
+                "sha256": null,
+                "depth": null,
+                "extra": {
+                    "provenance": "dependency:drupal/canvas"
+                }
+            },
+            {
+                "package": "drupal/canvas",
+                "description": "fix: #3591876 Canvas AI: page builder discards the whole build when the LLM names a region that does not exist",
+                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/canvas--2026-07-26--3591876--mr-1423.patch",
                 "sha256": null,
                 "depth": null,
                 "extra": {
