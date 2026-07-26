@@ -1900,17 +1900,17 @@
         },
         {
             "name": "drupal/ai",
-            "version": "1.4.4",
+            "version": "1.4.5",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/ai.git",
-                "reference": "1.4.4"
+                "reference": "1.4.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/ai-1.4.4.zip",
-                "reference": "1.4.4",
-                "shasum": "cb2188358266caa6365258cf61f316b019bb4c6a"
+                "url": "https://ftp.drupal.org/files/projects/ai-1.4.5.zip",
+                "reference": "1.4.5",
+                "shasum": "010157539fa0e91ad69a2fb05bf454d75336e950"
             },
             "require": {
                 "drupal/core": "^10.5 || ^11.2",
@@ -1940,8 +1940,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.4.4",
-                    "datestamp": "1783520097",
+                    "version": "1.4.5",
+                    "datestamp": "1784730304",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2038,6 +2038,65 @@
             "homepage": "https://www.drupal.org/project/ai",
             "support": {
                 "source": "https://git.drupalcode.org/project/ai"
+            }
+        },
+        {
+            "name": "drupal/ai_agent_modes",
+            "version": "1.0.0-alpha1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/ai_agent_modes.git",
+                "reference": "1.0.0-alpha1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/ai_agent_modes-1.0.0-alpha1.zip",
+                "reference": "1.0.0-alpha1",
+                "shasum": "6dfebadd4754c1b2d2c8ecf8893438fea9e1726f"
+            },
+            "require": {
+                "drupal/ai": "^1.1 || ^2",
+                "drupal/ai_agents": "^1.1",
+                "drupal/core": "^11"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.0-alpha1",
+                    "datestamp": "1784762473",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "josebc",
+                    "homepage": "https://www.drupal.org/user/1376836"
+                },
+                {
+                    "name": "mohammed j. razem",
+                    "homepage": "https://www.drupal.org/user/255384"
+                },
+                {
+                    "name": "omar alahmed",
+                    "homepage": "https://www.drupal.org/user/308031"
+                },
+                {
+                    "name": "rajab natshah",
+                    "homepage": "https://www.drupal.org/user/1414312"
+                }
+            ],
+            "description": "Adds a Mode selector that scopes an AI agent to a curated subset of its sub-agents, shrinking the orchestrator context.",
+            "homepage": "https://www.drupal.org/project/ai_agent_modes",
+            "support": {
+                "source": "https://git.drupalcode.org/project/ai_agent_modes",
+                "issues": "https://www.drupal.org/project/issues/ai_agent_modes"
             }
         },
         {
@@ -2295,6 +2354,78 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/ai_dashboard",
                 "issues": "http://drupal.org/project/issues/ai_dashboard"
+            }
+        },
+        {
+            "name": "drupal/ai_figma",
+            "version": "1.0.0-alpha1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/ai_figma.git",
+                "reference": "1.0.0-alpha1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/ai_figma-1.0.0-alpha1.zip",
+                "reference": "1.0.0-alpha1",
+                "shasum": "55f2da7bcea7e85ace285a61d1fa71596acb2d6a"
+            },
+            "require": {
+                "drupal/ai": "^1",
+                "drupal/ai_agents": "^1",
+                "drupal/core": "^11",
+                "drupal/easy_encryption": "^1",
+                "drupal/key": "^1",
+                "php": ">=8.3"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.0-alpha1",
+                    "datestamp": "1783213063",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Vardot",
+                    "homepage": "https://www.vardot.com",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "mohammed j. razem",
+                    "homepage": "https://www.drupal.org/user/255384"
+                },
+                {
+                    "name": "omar alahmed",
+                    "homepage": "https://www.drupal.org/user/308031"
+                },
+                {
+                    "name": "rajab natshah",
+                    "homepage": "https://www.drupal.org/user/1414312"
+                }
+            ],
+            "description": "Turn a Figma design into a Drupal Canvas page built from your theme components - via an admin form or the Canvas AI assistant - with an AI Agent tool that reads Figma design context. Config-driven and theme-agnostic.",
+            "homepage": "https://www.drupal.org/project/ai_figma",
+            "keywords": [
+                "AI",
+                "AI Agents",
+                "Drupal",
+                "Drupal Canvas",
+                "Figma",
+                "design to code",
+                "design tokens"
+            ],
+            "support": {
+                "source": "https://git.drupalcode.org/project/ai_figma",
+                "issues": "https://www.drupal.org/project/issues/ai_figma"
             }
         },
         {
@@ -3007,17 +3138,17 @@
         },
         {
             "name": "drupal/better_exposed_filters",
-            "version": "7.1.2",
+            "version": "7.1.3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/better_exposed_filters.git",
-                "reference": "7.1.2"
+                "reference": "7.1.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/better_exposed_filters-7.1.2.zip",
-                "reference": "7.1.2",
-                "shasum": "44aaa7ba5c95721cbe6ec25bcef0267ec6a9ad15"
+                "url": "https://ftp.drupal.org/files/projects/better_exposed_filters-7.1.3.zip",
+                "reference": "7.1.3",
+                "shasum": "802c4a2823c5393b78750a540ac4d2e2c95767e5"
             },
             "require": {
                 "drupal/core": "^10.3 || ^11",
@@ -3026,8 +3157,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.1.2",
-                    "datestamp": "1779237916",
+                    "version": "7.1.3",
+                    "datestamp": "1784943855",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -4867,17 +4998,17 @@
         },
         {
             "name": "drupal/ctools",
-            "version": "4.1.0",
+            "version": "4.1.1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/ctools.git",
-                "reference": "4.1.0"
+                "reference": "4.1.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/ctools-4.1.0.zip",
-                "reference": "4.1.0",
-                "shasum": "69f5889cf557df9e55519390e6a95cfa31b67874"
+                "url": "https://ftp.drupal.org/files/projects/ctools-4.1.1.zip",
+                "reference": "4.1.1",
+                "shasum": "a04db6a0b6a22ddcfb9fe8f16955d55297b5da1c"
             },
             "require": {
                 "drupal/core": "^9.5 || ^10 || ^11"
@@ -4885,8 +5016,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "4.1.0",
-                    "datestamp": "1718144949",
+                    "version": "4.1.1",
+                    "datestamp": "1784926417",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -7326,17 +7457,17 @@
         },
         {
             "name": "drupal/entity_usage",
-            "version": "2.1.0",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/entity_usage.git",
-                "reference": "8.x-2.1"
+                "reference": "8.x-2.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/entity_usage-8.x-2.1.zip",
-                "reference": "8.x-2.1",
-                "shasum": "6e581d6f8444584e810219918b811c543dae6d03"
+                "url": "https://ftp.drupal.org/files/projects/entity_usage-8.x-2.2.zip",
+                "reference": "8.x-2.2",
+                "shasum": "1086b8893ed36602e7877f4fcf45232bf1504600"
             },
             "require": {
                 "drupal/core": "^10.3 || ^11"
@@ -7358,8 +7489,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-2.1",
-                    "datestamp": "1782902223",
+                    "version": "8.x-2.2",
+                    "datestamp": "1784797651",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -14233,16 +14364,16 @@
         },
         {
             "name": "drupal/varbase_ai_base",
-            "version": "1.0.0-beta3",
+            "version": "1.0.0-beta4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/varbase_ai_base.git",
-                "reference": "e8e202a1a08f88b6a52b3ee39bd6103ab880b9fa"
+                "reference": "cce9ae62f3011801128a43e35b28530c7fee37ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fvarbase_ai_base/repository/archive.zip?sha=e8e202a1a08f88b6a52b3ee39bd6103ab880b9fa",
-                "reference": "e8e202a1a08f88b6a52b3ee39bd6103ab880b9fa",
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fvarbase_ai_base/repository/archive.zip?sha=cce9ae62f3011801128a43e35b28530c7fee37ed",
+                "reference": "cce9ae62f3011801128a43e35b28530c7fee37ed",
                 "shasum": ""
             },
             "require": {
@@ -14252,6 +14383,7 @@
                 "drupal/eca": "~3",
                 "drupal/varbase_ai_context": "~1.0.0",
                 "drupal/varbase_ai_editor_assistant": "~2.0.0",
+                "drupal/varbase_ai_figma_base": "~1.0.0",
                 "drupal/varbase_ai_image_alt": "~2.0.0",
                 "drupal/varbase_ai_safety": "~1.0.0",
                 "drupal/varbase_ai_taxonomy_tagging": "~2.0.0"
@@ -14282,9 +14414,9 @@
                 "varbase recipe"
             ],
             "support": {
-                "source": "https://git.drupalcode.org/project/varbase_ai_base/-/tree/1.0.0-beta3"
+                "source": "https://git.drupalcode.org/project/varbase_ai_base/-/tree/1.0.0-beta4"
             },
-            "time": "2026-07-10T00:18:41+00:00"
+            "time": "2026-07-23T01:20:36+00:00"
         },
         {
             "name": "drupal/varbase_ai_context",
@@ -14384,6 +14516,131 @@
                 "source": "https://git.drupalcode.org/project/varbase_ai_editor_assistant/-/tree/2.0.0-beta1"
             },
             "time": "2026-07-09T22:49:58+00:00"
+        },
+        {
+            "name": "drupal/varbase_ai_figma",
+            "version": "1.0.0-alpha1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/varbase_ai_figma.git",
+                "reference": "1.0.0-alpha1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/varbase_ai_figma-1.0.0-alpha1.zip",
+                "reference": "1.0.0-alpha1",
+                "shasum": "22196cd4e8a0daa1fbbb91bef4c3e58b31df1f77"
+            },
+            "require": {
+                "drupal/ai": "^1.1",
+                "drupal/ai_agents": "^1.1",
+                "drupal/ai_context": "^1.0",
+                "drupal/ai_figma": "^1.0",
+                "drupal/canvas": "^1.6",
+                "drupal/core": "^11.3",
+                "drupal/easy_encryption": "^1.0",
+                "drupal/key": "^1.18",
+                "php": ">=8.3"
+            },
+            "require-dev": {
+                "drupal/ai_provider_amazeeio": "^1.3",
+                "drupal/ai_simple_provider_installer": "^1.0@alpha"
+            },
+            "suggest": {
+                "drupal/ai_provider_anthropic": "Run the AI Agents / Canvas AI through Claude (Anthropic).",
+                "drupal/canvas": "Enables the Figma-to-Canvas page builder (canvas_page entity + canvas.component.* registry)."
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.0-alpha1",
+                    "datestamp": "1784742742",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Vardot",
+                    "homepage": "https://www.vardot.com",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "mohammed j. razem",
+                    "homepage": "https://www.drupal.org/user/255384"
+                },
+                {
+                    "name": "omar alahmed",
+                    "homepage": "https://www.drupal.org/user/308031"
+                },
+                {
+                    "name": "rajab natshah",
+                    "homepage": "https://www.drupal.org/user/1414312"
+                }
+            ],
+            "description": "Varbase customization of AI Figma - tunes the general Figma-to-Canvas engine for the Bootstrap 5.3 vartheme_bs5 theme and wires Context Control Center (ai_context).",
+            "homepage": "https://www.drupal.org/project/varbase_ai_figma",
+            "keywords": [
+                "AI",
+                "AI Agents",
+                "Bootstrap",
+                "Drupal",
+                "Drupal Canvas",
+                "Figma",
+                "Varbase",
+                "vartheme_bs5"
+            ],
+            "support": {
+                "source": "https://git.drupalcode.org/project/varbase_ai_figma",
+                "issues": "https://www.drupal.org/project/issues/varbase_ai_figma"
+            }
+        },
+        {
+            "name": "drupal/varbase_ai_figma_base",
+            "version": "1.0.0-alpha1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/varbase_ai_figma_base.git",
+                "reference": "8051421758e0ff2811bc8f432ebe8a47dbea23c3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fvarbase_ai_figma_base/repository/archive.zip?sha=8051421758e0ff2811bc8f432ebe8a47dbea23c3",
+                "reference": "8051421758e0ff2811bc8f432ebe8a47dbea23c3",
+                "shasum": ""
+            },
+            "require": {
+                "drupal/ai": "^1.1",
+                "drupal/ai_agent_modes": "~1.0.0",
+                "drupal/ai_agents": "^1.1",
+                "drupal/ai_context": "^1.0",
+                "drupal/ai_figma": "~1.0.0",
+                "drupal/canvas": "^1.6",
+                "drupal/core": "~11.4.0",
+                "drupal/easy_encryption": "^1.0",
+                "drupal/key": "^1.18",
+                "drupal/varbase_ai_figma": "~1.0.0"
+            },
+            "require-dev": {
+                "drupal/ai_provider_amazeeio": "^1.3",
+                "drupal/ai_simple_provider_installer": "^1.0@alpha"
+            },
+            "type": "drupal-recipe",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Base recipe for Varbase AI Figma (vartheme_bs5 / Bootstrap 5.3) - applies Varbase AI Base, installs ai_figma + varbase_ai_figma, Context Control Center, and the targeted Figma AI Context items, and wires the Figma tools into the Drupal Canvas AI Orchestrator.",
+            "support": {
+                "source": "https://git.drupalcode.org/project/varbase_ai_figma_base/-/tree/1.0.0-alpha1"
+            },
+            "time": "2026-07-23T00:19:22+00:00"
         },
         {
             "name": "drupal/varbase_ai_image_alt",
@@ -18779,16 +19036,16 @@
         },
         {
             "name": "mck89/peast",
-            "version": "v1.17.6",
+            "version": "v1.17.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mck89/peast.git",
-                "reference": "b8b4184b1e6912669f9af155caef9050509d9f18"
+                "reference": "89ee39f81e82cb7ed36cc5abaf2edd43cef71770"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mck89/peast/zipball/b8b4184b1e6912669f9af155caef9050509d9f18",
-                "reference": "b8b4184b1e6912669f9af155caef9050509d9f18",
+                "url": "https://api.github.com/repos/mck89/peast/zipball/89ee39f81e82cb7ed36cc5abaf2edd43cef71770",
+                "reference": "89ee39f81e82cb7ed36cc5abaf2edd43cef71770",
                 "shasum": ""
             },
             "require": {
@@ -18801,7 +19058,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.17.6-dev"
+                    "dev-master": "1.17.7-dev"
                 }
             },
             "autoload": {
@@ -18822,9 +19079,9 @@
             "description": "Peast is PHP library that generates AST for JavaScript code",
             "support": {
                 "issues": "https://github.com/mck89/peast/issues",
-                "source": "https://github.com/mck89/peast/tree/v1.17.6"
+                "source": "https://github.com/mck89/peast/tree/v1.17.7"
             },
-            "time": "2026-04-24T08:04:05+00:00"
+            "time": "2026-07-21T11:56:06+00:00"
         },
         {
             "name": "mkalkbrenner/php-htmldiff-advanced",
@@ -20900,16 +21157,16 @@
         },
         {
             "name": "swagger-api/swagger-ui",
-            "version": "v5.32.9",
+            "version": "v5.32.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swagger-api/swagger-ui.git",
-                "reference": "08bb057df45fa778351ccea63dfedf848d5c5edf"
+                "reference": "414a60c9a40408d37821297682b8a190a840a79b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swagger-api/swagger-ui/zipball/08bb057df45fa778351ccea63dfedf848d5c5edf",
-                "reference": "08bb057df45fa778351ccea63dfedf848d5c5edf",
+                "url": "https://api.github.com/repos/swagger-api/swagger-ui/zipball/414a60c9a40408d37821297682b8a190a840a79b",
+                "reference": "414a60c9a40408d37821297682b8a190a840a79b",
                 "shasum": ""
             },
             "type": "library",
@@ -20955,9 +21212,9 @@
             ],
             "support": {
                 "issues": "https://github.com/swagger-api/swagger-ui/issues",
-                "source": "https://github.com/swagger-api/swagger-ui/tree/v5.32.9"
+                "source": "https://github.com/swagger-api/swagger-ui/tree/v5.32.11"
             },
-            "time": "2026-07-17T08:23:23+00:00"
+            "time": "2026-07-22T07:31:41+00:00"
         },
         {
             "name": "symfony/console",
@@ -24543,16 +24800,16 @@
         },
         {
             "name": "vardot/varbase-patches",
-            "version": "11.0.28",
+            "version": "11.0.30",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Vardot/varbase-patches.git",
-                "reference": "cdd1107e1f0e2884b2b1c34f3ef1ed124c4f3c39"
+                "reference": "ed579241e3ea288694fab76277e8c4c21967153b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Vardot/varbase-patches/zipball/cdd1107e1f0e2884b2b1c34f3ef1ed124c4f3c39",
-                "reference": "cdd1107e1f0e2884b2b1c34f3ef1ed124c4f3c39",
+                "url": "https://api.github.com/repos/Vardot/varbase-patches/zipball/ed579241e3ea288694fab76277e8c4c21967153b",
+                "reference": "ed579241e3ea288694fab76277e8c4c21967153b",
                 "shasum": ""
             },
             "require": {
@@ -24567,9 +24824,6 @@
             "extra": {
                 "class": "Vardot\\VarbasePatches\\Plugin\\VarbasePatchesPlugin",
                 "patches": {
-                    "drupal/ai": {
-                        "fix: #3586589 Do not assume action definitions have a type when deriving action plugin functions": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/ai--2026-07-14--3586589--mr-1799.patch"
-                    },
                     "drupal/gin": {
                         "fix: #3590827 Sticky form actions appear on node revision revert/delete confirm forms (incomplete exclusion pattern)": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/gin--2026-05-19--3590827--mp-787.patch"
                     },
@@ -24588,10 +24842,6 @@
                     },
                     "drupal/coffee": {
                         "Issue #3535874: Add Navigation Top Bar integration for Coffee module in Drupal ~11.2.0 and Gin ~5.0": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/coffee--2025-07-30--3535874--mr-19.patch"
-                    },
-                    "drupal/ctools": {
-                        "fix: 3492432 PHP 8.4 nullable types in MaskContentEntityStorage::doLoadMultiple()": "https://git.drupalcode.org/project/ctools/-/commit/5a323c6e5072515148a54b4055e7db86a50f5111.diff",
-                        "fix: #3572317 ctools_views schema alter missing requiredKey for views_block mapping keys causes validation errors in Drupal Canvas": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/ctools--2026-02-09--3572317--mr-85.patch"
                     },
                     "drupal/entity": {
                         "Issue #3532309: Fix Deprecation notice from DeleteAction class causes errors in ECA module": "https://www.drupal.org/files/issues/2025-06-25/entity-fix-deprecation.patch"
@@ -24722,9 +24972,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Vardot/varbase-patches/issues",
-                "source": "https://github.com/Vardot/varbase-patches/tree/11.0.28"
+                "source": "https://github.com/Vardot/varbase-patches/tree/11.0.30"
             },
-            "time": "2026-07-20T18:06:46+00:00"
+            "time": "2026-07-26T09:47:45+00:00"
         },
         {
             "name": "yethee/tiktoken",

@@ -1,5 +1,5 @@
 {
-    "_hash": "b919876c16d13e75635f8c00946d8147ea275bdcdd8bd06a61aaea0444437e15",
+    "_hash": "1d669a789d92baa78ca0331168da2648922a07278f99f24b85e58037f771d714",
     "patches": {
         "drupal/core": [
             {
@@ -223,18 +223,6 @@
                 }
             }
         ],
-        "drupal/ai": [
-            {
-                "package": "drupal/ai",
-                "description": "fix: #3586589 Do not assume action definitions have a type when deriving action plugin functions",
-                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/ai--2026-07-14--3586589--mr-1799.patch",
-                "sha256": null,
-                "depth": null,
-                "extra": {
-                    "provenance": "dependency:drupal/ai"
-                }
-            }
-        ],
         "drupal/gin": [
             {
                 "package": "drupal/gin",
@@ -332,28 +320,6 @@
                 "depth": null,
                 "extra": {
                     "provenance": "dependency:drupal/coffee"
-                }
-            }
-        ],
-        "drupal/ctools": [
-            {
-                "package": "drupal/ctools",
-                "description": "fix: 3492432 PHP 8.4 nullable types in MaskContentEntityStorage::doLoadMultiple()",
-                "url": "https://git.drupalcode.org/project/ctools/-/commit/5a323c6e5072515148a54b4055e7db86a50f5111.diff",
-                "sha256": null,
-                "depth": null,
-                "extra": {
-                    "provenance": "dependency:drupal/ctools"
-                }
-            },
-            {
-                "package": "drupal/ctools",
-                "description": "fix: #3572317 ctools_views schema alter missing requiredKey for views_block mapping keys causes validation errors in Drupal Canvas",
-                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/ctools--2026-02-09--3572317--mr-85.patch",
-                "sha256": null,
-                "depth": null,
-                "extra": {
-                    "provenance": "dependency:drupal/ctools"
                 }
             }
         ],
