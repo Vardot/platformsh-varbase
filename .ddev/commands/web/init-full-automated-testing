@@ -42,25 +42,45 @@ if [ "$BOOTSTRAP" != "Successful" ]; then
   echo ""
   echo "--- Applying optional Varbase recipes ---"
 
+  # Recipes are applied with core's `dr recipe` runner: Drush 13.x has no
+  # `recipe` command. A cache rebuild before each apply lets a recipe see the
+  # modules/hooks the previous one enabled (avoids stale-container fatals).
+  # This template sets composer config bin-dir to vendor/bin, so `dr` lives
+  # there rather than in bin/. Resolve it once and fail loudly if it is
+  # missing: a silently skipped apply leaves the site half-configured.
+  DR_BIN=""
+  for candidate in /var/www/html/vendor/bin/dr /var/www/html/bin/dr; do
+    if [ -f "$candidate" ]; then DR_BIN="$candidate"; break; fi
+  done
+  if [ -z "$DR_BIN" ]; then
+    echo "ERROR: core recipe runner 'dr' not found in vendor/bin or bin. Run 'ddev composer install' first." >&2
+    exit 1
+  fi
+
+  apply_recipe() {
+    drush cache:rebuild || true
+    php "$DR_BIN" recipe "/var/www/html/recipes/$1" || true
+  }
+
   echo ""
   echo "  Applying recipe: varbase_users_base"
-  drush recipe /var/www/html/recipes/varbase_users_base --yes
+  apply_recipe varbase_users_base
 
   echo ""
   echo "  Applying recipe: varbase_dev_base"
-  drush recipe /var/www/html/recipes/varbase_dev_base --yes
+  apply_recipe varbase_dev_base
 
   echo ""
   echo "  Applying recipe: varbase_i18n_base"
-  drush recipe /var/www/html/recipes/varbase_i18n_base --yes
+  apply_recipe varbase_i18n_base
 
   echo ""
   echo "  Applying recipe: varbase_api_base"
-  drush recipe /var/www/html/recipes/varbase_api_base --yes
+  apply_recipe varbase_api_base
 
   echo ""
   echo "  Applying recipe: varbase_auth_base"
-  drush recipe /var/www/html/recipes/varbase_auth_base --yes
+  apply_recipe varbase_auth_base
 
   echo ""
   echo "--- Enabling social auth modules ---"
@@ -69,7 +89,20 @@ if [ "$BOOTSTRAP" != "Successful" ]; then
 
   echo ""
   echo "  Applying recipe: varbase_ai_base"
-  drush recipe /var/www/html/recipes/varbase_ai_base --yes
+  apply_recipe varbase_ai_base
+
+  echo ""
+  echo "  Applying recipe: varbase_ai_context"
+  apply_recipe varbase_ai_context
+
+  echo ""
+  echo "  Applying recipe: varbase_ai_safety"
+  apply_recipe varbase_ai_safety
+
+  echo ""
+  echo "--- Enabling AI observability/logging/automators (recipe config actions"
+  echo "    that need a live AI provider are skipped in unattended installs) ---"
+  drush pm:enable ai_logging ai_observability ai_automators --yes || true
 
   echo ""
   echo "--- Rebuilding cache after recipes ---"
@@ -122,6 +155,30 @@ done
 echo ""
 echo "--- Disabling antibot module ---"
 drush pm:uninstall antibot --yes 2>/dev/null || echo "  Antibot module not found or already disabled"
+
+echo ""
+echo "--- Relaxing login flood limits for automated testing ---"
+# The varbase-e2e suite logs in many times in a row; the default flood
+# limits (ip_limit 5 / user_limit 4) trip "Too many failed login attempts"
+# and cascade-fail every login-dependent scenario. Raise the ceilings so the
+# suite starts from a clean slate.
+drush config:set user.flood ip_limit 1000000 --yes
+drush config:set user.flood user_limit 1000000 --yes
+
+echo ""
+echo "--- Disabling Honeypot time trap for automated testing ---"
+# Honeypot's time_limit rejects fast form submissions ("Please wait N seconds
+# and try again"), which breaks scripted form posts. Zero it out; the hidden
+# honeypot field protection stays in place.
+drush config:set honeypot.settings time_limit 0 --yes
+
+echo ""
+echo "--- Disabling the AI chatbot floating widget for automated testing ---"
+# The ai_chatbot (Deepchat) block floats over every page and intercepts
+# clicks on buttons/links near it (login submit, row "Edit" actions, etc.),
+# causing 30-45s actionability timeouts. Disable the block; the AI modules
+# and their admin pages stay fully installed.
+drush php:eval '$b=\Drupal::entityTypeManager()->getStorage("block")->load("ai_chatbot"); if($b){$b->disable()->save();}'
 
 echo ""
 echo "--- Disabling CSS/JS aggregation ---"

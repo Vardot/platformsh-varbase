@@ -1,0 +1,312 @@
+################################################################################
+# Code quality checks on GitHub Actions.
+#
+# GitHub Actions port of the `validate` stage in the Varbase project template's
+# .gitlab-ci.yml, plus the self-contained Storybook build check that ran in its
+# pre-test stage. Every job here is self-contained: it installs what it needs
+# and does not depend on a shared build artifact.
+#
+# WHAT IS DELIBERATELY NOT PORTED, AND WHY
+#
+# The GitLab pipeline also ships Cspell, ESLint and Stylelint jobs. All three
+# mask their command with `|| true`, so they report success no matter what they
+# find. They have to, because the configs they run are broken:
+#
+#   * .eslintrc.json extends "airbnb", "plugin:react/recommended",
+#     "plugin:prettier/recommended" and "plugin:yml/recommended", none of whose
+#     packages are in devDependencies. ESLint aborts with
+#     "couldn't find the config airbnb to extend from".
+#   * .stylelintrc.json extends "stylelint-config-standard" and loads the
+#     "stylelint-no-browser-hacks" plugin, neither of which is installed.
+#     Stylelint aborts with a ConfigurationError.
+#   * cspell currently reports 41 unknown words across the docs it checks.
+#
+# Shipping those three as masked jobs would add three permanently green checks
+# that verify nothing. They are left out until their configs are fixed, which is
+# its own piece of work. Do NOT add them back with `|| true`.
+################################################################################
+
+name: Code Quality
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: quality-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  PHP_VERSION: "8.4"
+  NODE_VERSION: "20"
+  COMPOSER_MEMORY_LIMIT: "-1"
+  YARN_ENABLE_IMMUTABLE_INSTALLS: "false"
+
+jobs:
+  # ===========================================================================
+  # Every YAML file in the project parses.
+  # ===========================================================================
+  yaml-lint:
+    name: "YAML lint"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install PyYAML
+        run: pip install --no-cache-dir pyyaml
+
+      # A catch-all constructor keeps custom `!tags` from failing what is only
+      # meant to be a syntax check. Contrib, core and build output are skipped.
+      - name: Check that every YAML file parses
+        run: |
+          python - <<'PY'
+          import sys, yaml
+          from pathlib import Path
+
+          class Loader(yaml.SafeLoader):
+              pass
+          Loader.add_multi_constructor('', lambda loader, suffix, node: None)
+
+          SKIP = ('vendor/', 'node_modules/', 'web/core/', 'web/modules/contrib/',
+                  'web/themes/contrib/', 'web/profiles/contrib/', 'web/profiles/varbase/',
+                  'web/libraries/', 'drush/contrib/', 'recipes/', '.cache/')
+          errors = 0
+          count = 0
+          for path in sorted(Path('.').rglob('*.y*ml')):
+              rel = str(path).lstrip('./')
+              if any(s in rel for s in SKIP):
+                  continue
+              count += 1
+              try:
+                  with open(path) as fh:
+                      list(yaml.load_all(fh, Loader=Loader))
+              except yaml.YAMLError as e:
+                  errors += 1
+                  print(f"INVALID: {rel}\n  {e}")
+          print(f"Checked {count} YAML files, {errors} invalid.")
+          sys.exit(1 if errors else 0)
+          PY
+
+  # ===========================================================================
+  # Drupal coding standards over a developer's own custom code.
+  # ===========================================================================
+  phpcs:
+    name: "PHPCS"
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up PHP ${{ env.PHP_VERSION }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: mbstring, xml
+          coverage: none
+          tools: composer
+
+      - name: Install PHP_CodeSniffer with the Drupal standard
+        run: |
+          # Composer 2.2+ blocks third-party plugins by default; allow the
+          # standards installer before requiring it, or the require aborts.
+          composer global config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+          composer global require drupal/coder:^8.3 dealerdirect/phpcodesniffer-composer-installer --no-interaction
+          echo "$(composer global config bin-dir --absolute)" >> "$GITHUB_PATH"
+
+      # A project developer's own code lives in web/modules/custom,
+      # web/themes/custom and web/recipes/custom. A fresh template ships none,
+      # and PHPCS errors on an empty target, so only sniff what has PHP in it.
+      - name: Sniff the custom code
+        run: |
+          phpcs --version
+          SCOPE=""
+          for d in web/modules/custom web/themes/custom web/recipes/custom; do
+            if [ -d "$d" ] && find "$d" -type f \( -name '*.php' -o -name '*.module' -o -name '*.inc' -o -name '*.install' -o -name '*.theme' -o -name '*.profile' \) | grep -q .; then
+              SCOPE="$SCOPE $d"
+            fi
+          done
+          if [ -n "$SCOPE" ]; then
+            phpcs --standard=.phpcs.xml -p $SCOPE
+          else
+            echo "No PHP in web/*/custom - nothing for PHPCS to sniff."
+          fi
+
+  # ===========================================================================
+  # Static analysis over the recipes and any custom code.
+  # ===========================================================================
+  phpstan:
+    name: "PHPStan"
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up PHP ${{ env.PHP_VERSION }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: mbstring, xml
+          coverage: none
+          tools: composer
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Composer downloads
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: composer-${{ runner.os }}-php${{ env.PHP_VERSION }}-${{ hashFiles('composer.lock') }}
+          restore-keys: composer-${{ runner.os }}-php${{ env.PHP_VERSION }}-
+
+      # phpstan.neon scopes recipes/varbase_starter, which composer installs
+      # into ./recipes, so the codebase has to be built first.
+      - name: Build the codebase
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: Download PHPStan
+        run: |
+          curl -sSL https://github.com/phpstan/phpstan/releases/latest/download/phpstan.phar -o phpstan.phar
+          chmod +x phpstan.phar
+
+      - name: Analyse
+        run: |
+          SCOPE=""
+          for d in recipes/varbase_starter web/modules/custom web/themes/custom web/recipes/custom; do
+            if [ -d "$d" ] && find "$d" -name '*.php' | grep -q .; then
+              SCOPE="$SCOPE $d"
+            fi
+          done
+          if [ -n "$SCOPE" ]; then
+            php phpstan.phar analyse -c phpstan.neon --no-progress $SCOPE
+          else
+            echo "No PHP files in the PHPStan scope - nothing to analyse."
+          fi
+
+  # ===========================================================================
+  # Storybook: the static build and the dev server both produce a story index.
+  # Needs no database and no running Drupal - the Server framework builds the
+  # index client-side.
+  # ===========================================================================
+  storybook:
+    name: "Storybook build"
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    env:
+      # Read by .storybook/middleware.js and preview.ts. Only embedded into the
+      # build; they do not need to be reachable for the index to be produced.
+      STORYBOOK_SERVER_URL: "http://localhost"
+      STORYBOOK_SERVER_RENDER_URL: "http://localhost/storybook/stories/render"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up PHP ${{ env.PHP_VERSION }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: gd, imagick, mbstring, xml, curl, zip, sodium, apcu, yaml, pgsql
+          coverage: none
+          tools: composer
+
+      - name: Set up Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Composer downloads
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: composer-${{ runner.os }}-php${{ env.PHP_VERSION }}-${{ hashFiles('composer.lock') }}
+          restore-keys: composer-${{ runner.os }}-php${{ env.PHP_VERSION }}-
+
+      # Brings in web/themes/contrib/vartheme_bs5 with its shipped component
+      # stories.
+      - name: Build the codebase
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: Install Node dependencies
+        run: |
+          test -f .yarnrc.yml || echo "nodeLinker: node-modules" > .yarnrc.yml
+          corepack enable
+          # --mode=skip-build skips the composer-bound postinstall
+          # (drupal-libraries-sync), which a static Storybook build does not need.
+          yarn install --mode=skip-build
+
+      - name: Install Playwright Chromium
+        run: ./node_modules/.bin/playwright install --with-deps chromium
+
+      - name: Check the component stories shipped with the theme
+        run: test -d web/themes/contrib/vartheme_bs5/components || { echo "vartheme_bs5 components missing"; exit 1; }
+
+      - name: Static build produces a story index
+        run: |
+          yarn storybook:build
+          test -f storybook/index.html || { echo "build produced no index.html"; exit 1; }
+          test -f storybook/index.json || { echo "build produced no index.json"; exit 1; }
+          BUILD_COUNT=$(grep -o '"id":' storybook/index.json | wc -l)
+          echo "Storybook build: ${BUILD_COUNT} entries in index.json"
+          test "${BUILD_COUNT}" -gt 0 || { echo "0 stories in the built index.json"; exit 1; }
+
+      - name: Dev server boots and serves the index
+        run: |
+          yarn storybook:dev > storybook-dev.log 2>&1 &
+          echo "SB_PID=$!" >> "$GITHUB_ENV"
+          UP=0
+          for i in $(seq 1 60); do
+            if curl -sf http://127.0.0.1:6006/index.json | grep -q '"entries"'; then UP=1; break; fi
+            sleep 5
+          done
+          if [ "${UP}" != "1" ]; then
+            echo "dev server did not come up on :6006"; tail -n 50 storybook-dev.log; exit 1
+          fi
+          DEV_COUNT=$(curl -sf http://127.0.0.1:6006/index.json | grep -o '"id":' | wc -l)
+          echo "Storybook dev: ${DEV_COUNT} entries served on :6006"
+          test "${DEV_COUNT}" -gt 0 || { echo "dev server served 0 stories"; exit 1; }
+
+      # Drives Chromium against the dev server and asserts a story renders in
+      # the preview iframe. Uses the static "Welcome" story, so it passes with
+      # no Drupal render backend.
+      - name: The Storybook page renders in a real browser
+        run: SB_URL=http://127.0.0.1:6006 node tests/storybook/check-storybook-page.mjs
+
+      - name: Stop the dev server
+        if: always()
+        run: kill "${SB_PID}" 2>/dev/null || true
+
+      - name: Upload the Storybook build
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: storybook
+          path: |
+            storybook/
+            storybook-dev.log
+          retention-days: 7
+          if-no-files-found: ignore

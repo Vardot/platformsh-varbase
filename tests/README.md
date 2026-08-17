@@ -1,8 +1,11 @@
 # Varbase Automated Testing
 
+[![Automated Functional Testing](https://github.com/Vardot/platformsh-varbase/actions/workflows/automated-functional-testing.yml/badge.svg)](https://github.com/Vardot/platformsh-varbase/actions/workflows/automated-functional-testing.yml)
+[![Code Quality](https://github.com/Vardot/platformsh-varbase/actions/workflows/code-quality.yml/badge.svg)](https://github.com/Vardot/platformsh-varbase/actions/workflows/code-quality.yml)
+
 Automated functional acceptance testing for Varbase using
 [Playwright](https://playwright.dev/), [Cucumber-JS](https://github.com/cucumber/cucumber-js),
-and [Webship-js](https://github.com/webship/webship-js).
+and [Varbase E2E](https://github.com/Vardot/varbase-e2e).
 
 Moving with modern automated functional testing setup for end-to-end testing.
 
@@ -18,15 +21,15 @@ Moving with modern automated functional testing setup for end-to-end testing.
 > collaboration and trust on your team.
 > Supports [Behaviour-Driven Development (BDD)](https://cucumber.io/docs/bdd/).
 
-> **[Webship-js](https://github.com/webship/webship-js)** is an **Automated Functional Acceptance Testing** tool.
+> **[Varbase E2E](https://github.com/Vardot/varbase-e2e)** is an **Automated Functional Acceptance Testing** tool.
 > Helps to ease and speed the work with end-to-end testing features in web apps or projects.
 > Utilizing Playwright and Cucumber-js.
-> [Having custom and advanced general step definitions](https://webship.co/docs/webship-js/2.0.x/step-definitions)
+> [Having custom and advanced general step definitions](https://varbase-e2e.co/docs/varbase-e2e/2.0.x/step-definitions)
 > with Drupal Core and Drupal CMS context in mind.
 
 ### Summary
 
-- Add automated functional testing support using **Playwright**, **Cucumber-JS**, and **Webship-js**.
+- Add automated functional testing support using **Playwright**, **Cucumber-JS**, and **Varbase E2E**.
 - Provide custom and advanced Drupal CMS general step definitions.
 - Enable readable, maintainable end-to-end test scenarios.
 - Run tests as part of the CI pipeline on each merge request and build.
@@ -151,7 +154,7 @@ The report opens from `tests/reports/cucumber_report.html`.
 To disable the auto-generated report on exit, set:
 
 ```bash
-WEBSHIP_REPORT_DISABLE=1 yarn test:chromium
+VARBASE_E2E_REPORT_DISABLE=1 yarn test:chromium
 ```
 
 ## Screenshots
@@ -184,11 +187,23 @@ export DIFFY_API_KEY=your-api-key
 export DIFFY_PROJECT_ID=your-project-id
 ```
 
-Then enable the Diffy step definitions in `cucumber.js`:
+Visual regression is not built into Varbase E2E 2.0. It ships as a separate
+step-pack plugin. Install it and add its step definitions to the `require:`
+list in `cucumber.js`:
+
+```bash
+ddev yarn add --dev @webship-js/diffy-steps
+```
 
 ```js
-'node_modules/webship-js/tests/step-definitions-diffy/**/*.js',
+require: [
+  'node_modules/@vardot/varbase-e2e/tests/step-definitions/**/*.js',
+  'node_modules/@webship-js/diffy-steps/tests/step-definitions/**/*.js',
+  'tests/step-definitions/**/*.js',
+],
 ```
+
+The `DIFFY_*` variables below belong to that plugin, not to Varbase E2E.
 
 | Variable               | Default                          | Description                        |
 |------------------------|----------------------------------|------------------------------------|
@@ -206,19 +221,30 @@ Then enable the Diffy step definitions in `cucumber.js`:
 ```
 tests/
   features/
-    01-website-base-requirements/   # Registration, roles, input formats, languages, accessibility
-    02-user-management/             # Login, passwords, role assignment, login redirect
-    03-admin-management/            # Admin pages, masquerade, media, JSON:API
-    04-content-structure/           # Content types, Canvas pages, blog, homepage, contact us, Canvas editor, breadcrumbs
-    05-content-management/          # Entityqueues, media library, content workflows, scheduling, cloning, linking, trash
+    # Each folder is one parallel CI suite (parallel: matrix over SUITE) and has
+    # its own README.md describing its feature files.
+    01-website-base-requirements/   # Welcome tour, registration, roles, input formats, languages
+    02-user-management/             # Login, passwords, persistent login, role assign, login redirect, user protect
+    03-admin-pages/                 # Admin/dev pages, media list, JSON:API, audit trail, bulk upload
+    04-admin-users/                 # Masquerade, disable users, admin keyboard navigation
+    05-content-pages/               # Utility pages, breadcrumbs
+    06-content-blog/                # Blog permissions, blog page
+    07-content-contact/             # Contact us page
+    08-content-homepage/            # Homepage
+    09-drupal-canvas/               # Canvas page permissions, Canvas editor
+    10-content-permissions/         # Entityqueue, media library, easy linking
+    11-content-workflow/            # Workflows, scheduling, cloning, trash
+    12-content-access-and-lock/     # Access unpublished, content lock
+    13-recipes-and-ai/              # Varbase base recipes + AI recipes (editor assistant, image alt, taxonomy, context, safety)
+    14-quality/                     # Editorial accessibility checker, accessibility (axe-core), performance budgets
   reports/                          # Generated test reports (cucumber_report.json, cucumber_report.html)
   selectors/                        # Custom CSS/XPath selector files
   step-definitions/
-    varbase-step-definitions.js     # Varbase-specific step definitions
+    varbase.steps.js                # Varbase-specific step definitions (login, perf budget, checkbox/element asserts)
     custom.js                       # Project-specific custom step definitions
 ```
 
-Step definitions from [Webship-js](https://github.com/webship/webship-js) are loaded automatically from `node_modules/webship-js/tests/step-definitions/`.
+Step definitions from [Varbase E2E](https://github.com/Vardot/varbase-e2e) are loaded automatically from `node_modules/@vardot/varbase-e2e/tests/step-definitions/`.
 
 ## Configuration
 
@@ -239,3 +265,50 @@ Step definitions from [Webship-js](https://github.com/webship/webship-js) are lo
 | Super admin     | test.super_admin@vardot.com    | administrator   |
 
 All test user passwords: `dD.123123ddd`
+
+## Continuous Integration
+
+CI runs on GitHub Actions. This template is deployed to Upsun, so there is no
+GitLab pipeline here; the two workflows below are the GitHub Actions port of the
+Varbase project template's `.gitlab-ci.yml`.
+
+- **`.github/workflows/automated-functional-testing.yml`**: the browser suite, in
+  three phases:
+  1. `install` builds the codebase, installs Varbase with the `varbase` profile,
+     applies the base + AI recipes, seeds the testing users and relaxes the login
+     flood / Honeypot limits (mirroring `ddev init-full-automated-testing`), then
+     exports a database dump.
+  2. `test` fans the suites out into 24 parallel jobs. Each restores the installed
+     site and runs one suite, writing its own cucumber JSON.
+  3. `reports` merges every suite's JSON into one HTML + PDF report, published as
+     a build artifact.
+- **`.github/workflows/code-quality.yml`**: YAML lint, PHPCS, PHPStan and the
+  Storybook build check.
+
+Both workflows also run on `workflow_dispatch`, so you can start either by hand
+from the repository's Actions tab.
+
+### Selecting suites
+
+`cucumber.js` reads two environment variables, which is how one workflow job runs
+one suite:
+
+- `FEATURES`: the feature-file glob to run.
+- `CUCUMBER_JSON`: the name of this run's JSON report, so parallel jobs do not
+  overwrite each other.
+
+```bash
+FEATURES="tests/features/17-search/**/*.feature" ddev yarn test:chromium
+```
+
+### Running the whole suite locally
+
+The workflows cannot be reproduced end to end on a laptop: they need a MariaDB
+service and a full Composer build. Run the browser suite against a live site
+instead:
+
+```bash
+ddev drush sql:drop -y
+ddev init-full-automated-testing
+ddev yarn test:chromium
+```

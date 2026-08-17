@@ -70,25 +70,45 @@ if [[ "$INSTALL_TYPE" == "full" ]]; then
   echo ""
   echo "--- Applying optional Varbase recipes for full install ---"
 
+  # Recipes are applied with core's `dr recipe` runner: Drush 13.x has no
+  # `recipe` command. A cache rebuild before each apply lets a recipe see the
+  # modules/hooks the previous one enabled (avoids stale-container fatals).
+  # This template sets composer config bin-dir to vendor/bin, so `dr` lives
+  # there rather than in bin/. Resolve it once and fail loudly if it is
+  # missing: a silently skipped apply leaves the site half-configured.
+  DR_BIN=""
+  for candidate in /var/www/html/vendor/bin/dr /var/www/html/bin/dr; do
+    if [ -f "$candidate" ]; then DR_BIN="$candidate"; break; fi
+  done
+  if [ -z "$DR_BIN" ]; then
+    echo "ERROR: core recipe runner 'dr' not found in vendor/bin or bin. Run 'ddev composer install' first." >&2
+    exit 1
+  fi
+
+  apply_recipe() {
+    drush cache:rebuild || true
+    php "$DR_BIN" recipe "/var/www/html/recipes/$1" || true
+  }
+
   echo ""
   echo "  Applying recipe: varbase_users_base"
-  drush recipe /var/www/html/recipes/varbase_users_base --yes
+  apply_recipe varbase_users_base
 
   echo ""
   echo "  Applying recipe: varbase_dev_base"
-  drush recipe /var/www/html/recipes/varbase_dev_base --yes
+  apply_recipe varbase_dev_base
 
   echo ""
   echo "  Applying recipe: varbase_i18n_base"
-  drush recipe /var/www/html/recipes/varbase_i18n_base --yes
+  apply_recipe varbase_i18n_base
 
   echo ""
   echo "  Applying recipe: varbase_api_base"
-  drush recipe /var/www/html/recipes/varbase_api_base --yes
+  apply_recipe varbase_api_base
 
   echo ""
   echo "  Applying recipe: varbase_auth_base"
-  drush recipe /var/www/html/recipes/varbase_auth_base --yes
+  apply_recipe varbase_auth_base
 
   echo ""
   echo "--- Enabling social auth modules ---"
@@ -97,7 +117,7 @@ if [[ "$INSTALL_TYPE" == "full" ]]; then
 
   echo ""
   echo "  Applying recipe: varbase_ai_base"
-  drush recipe /var/www/html/recipes/varbase_ai_base --yes
+  apply_recipe varbase_ai_base
 
   echo ""
   echo "--- Rebuilding cache after recipes ---"

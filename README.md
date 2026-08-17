@@ -150,6 +150,52 @@ Lando supports PHP applications configured to run on Upsun.
 >
 > For many of the steps above, you may need to include the CLI flags `-p PROJECT_ID` and `-e ENVIRONMENT_ID` if you are not in the project directory or if the environment is associated with an existing pull request.
 
+## Automated functional testing
+
+Browser-driven acceptance tests for the whole site, built on
+[Varbase E2E](https://github.com/Vardot/varbase-e2e) (Playwright + Cucumber). The suite lives in
+[`tests/`](tests/README.md): 17 feature suites, 288 scenarios, covering the base requirements, user
+and admin management, content structure and workflow, Drupal Canvas, the AI recipes, the ECA
+workflow modeler and search.
+
+### Run it locally with DDEV
+
+```bash
+ddev start
+ddev init-full-automated-testing   # install + recipes + testing users + site prep
+ddev yarn test                     # the whole suite
+```
+
+Run one suite, or watch a single feature in a headed browser:
+
+```bash
+FEATURES="tests/features/17-search/**/*.feature" ddev yarn test:chromium
+ddev exec HEADLESS=false SLOW_MO=800 ./node_modules/.bin/cucumber-js tests/features/17-search
+```
+
+| Command | Description |
+|---------|-------------|
+| `ddev install-varbase minimal\|full` | Install Varbase from scratch with Drupal recipes |
+| `ddev init-full-automated-testing` | Install (if needed) + recipes + test users + site prep |
+| `ddev init-minimal-automated-testing` | Test users + site prep on an already installed site |
+| `ddev add-testing-users` | Add testing user accounts |
+| `ddev delete-testing-users` | Remove testing user accounts |
+
+> **The testing users all share one password that is published in the public Varbase repository.**
+> They are for throwaway local and CI sites only. Never seed them on a public environment, and
+> change every password immediately if you ever do.
+
+### Run it in CI
+
+[`.github/workflows/automated-functional-testing.yml`](.github/workflows/automated-functional-testing.yml)
+runs the same suite on GitHub Actions in three phases: install Varbase once, fan the 24 suites out
+into parallel jobs, then merge every suite's JSON into one HTML + PDF report published as a build
+artifact. [`.github/workflows/code-quality.yml`](.github/workflows/code-quality.yml) carries the
+lint and static-analysis checks (cspell, YAML, ESLint, Stylelint, PHPCS, PHPStan) plus the Storybook
+build check.
+
+Both workflows also run on `workflow_dispatch`, so you can start them by hand from the Actions tab.
+
 ## Configuration files
 
 |  File | Purpose    |

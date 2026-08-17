@@ -1,0 +1,530 @@
+################################################################################
+# Automated Functional Acceptance Testing (Varbase E2E) on GitHub Actions.
+#
+# GitHub Actions port of the pre-test -> test -> post-test flow in the Varbase
+# project template's .gitlab-ci.yml. Same three phases, same suite split, same
+# report output:
+#
+#   install  (pre-test)  Build the codebase, install Varbase with the `varbase`
+#                        profile, apply the base + AI recipes, seed the per-role
+#                        testing users, prepare the site for deterministic
+#                        testing, then export a DB dump for the test jobs.
+#   test     (test)      One job per feature suite, fanned out by `matrix`. Each
+#                        restores the installed site and runs ONE suite, writing
+#                        its own cucumber JSON.
+#   reports  (post-test) Merge every suite's JSON into one HTML + PDF report.
+#
+# Differences from the GitLab pipeline, and why:
+#
+#   * Web server. GitLab ran Apache in the drupalci image. Here we serve the
+#     docroot with PHP's built-in server through Drupal core's own
+#     `web/.ht.router.php`, which is the router core ships for exactly this
+#     purpose: it rewrites missing files (image style derivatives, including the
+#     WebP ones drimage_improved generates on the fly) back to index.php.
+#     PHP_CLI_SERVER_WORKERS is required: the built-in server is single-process
+#     by default, and a real browser opening many parallel requests would
+#     serialise behind one worker or dead-lock on Drupal sub-requests.
+#   * Build sharing. GitLab used a build cache plus small artifacts. The same
+#     split is used here: `actions/cache` carries the heavy built trees
+#     (vendor, node_modules, web, recipes, Playwright browsers) between jobs,
+#     and `upload-artifact` carries the small installed-site state (DB dump,
+#     settings.php, files, .easy_encryption).
+#   * The `dr` recipe runner lives in vendor/bin here (this template sets
+#     composer config bin-dir to vendor/bin), not in bin/ as in the Varbase
+#     project template.
+#   * Suite 16-eca-workflow-modeler is included in the matrix. Its own README
+#     documents a `SUITE=16-eca-workflow-modeler` CI job, but the GitLab matrix
+#     does not list the folder, so those 3 feature files never ran there.
+#
+# Drush 13.x has NO `recipe` command, so recipes are applied with core's `dr`
+# runner. A cache rebuild before each apply lets a recipe see the modules and
+# hooks the previous one enabled.
+################################################################################
+
+name: Automated Functional Testing
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+  workflow_dispatch:
+
+# A new push supersedes an in-flight run of the same ref: this pipeline is long
+# and there is no value in finishing a run for code that has been replaced.
+concurrency:
+  group: functional-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  PHP_VERSION: "8.4"
+  NODE_VERSION: "20"
+  COMPOSER_MEMORY_LIMIT: "-1"
+  # Yarn 4 defaults to immutable installs and would refuse to touch the
+  # lockfile in CI; the postinstall script needs to run, so allow it.
+  YARN_ENABLE_IMMUTABLE_INSTALLS: "false"
+  PLAYWRIGHT_BROWSERS_PATH: "${{ github.workspace }}/.cache/ms-playwright"
+  DRUPAL_ADMIN_USERNAME: "webmaster"
+  DRUPAL_ADMIN_PASSWORD: "dD.123123ddd"
+  LAUNCH_URL: "http://127.0.0.1:8080"
+  DRUPAL_TEST_BASE_URL: "http://127.0.0.1:8080"
+  FORCE_COLOR: "1"
+
+jobs:
+  # ===========================================================================
+  # Pre-test: build the codebase and install Varbase once.
+  # ===========================================================================
+  install:
+    name: "Install Varbase"
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    services:
+      # Matches the mariadb:10.11 service the Upsun project runs in production.
+      database:
+        image: mariadb:10.11
+        env:
+          MARIADB_ROOT_PASSWORD: drupal
+          MARIADB_DATABASE: drupal
+          MARIADB_USER: drupal
+          MARIADB_PASSWORD: drupal
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    env:
+      SIMPLETEST_DB: "mysql://drupal:drupal@127.0.0.1:3306/drupal"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up PHP ${{ env.PHP_VERSION }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          # sodium / apcu / yaml / imagick / pgsql mirror the extensions the
+          # Upsun app runtime enables. pgsql is required by
+          # drupal/ai_provider_amazeeio >= 1.3.2.
+          extensions: gd, imagick, pdo_mysql, mbstring, xml, curl, zip, sodium, apcu, yaml, pgsql, bcmath
+          coverage: none
+          ini-values: memory_limit=-1
+
+      - name: Set up Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      # ImageMagick with WebP read/write. Varbase uses ImageMagick as its image
+      # toolkit and drimage_improved emits WebP derivatives on the fly; without
+      # the WebP coder and a permissive policy those derivative requests fail
+      # and front-end pages log resource 404s.
+      - name: Install ImageMagick with WebP support
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y imagemagick webp libwebp7
+          sudo sed -i 's/rights="none"\s*pattern="WEBP"/rights="read|write" pattern="WEBP"/I' /etc/ImageMagick-*/policy.xml 2>/dev/null || true
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Composer downloads
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: composer-${{ runner.os }}-php${{ env.PHP_VERSION }}-${{ hashFiles('composer.lock') }}
+          restore-keys: composer-${{ runner.os }}-php${{ env.PHP_VERSION }}-
+
+      - name: Cache Yarn downloads
+        uses: actions/cache@v4
+        with:
+          path: ~/.yarn/berry/cache
+          key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+          restore-keys: yarn-${{ runner.os }}-
+
+      # Install strictly from the committed lock so CI proves the same
+      # resolution the template ships, not a fresh one.
+      - name: Install Composer dependencies
+        run: |
+          composer install --no-interaction --no-progress --optimize-autoloader --prefer-dist
+
+      - name: Install Node dependencies and Playwright Chromium
+        run: |
+          test -f .yarnrc.yml || echo "nodeLinker: node-modules" > .yarnrc.yml
+          # varbase-e2e's postinstall scaffolds a cucumber.js when none exists.
+          # Under yarn 4 it can clobber the committed one, so restore it after.
+          cp cucumber.js .cucumber.js.bak
+          corepack enable
+          yarn install
+          cp .cucumber.js.bak cucumber.js && rm .cucumber.js.bak
+          ./node_modules/.bin/playwright install --with-deps chromium
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
+          key: playwright-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+
+      - name: Prepare the docroot and start the web server
+        run: |
+          mkdir -p web/sites/default/files web/sites/simpletest
+          chmod -R 777 web/sites/default/files web/sites/simpletest
+          # PHP's built-in server is single-process by default; a browser opens
+          # many parallel requests and Drupal issues sub-requests, so without
+          # extra workers the suite serialises or dead-locks.
+          echo "PHP_CLI_SERVER_WORKERS=8" >> "$GITHUB_ENV"
+          cd web
+          PHP_CLI_SERVER_WORKERS=8 php -S 127.0.0.1:8080 .ht.router.php > "${{ github.workspace }}/webserver.log" 2>&1 &
+          cd ..
+          for i in $(seq 1 30); do
+            if curl -sf -o /dev/null "http://127.0.0.1:8080/core/install.php"; then
+              echo "Web server is up."; exit 0
+            fi
+            sleep 2
+          done
+          echo "Web server did not come up."; cat webserver.log; exit 1
+
+      - name: Install Varbase
+        run: |
+          ./vendor/bin/drush --root="${{ github.workspace }}/web" site:install varbase \
+            --db-url="$SIMPLETEST_DB" \
+            --account-name="$DRUPAL_ADMIN_USERNAME" \
+            --account-pass="$DRUPAL_ADMIN_PASSWORD" \
+            --account-mail=webmaster@vardot.com \
+            --site-name="Varbase Test" --locale=en -y
+
+      # Recipes are applied with core's `dr` runner (Drush 13.x has no `recipe`
+      # command). Rebuilding caches before each apply avoids stale-container
+      # fatals from modules the previous recipe enabled.
+      - name: Apply the base and AI recipes
+        run: |
+          DRUSH="./vendor/bin/drush --root=${{ github.workspace }}/web"
+          DR="./vendor/bin/dr"
+          test -f "$DR" || { echo "core recipe runner 'dr' missing from vendor/bin"; exit 1; }
+          apply_recipe() {
+            $DRUSH cache:rebuild || true
+            php "$DR" recipe "${{ github.workspace }}/recipes/$1" || true
+          }
+          apply_recipe varbase_dev_base
+          apply_recipe varbase_i18n_base
+          apply_recipe varbase_api_base
+          apply_recipe varbase_auth_base
+          # Auth Base enables Google only; Facebook and LinkedIn ship disabled.
+          $DRUSH pm:enable social_auth_facebook social_auth_linkedin -y || true
+          apply_recipe varbase_ai_base
+          apply_recipe varbase_ai_context
+          apply_recipe varbase_ai_safety
+          # The AI safety/taxonomy sub-recipes abort on config actions that need
+          # a live AI provider (API key / default chat model), which CI has not
+          # got, so their modules never get enabled. Enable them explicitly so
+          # their admin pages exist; the config actions are optional.
+          $DRUSH cache:rebuild || true
+          $DRUSH pm:enable ai_logging ai_observability ai_automators -y || true
+
+      # Rendering the ai_ckeditor "AI Assistant" settings subform performs a
+      # live AI-provider lookup, which hangs on a runner with no provider and
+      # blows the browser's navigation budget on the text-format edit page.
+      # Strip the button/plugin from every editor; the module stays enabled.
+      - name: Remove the AI CKEditor button from every editor
+        run: |
+          ./vendor/bin/drush --root="${{ github.workspace }}/web" php:eval 'foreach(\Drupal::entityTypeManager()->getStorage("editor")->loadMultiple() as $e){$s=$e->getSettings();$c=false;if(!empty($s["toolbar"]["items"])&&is_array($s["toolbar"]["items"])){$n=array_values(array_filter($s["toolbar"]["items"],function($i){return stripos((string)$i,"ai_ckeditor")===false&&stripos((string)$i,"aickeditor")===false;}));if($n!==$s["toolbar"]["items"]){$s["toolbar"]["items"]=$n;$c=true;}}if(!empty($s["plugins"])&&is_array($s["plugins"])){foreach(array_keys($s["plugins"]) as $k){if(stripos($k,"ai_ckeditor")!==false){unset($s["plugins"][$k]);$c=true;}}}if($c){$e->setSettings($s);$e->save();}}' || true
+          ./vendor/bin/drush --root="${{ github.workspace }}/web" cache:rebuild || true
+
+      # The registry of accounts here mirrors worldParameters.users in
+      # cucumber.js. NOTE: this script sets one published password for every
+      # account; that is acceptable only on a throwaway CI site and must never
+      # be used on a public environment.
+      - name: Seed the per-role testing users
+        run: |
+          cd recipes/varbase_starter/scripts
+          bash add-testing-users.sh
+          cd "${{ github.workspace }}"
+
+      - name: Prepare the site for deterministic testing
+        run: |
+          DRUSH="./vendor/bin/drush --root=${{ github.workspace }}/web"
+          $DRUSH pm:uninstall antibot -y || true
+          $DRUSH config:set user.flood ip_limit 1000000 -y
+          $DRUSH config:set user.flood user_limit 1000000 -y
+          $DRUSH config:set honeypot.settings time_limit 0 -y || true
+          $DRUSH php:eval '$b=\Drupal::entityTypeManager()->getStorage("block")->load("ai_chatbot"); if($b){$b->disable()->save();}' || true
+          # Keep aggregation ON: with it off, heavy admin pages (the CKEditor 5
+          # text-format config in particular) emit ~90 script tags and exceed
+          # the browser's domcontentloaded budget. Aggregated they load fast and
+          # match production.
+          $DRUSH config:set system.performance css.preprocess 1 -y
+          $DRUSH config:set system.performance js.preprocess 1 -y
+          $DRUSH config:set system.logging error_level all -y
+          $DRUSH cache:rebuild
+
+      - name: Export the installed site
+        run: |
+          ./vendor/bin/drush --root="${{ github.workspace }}/web" sql:dump --gzip --result-file="${{ github.workspace }}/varbase-db.sql"
+
+      # The heavy built trees move between jobs through the cache, keyed on the
+      # run id so every job in this run gets exactly this build.
+      - name: Save the built codebase to the cache
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            vendor
+            node_modules
+            web
+            recipes
+            drush/contrib
+            ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
+          key: varbase-build-${{ github.run_id }}
+
+      - name: Upload the installed site state
+        uses: actions/upload-artifact@v4
+        with:
+          name: installed-site
+          path: |
+            varbase-db.sql.gz
+            web/sites/default/settings.php
+            web/sites/default/files
+            .easy_encryption
+          include-hidden-files: true
+          retention-days: 1
+          if-no-files-found: error
+
+      - name: Upload the web server log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: install-webserver-log
+          path: webserver.log
+          retention-days: 7
+          if-no-files-found: ignore
+
+  # ===========================================================================
+  # Test: one job per feature suite.
+  # ===========================================================================
+  test:
+    name: "Varbase E2E: ${{ matrix.suite }}"
+    needs: install
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    strategy:
+      # One failing suite must not cancel the rest. The whole point of the fan
+      # out is to see every suite's result in one run.
+      fail-fast: false
+      matrix:
+        include:
+          # Suites small enough to run whole.
+          - suite: "02-user-management"
+          - suite: "03-admin-pages"
+          - suite: "05-content-pages"
+          - suite: "06-content-blog"
+          - suite: "07-content-contact"
+          - suite: "08-content-homepage"
+          - suite: "10-content-permissions"
+          - suite: "11-content-workflow"
+          - suite: "13-varbase-recipes"
+          - suite: "14-ai"
+          - suite: "15-quality"
+          - suite: "16-eca-workflow-modeler"
+          - suite: "17-search"
+          # The heaviest suites are split by feature-file glob so each job stays
+          # short. They run concurrently, so more jobs lower wall-clock time.
+          - suite: "01-website-base-requirements-a"
+            features: "tests/features/01-website-base-requirements/01-{00,01,02,03}-*.feature"
+          - suite: "01-website-base-requirements-b"
+            features: "tests/features/01-website-base-requirements/01-{04,05,06}-*.feature"
+          - suite: "01-website-base-requirements-c"
+            features: "tests/features/01-website-base-requirements/01-07-*.feature"
+          - suite: "04-admin-users-a"
+            features: "tests/features/04-admin-users/04-01-*.feature"
+          - suite: "04-admin-users-b"
+            features: "tests/features/04-admin-users/04-{02,03}-*.feature"
+          - suite: "09-drupal-canvas-a"
+            features: "tests/features/09-drupal-canvas/09-01-*.feature"
+          - suite: "09-drupal-canvas-b"
+            features: "tests/features/09-drupal-canvas/09-02-*.feature"
+          - suite: "09-drupal-canvas-c"
+            features: "tests/features/09-drupal-canvas/09-{03,04,05}-*.feature"
+          - suite: "09-drupal-canvas-d"
+            features: "tests/features/09-drupal-canvas/09-06-*.feature"
+          - suite: "12-content-access-and-lock-a"
+            features: "tests/features/12-content-access-and-lock/12-01-*.feature"
+          - suite: "12-content-access-and-lock-b"
+            features: "tests/features/12-content-access-and-lock/12-02-*.feature"
+
+    services:
+      database:
+        image: mariadb:10.11
+        env:
+          MARIADB_ROOT_PASSWORD: drupal
+          MARIADB_DATABASE: drupal
+          MARIADB_USER: drupal
+          MARIADB_PASSWORD: drupal
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    env:
+      SIMPLETEST_DB: "mysql://drupal:drupal@127.0.0.1:3306/drupal"
+      # cucumber.js reads both: FEATURES selects the glob, CUCUMBER_JSON names
+      # the per-suite report the post-test job merges.
+      FEATURES: ${{ matrix.features || format('tests/features/{0}/**/*.feature', matrix.suite) }}
+      CUCUMBER_JSON: "cucumber_report_${{ matrix.suite }}"
+      # Report generation is the separate reports job; disable varbase-e2e's
+      # auto HTML hook so it does not build one from process.on('exit').
+      VARBASE_E2E_REPORT_DISABLE: "1"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up PHP ${{ env.PHP_VERSION }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: gd, imagick, pdo_mysql, mbstring, xml, curl, zip, sodium, apcu, yaml, pgsql, bcmath
+          coverage: none
+          ini-values: memory_limit=-1
+
+      - name: Set up Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install ImageMagick with WebP support
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y imagemagick webp libwebp7
+          sudo sed -i 's/rights="none"\s*pattern="WEBP"/rights="read|write" pattern="WEBP"/I' /etc/ImageMagick-*/policy.xml 2>/dev/null || true
+
+      # vendor, node_modules, web, recipes and the browsers all arrive from the
+      # install job's cache: no composer install, no yarn install, no browser
+      # download in this job.
+      - name: Restore the built codebase
+        id: build-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            vendor
+            node_modules
+            web
+            recipes
+            drush/contrib
+            ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
+          key: varbase-build-${{ github.run_id }}
+          fail-on-cache-miss: true
+
+      - name: Download the installed site state
+        uses: actions/download-artifact@v4
+        with:
+          name: installed-site
+
+      - name: Install Playwright system libraries
+        run: ./node_modules/.bin/playwright install-deps chromium
+
+      - name: Restore the database and start the web server
+        run: |
+          chmod -R u+w web/sites || true
+          mkdir -p web/sites/default/files web/sites/simpletest
+          chmod -R 777 web/sites/default/files web/sites/simpletest
+          gunzip -c varbase-db.sql.gz | ./vendor/bin/drush --root="${{ github.workspace }}/web" sql:cli
+          ./vendor/bin/drush --root="${{ github.workspace }}/web" cache:rebuild
+          cd web
+          PHP_CLI_SERVER_WORKERS=8 php -S 127.0.0.1:8080 .ht.router.php > "${{ github.workspace }}/webserver.log" 2>&1 &
+          cd ..
+          for i in $(seq 1 30); do
+            if curl -sf -o /dev/null "http://127.0.0.1:8080/user/login"; then
+              echo "Web server is up."; exit 0
+            fi
+            sleep 2
+          done
+          echo "Web server did not come up."; cat webserver.log; exit 1
+
+      - name: Run the suite
+        run: ./node_modules/.bin/cucumber-js --config cucumber.js --tags "not @wip"
+
+      - name: Upload this suite's report, screenshots and videos
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cucumber-${{ matrix.suite }}
+          path: |
+            tests/reports/
+            tests/screenshots/
+            tests/videos/
+            webserver.log
+          retention-days: 7
+          if-no-files-found: ignore
+
+  # ===========================================================================
+  # Post-test: merge every suite's JSON into one HTML + PDF report.
+  # ===========================================================================
+  reports:
+    name: "Create reports"
+    needs: test
+    # Always build the report, even when a suite failed, so failures are
+    # captured rather than hidden.
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Download every suite's artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: cucumber-*
+          merge-multiple: true
+
+      - name: Install the report generator
+        run: |
+          npm install --no-save @vardot/varbase-e2e
+          # The PDF report renders through headless Chromium; --with-deps pulls
+          # the system libraries the runner image lacks.
+          ./node_modules/.bin/playwright install --with-deps chromium
+
+      - name: Merge the suite reports and generate HTML + PDF
+        run: |
+          shopt -s nullglob
+          FILES=(tests/reports/cucumber_report_*.json)
+          if [ ${#FILES[@]} -eq 0 ]; then
+            echo "No suite reports were produced, so there is nothing to merge."
+            exit 1
+          fi
+          jq -s 'add' "${FILES[@]}" > tests/reports/cucumber_report.json
+          REPORT="varbase--${GITHUB_REF_NAME//\//-}--automated-functional-testing-report--$(date +%Y-%m-%d)--$(date +%H-%M)"
+          node ./node_modules/@vardot/varbase-e2e/bin/generate-reports.js \
+            --json tests/reports/cucumber_report.json \
+            --out  "tests/reports/${REPORT}.html" \
+            --format all \
+            --pdf-out "tests/reports/${REPORT}.pdf"
+
+      - name: Upload the combined report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: automated-functional-testing-report
+          path: |
+            tests/reports/
+            tests/screenshots/
+            tests/videos/
+          retention-days: 30
+          if-no-files-found: ignore
