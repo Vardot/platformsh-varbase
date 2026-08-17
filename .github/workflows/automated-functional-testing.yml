@@ -110,10 +110,10 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ env.PHP_VERSION }}
-          # sodium / apcu / yaml / imagick / pgsql mirror the extensions the
-          # Upsun app runtime enables. pgsql is required by
-          # drupal/ai_provider_amazeeio >= 1.3.2.
-          extensions: gd, imagick, pdo_mysql, mbstring, xml, curl, zip, sodium, apcu, yaml, pgsql, bcmath
+          # sodium / apcu / yaml / imagick mirror the extensions the Upsun app
+          # runtime enables. Varbase does not use PostgreSQL, so neither pgsql
+          # nor pdo_pgsql is installed; composer.json declares both as provided.
+          extensions: gd, imagick, pdo_mysql, mbstring, xml, curl, zip, sodium, apcu, yaml, bcmath
           coverage: none
           ini-values: memory_limit=-1
 
@@ -393,7 +393,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ env.PHP_VERSION }}
-          extensions: gd, imagick, pdo_mysql, mbstring, xml, curl, zip, sodium, apcu, yaml, pgsql, bcmath
+          extensions: gd, imagick, pdo_mysql, mbstring, xml, curl, zip, sodium, apcu, yaml, bcmath
           coverage: none
           ini-values: memory_limit=-1
 

@@ -226,7 +226,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ env.PHP_VERSION }}
-          extensions: gd, imagick, mbstring, xml, curl, zip, sodium, apcu, yaml, pgsql
+          extensions: gd, imagick, mbstring, xml, curl, zip, sodium, apcu, yaml
           coverage: none
           tools: composer
 
