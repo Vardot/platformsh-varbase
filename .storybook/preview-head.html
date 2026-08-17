@@ -1,0 +1,43 @@
+<style>
+  /*
+   * Storybook-preview-only contrast fix.
+   *
+   * Not shipped to the production theme: this file is only injected into the
+   * Storybook preview iframe's <head> (see .storybook/preview-head.html
+   * convention), never bundled into the theme's own CSS.
+   *
+   * card-action-text, card-dated-vertical, card-program, and quote-card print
+   * their title/description/date/author text directly (no color prop of
+   * their own) and rely on Bootstrap's bg-dark / bg-primary utilities — which
+   * only set background-color, never text color. In this theme bg-dark
+   * (#050833) is the same navy as the default body text color, and bg-primary
+   * is a mid-blue with low contrast against it, so text becomes unreadable
+   * once one of those dark backgrounds is selected.
+   *
+   * In real Drupal usage these cards are composed from text/heading
+   * components that already expose their own color props, so the component
+   * templates themselves are left untouched — this only keeps the Storybook
+   * demo legible when a dark background is picked from the story controls.
+   */
+  .card-action-text.bg-dark,
+  .card-action-text.bg-primary,
+  .card-dated-vertical.bg-dark,
+  .card-dated-vertical.bg-primary,
+  .card-program.bg-dark,
+  .card-program.bg-primary,
+  .quote-card.bg-dark,
+  .quote-card.bg-primary {
+    color: #fff;
+  }
+
+  .card-action-text.bg-dark .text-muted,
+  .card-action-text.bg-primary .text-muted,
+  .card-dated-vertical.bg-dark .text-muted,
+  .card-dated-vertical.bg-primary .text-muted,
+  .card-program.bg-dark .text-muted,
+  .card-program.bg-primary .text-muted,
+  .quote-card.bg-dark .text-muted,
+  .quote-card.bg-primary .text-muted {
+    color: rgba(255, 255, 255, 0.7) !important;
+  }
+</style>

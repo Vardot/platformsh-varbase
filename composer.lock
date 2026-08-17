@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d9e40ebbd8c49fa7d72c91fc4befcdbe",
+    "content-hash": "fff7410bb0ffc50b384d2d40d840f443",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1134,6 +1134,92 @@
             "time": "2024-07-08T12:26:09+00:00"
         },
         {
+            "name": "doctrine/collections",
+            "version": "2.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/collections.git",
+                "reference": "7713da39d8e237f28411d6a616a3dce5e20d5de2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/collections/zipball/7713da39d8e237f28411d6a616a3dce5e20d5de2",
+                "reference": "7713da39d8e237f28411d6a616a3dce5e20d5de2",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/deprecations": "^1",
+                "php": "^8.1",
+                "symfony/polyfill-php84": "^1.30"
+            },
+            "require-dev": {
+                "doctrine/coding-standard": "^14",
+                "ext-json": "*",
+                "phpstan/phpstan": "^2.1.30",
+                "phpstan/phpstan-phpunit": "^2.0.7",
+                "phpunit/phpunit": "^10.5.58 || ^11.5.42 || ^12.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Doctrine\\Common\\Collections\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Guilherme Blanco",
+                    "email": "guilhermeblanco@gmail.com"
+                },
+                {
+                    "name": "Roman Borschel",
+                    "email": "roman@code-factory.org"
+                },
+                {
+                    "name": "Benjamin Eberlei",
+                    "email": "kontakt@beberlei.de"
+                },
+                {
+                    "name": "Jonathan Wage",
+                    "email": "jonwage@gmail.com"
+                },
+                {
+                    "name": "Johannes Schmitt",
+                    "email": "schmittjoh@gmail.com"
+                }
+            ],
+            "description": "PHP Doctrine Collections library that adds additional functionality on top of PHP arrays.",
+            "homepage": "https://www.doctrine-project.org/projects/collections.html",
+            "keywords": [
+                "array",
+                "collections",
+                "iterators",
+                "php"
+            ],
+            "support": {
+                "issues": "https://github.com/doctrine/collections/issues",
+                "source": "https://github.com/doctrine/collections/tree/2.6.0"
+            },
+            "funding": [
+                {
+                    "url": "https://www.doctrine-project.org/sponsorship.html",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://www.patreon.com/phpdoctrine",
+                    "type": "patreon"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/doctrine%2Fcollections",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2026-01-15T10:01:58+00:00"
+        },
+        {
             "name": "doctrine/common",
             "version": "3.5.0",
             "source": {
@@ -1766,6 +1852,104 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/ace_editor",
                 "issues": "https://www.drupal.org/project/issues/ace_editor"
+            }
+        },
+        {
+            "name": "drupal/add_content_by_bundle",
+            "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/add_content_by_bundle.git",
+                "reference": "2.0.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/add_content_by_bundle-2.0.1.zip",
+                "reference": "2.0.1",
+                "shasum": "0b09e7967d33987c0635636b706c04782615573d"
+            },
+            "require": {
+                "drupal/core": "^10 || ^11 || ^12"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.1",
+                    "datestamp": "1783076897",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "mandclu",
+                    "homepage": "https://www.drupal.org/user/52136"
+                }
+            ],
+            "description": "Add Content by Bundle Views Area Plugin",
+            "homepage": "https://www.drupal.org/project/add_content_by_bundle",
+            "support": {
+                "source": "https://git.drupalcode.org/project/add_content_by_bundle",
+                "issues": "https://www.drupal.org/project/issues/add_content_by_bundle"
+            }
+        },
+        {
+            "name": "drupal/addtocal_augment",
+            "version": "1.2.6",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/addtocal_augment.git",
+                "reference": "1.2.6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/addtocal_augment-1.2.6.zip",
+                "reference": "1.2.6",
+                "shasum": "85b3325df0579e957f15d0791a49f1bfb6bba1a3"
+            },
+            "require": {
+                "drupal/core": "^10.1 || ^11 || ^12",
+                "drupal/date_augmenter": "^1.1"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.2.6",
+                    "datestamp": "1782418141",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "mandclu",
+                    "homepage": "https://www.drupal.org/user/52136"
+                },
+                {
+                    "name": "mark_fullmer",
+                    "homepage": "https://www.drupal.org/user/2612816"
+                }
+            ],
+            "description": "Provides a plugin to inject add to calendar links into date displays.",
+            "homepage": "https://www.drupal.org/project/addtocal_augment",
+            "keywords": [
+                "Drupal"
+            ],
+            "support": {
+                "source": "https://git.drupalcode.org/project/addtocal_augment",
+                "issues": "https://www.drupal.org/project/issues/addtocal_augment"
             }
         },
         {
@@ -2489,43 +2673,44 @@
         },
         {
             "name": "drupal/ai_integration_eca",
-            "version": "1.0.0-rc3",
+            "version": "1.0.0-rc4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/ai_integration_eca.git",
-                "reference": "1.0.0-rc3"
+                "reference": "1.0.0-rc4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/ai_integration_eca-1.0.0-rc3.zip",
-                "reference": "1.0.0-rc3",
-                "shasum": "3396d9ccecd31636a69d4746d7d659e2e76e61a6"
+                "url": "https://ftp.drupal.org/files/projects/ai_integration_eca-1.0.0-rc4.zip",
+                "reference": "1.0.0-rc4",
+                "shasum": "fd9ce912fd2e4b017065865265f36a282b59a211"
             },
             "require": {
-                "drupal/ai": "^1.2",
-                "drupal/ai_agents": "^1.2",
+                "drupal/ai": "^1.4",
+                "drupal/ai_agents": "^1.3",
                 "drupal/core": "^10.3 || ^11",
-                "drupal/eca": "^2 || ^3",
-                "drupal/token": "^1.15"
+                "drupal/eca": "^2 || ^3"
             },
             "replace": {
                 "drupal/ai_eca": "*"
             },
             "require-dev": {
+                "drupal/ai": "^1.4",
                 "drupal/ai_agents": "*",
                 "drupal/ai_automators": "*",
+                "drupal/eca": "*",
                 "drupal/eca_content": "*",
                 "drupal/eca_ui": "*",
+                "drupal/modeler_api": "^1",
                 "drupal/schemata": "^1.0",
                 "drupal/schemata_json_schema": "*",
-                "drupal/token": "*",
                 "spatie/phpunit-snapshot-assertions": "^4.2 || ^5.1"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.0.0-rc3",
-                    "datestamp": "1765554443",
+                    "version": "1.0.0-rc4",
+                    "datestamp": "1786961650",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "RC releases are not covered by Drupal security advisories."
@@ -5289,6 +5474,50 @@
             }
         },
         {
+            "name": "drupal/date_augmenter",
+            "version": "1.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/date_augmenter.git",
+                "reference": "1.1.3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/date_augmenter-1.1.3.zip",
+                "reference": "1.1.3",
+                "shasum": "092f8ed5c50eb58fd26367e99f7997e12ddbf2a1"
+            },
+            "require": {
+                "drupal/core": "^9 || ^10 || ^11"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.1.3",
+                    "datestamp": "1779552575",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "mandclu",
+                    "homepage": "https://www.drupal.org/user/52136"
+                }
+            ],
+            "description": "Provides a plugin class for augmenting the display of dates and times.",
+            "homepage": "https://www.drupal.org/project/date_augmenter",
+            "support": {
+                "source": "https://git.drupalcode.org/project/date_augmenter"
+            }
+        },
+        {
             "name": "drupal/date_filter",
             "version": "1.0.2",
             "source": {
@@ -7119,6 +7348,70 @@
             }
         },
         {
+            "name": "drupal/educare",
+            "version": "1.0.0-alpha2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/educare.git",
+                "reference": "7c2c48f7c495eed8eed98e04c4ca770653c11619"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Feducare/repository/archive.zip?sha=7c2c48f7c495eed8eed98e04c4ca770653c11619",
+                "reference": "7c2c48f7c495eed8eed98e04c4ca770653c11619",
+                "shasum": ""
+            },
+            "require": {
+                "drupal/core": "^11.3",
+                "drupal/drupal_cms_accessibility_tools": "~2",
+                "drupal/drupal_cms_admin_ui": "~2",
+                "drupal/drupal_cms_ai": "~2",
+                "drupal/drupal_cms_anti_spam": "~2",
+                "drupal/drupal_cms_authentication": "~2",
+                "drupal/drupal_cms_forms": "~2",
+                "drupal/drupal_cms_google_analytics": "~2",
+                "drupal/drupal_cms_helper": "~2",
+                "drupal/drupal_cms_media": "~2",
+                "drupal/drupal_cms_privacy_basic": "~2",
+                "drupal/drupal_cms_search": "~2",
+                "drupal/drupal_cms_seo_basic": "~2",
+                "drupal/drupal_cms_seo_tools": "~2",
+                "drupal/easy_email_express": "~1",
+                "drupal/recipe_installer_kit": "~1",
+                "drupal/varbase_admin_base": "~1.0.0",
+                "drupal/varbase_ai_base": "~1.0.0",
+                "drupal/varbase_api_base": "~1.0.0",
+                "drupal/varbase_auth_base": "~1.0.0",
+                "drupal/varbase_content_base": "~1.0.0",
+                "drupal/varbase_demo_content": "~1.0.0",
+                "drupal/varbase_dev_base": "~1.0.0",
+                "drupal/varbase_editor_base": "~1.0.0",
+                "drupal/varbase_events_base": "~1.0.0",
+                "drupal/varbase_i18n_base": "~1.0.0",
+                "drupal/varbase_media_base": "~1.0.0",
+                "drupal/varbase_news_base": "~1.0.0",
+                "drupal/varbase_page_base": "~1.0.0",
+                "drupal/varbase_performance_base": "~1.0.0",
+                "drupal/varbase_security_base": "~1.0.0",
+                "drupal/varbase_seo_base": "~1.0.0",
+                "drupal/varbase_users_base": "~1.0.0",
+                "drupal/varbase_webform_base": "~1.0.0",
+                "drupal/varbase_workflow_base": "~1.0.0",
+                "drupal/vartheme_bs5_educare": "~1.0.0",
+                "vardot/varbase-patches": "~11.0.0"
+            },
+            "type": "drupal-recipe",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "A Drupal CMS site template recipe for education websites (schools, universities, academies, e-learning), built the Varbase recipe-first way.",
+            "support": {
+                "source": "https://git.drupalcode.org/project/educare/-/tree/1.0.0-alpha2"
+            },
+            "time": "2026-08-17T07:04:09+00:00"
+        },
+        {
             "name": "drupal/embed",
             "version": "1.10.0",
             "source": {
@@ -7713,6 +8006,48 @@
                 "source": "http://cgit.drupalcode.org/entityqueue_form_widget",
                 "issues": "https://www.drupal.org/project/issues/entityqueue_form_widget"
             }
+        },
+        {
+            "name": "drupal/events",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/events.git",
+                "reference": "ebea248ce36a8c805bfd80448f1714dbf138fba3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fevents/repository/archive.zip?sha=ebea248ce36a8c805bfd80448f1714dbf138fba3",
+                "reference": "ebea248ce36a8c805bfd80448f1714dbf138fba3",
+                "shasum": ""
+            },
+            "require": {
+                "drupal/add_content_by_bundle": "^2.0",
+                "drupal/addtocal_augment": "^1.2",
+                "drupal/core": "^10.4 || ^11.1",
+                "drupal/pathauto": "^1.13",
+                "drupal/smart_date": "^4.2 || ^5.0"
+            },
+            "suggest": {
+                "drupal/events_calendar": "Creates an interactive calendar display",
+                "drupal/events_locations": "Allows events to be associated with locations",
+                "drupal/events_registration": "Allows users to register for events"
+            },
+            "type": "drupal-recipe",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "description": "A content type and view to help manage events in Drupal.",
+            "homepage": "https://www.drupal.org/project/events",
+            "keywords": [
+                "drupal"
+            ],
+            "support": {
+                "issues": "https://www.drupal.org/project/issues/events",
+                "source": "https://git.drupalcode.org/project/events"
+            },
+            "time": "2026-06-27T16:28:20+00:00"
         },
         {
             "name": "drupal/extlink",
@@ -10322,17 +10657,17 @@
         },
         {
             "name": "drupal/modeler",
-            "version": "1.0.4",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/modeler.git",
-                "reference": "1.0.4"
+                "reference": "1.0.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/modeler-1.0.4.zip",
-                "reference": "1.0.4",
-                "shasum": "2bb20bc1328d72462f8afd04141a2f3179f7e442"
+                "url": "https://ftp.drupal.org/files/projects/modeler-1.0.5.zip",
+                "reference": "1.0.5",
+                "shasum": "0bcf2912f1f6368961442f530896fe6fdcd62b97"
             },
             "require": {
                 "drupal/core": "^11.3 || ^12.0",
@@ -10342,8 +10677,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.0.4",
-                    "datestamp": "1783337230",
+                    "version": "1.0.5",
+                    "datestamp": "1786962944",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -10377,17 +10712,17 @@
         },
         {
             "name": "drupal/modeler_api",
-            "version": "1.1.3",
+            "version": "1.1.4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/modeler_api.git",
-                "reference": "1.1.3"
+                "reference": "1.1.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/modeler_api-1.1.3.zip",
-                "reference": "1.1.3",
-                "shasum": "f66fb69dc94a9404cf963fb58398b5203f3b3387"
+                "url": "https://ftp.drupal.org/files/projects/modeler_api-1.1.4.zip",
+                "reference": "1.1.4",
+                "shasum": "e33d844ba9ab523b7bf22078bdfe52dc2e7a3197"
             },
             "require": {
                 "drupal/core": "^11.3 || ^12.0",
@@ -10396,8 +10731,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.1.3",
-                    "datestamp": "1780496337",
+                    "version": "1.1.4",
+                    "datestamp": "1786962161",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -12941,6 +13276,77 @@
             }
         },
         {
+            "name": "drupal/smart_date",
+            "version": "4.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/smart_date.git",
+                "reference": "4.3.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/smart_date-4.3.0.zip",
+                "reference": "4.3.0",
+                "shasum": "820497eb5aa608aadf3b82a630490b5ed6182a31"
+            },
+            "require": {
+                "drupal/core": "^10 || ^11 || ^12",
+                "php": ">=8.1",
+                "simshaun/recurr": "^5"
+            },
+            "require-dev": {
+                "drupal/token": "*",
+                "drush/drush": "*"
+            },
+            "suggest": {
+                "drupal/multiple_fields_remove_button": "Provides a button for editors to remove unwanted rows."
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "4.3.0",
+                    "datestamp": "1783894694",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                },
+                "drush": {
+                    "services": {
+                        "drush.services.yml": "^9"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "mandclu",
+                    "homepage": "https://www.drupal.org/user/52136"
+                },
+                {
+                    "name": "stefan.korn",
+                    "homepage": "https://www.drupal.org/user/1942204"
+                },
+                {
+                    "name": "tyapchyc",
+                    "homepage": "https://www.drupal.org/user/3351412"
+                }
+            ],
+            "description": "Adds app-like date and recurring date functionality.",
+            "homepage": "https://www.drupal.org/project/smart_date",
+            "keywords": [
+                "Drupal"
+            ],
+            "support": {
+                "source": "https://git.drupalcode.org/project/smart_date",
+                "issues": "https://www.drupal.org/project/issues/smart_date",
+                "documentation": "https://www.drupal.org/docs/contributed-modules/smart-date"
+            }
+        },
+        {
             "name": "drupal/smart_trim",
             "version": "2.3.1",
             "source": {
@@ -15420,6 +15826,50 @@
             "time": "2026-08-15T15:53:20+00:00"
         },
         {
+            "name": "drupal/varbase_events_base",
+            "version": "1.0.0-alpha2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/varbase_events_base.git",
+                "reference": "53bba4b12ef6bd6840b6950439de3ec41fc82c85"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fvarbase_events_base/repository/archive.zip?sha=53bba4b12ef6bd6840b6950439de3ec41fc82c85",
+                "reference": "53bba4b12ef6bd6840b6950439de3ec41fc82c85",
+                "shasum": ""
+            },
+            "require": {
+                "drupal/core": "~11.4.0",
+                "drupal/events": "~2.0",
+                "drupal/selective_better_exposed_filters": "~3",
+                "drupal/varbase_components": "~4.0.0",
+                "drupal/varbase_content_base": "~1.0.0",
+                "drupal/varbase_media_base": "~1.0.0",
+                "drupal/varbase_seo_base": "~1.0.0",
+                "drupal/varbase_workflow_base": "~1.0.0",
+                "drupal/webshare": "~2.0.0"
+            },
+            "type": "drupal-recipe",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Vardot",
+                    "homepage": "https://www.drupal.org/vardot",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "A recipe to provide an event content type and an events listing for Varbase. Builds on the Events recipe and wires it up the Varbase way.",
+            "support": {
+                "issues": "https://www.drupal.org/project/issues/varbase_events_base",
+                "source": "http://cgit.drupalcode.org/varbase_events_base"
+            },
+            "time": "2026-08-13T20:58:36+00:00"
+        },
+        {
             "name": "drupal/varbase_i18n_base",
             "version": "1.0.0-rc1",
             "source": {
@@ -15626,6 +16076,49 @@
                 "source": "http://cgit.drupalcode.org/varbase_media_base"
             },
             "time": "2026-08-15T15:56:45+00:00"
+        },
+        {
+            "name": "drupal/varbase_news_base",
+            "version": "1.0.0-alpha2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/varbase_news_base.git",
+                "reference": "9575147a53f5e783ce6c5af297c0ba7b794fe95b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fvarbase_news_base/repository/archive.zip?sha=9575147a53f5e783ce6c5af297c0ba7b794fe95b",
+                "reference": "9575147a53f5e783ce6c5af297c0ba7b794fe95b",
+                "shasum": ""
+            },
+            "require": {
+                "drupal/core": "~11.4.0",
+                "drupal/selective_better_exposed_filters": "~3",
+                "drupal/varbase_components": "~4.0.0",
+                "drupal/varbase_content_base": "~1.0.0",
+                "drupal/varbase_media_base": "~1.0.0",
+                "drupal/varbase_seo_base": "~1.0.0",
+                "drupal/varbase_workflow_base": "~1.0.0",
+                "drupal/webshare": "~2.0.0"
+            },
+            "type": "drupal-recipe",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Vardot",
+                    "homepage": "https://www.drupal.org/vardot",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "A recipe to provide a news post content type and listing page for Varbase. Build on top of the Varbase Content Base recipe with news-specific features.",
+            "support": {
+                "issues": "https://www.drupal.org/project/issues/varbase_news_base",
+                "source": "http://cgit.drupalcode.org/varbase_news_base"
+            },
+            "time": "2026-08-13T18:24:31+00:00"
         },
         {
             "name": "drupal/varbase_page_base",
@@ -16161,6 +16654,66 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/vartheme_bs5",
                 "issues": "http://drupal.org/project/issues/vartheme_bs5"
+            }
+        },
+        {
+            "name": "drupal/vartheme_bs5_educare",
+            "version": "1.0.0-alpha3",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/vartheme_bs5_educare.git",
+                "reference": "1.0.0-alpha3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/vartheme_bs5_educare-1.0.0-alpha3.zip",
+                "reference": "1.0.0-alpha3",
+                "shasum": "623162e6abfffef54a0bf3f158696c427fd5c9e9"
+            },
+            "require": {
+                "drupal/canvas": "~1",
+                "drupal/core": "~11.4.0",
+                "drupal/cva": "^1"
+            },
+            "type": "drupal-theme",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.0-alpha3",
+                    "datestamp": "1786942911",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Vardot",
+                    "homepage": "https://www.drupal.org/vardot",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "mohammed j. razem",
+                    "homepage": "https://www.drupal.org/user/255384"
+                },
+                {
+                    "name": "omar alahmed",
+                    "homepage": "https://www.drupal.org/user/308031"
+                },
+                {
+                    "name": "rajab natshah",
+                    "homepage": "https://www.drupal.org/user/1414312"
+                }
+            ],
+            "description": "The Bootstrap 5 front-end theme for the Educare site template, cloned from Vartheme BS5 (SDC + Storybook).",
+            "homepage": "https://www.drupal.org/project/vartheme_bs5_educare",
+            "support": {
+                "source": "http://cgit.drupalcode.org/vartheme_bs5_educare",
+                "issues": "http://drupal.org/project/issues/vartheme_bs5_educare"
             }
         },
         {
@@ -21247,6 +21800,65 @@
                 }
             ],
             "time": "2025-02-07T04:55:46+00:00"
+        },
+        {
+            "name": "simshaun/recurr",
+            "version": "v5.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/simshaun/recurr.git",
+                "reference": "7b136768d64f257065e38a804ee6d2f9af6ba6d1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/simshaun/recurr/zipball/7b136768d64f257065e38a804ee6d2f9af6ba6d1",
+                "reference": "7b136768d64f257065e38a804ee6d2f9af6ba6d1",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/collections": "~1.6||^2.0",
+                "php": "^7.2||^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8.5.16",
+                "symfony/yaml": "^5.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Recurr\\": "src/Recurr/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Shaun Simmons",
+                    "email": "shaun@shaun.pub",
+                    "homepage": "https://shaun.pub"
+                }
+            ],
+            "description": "PHP library for working with recurrence rules",
+            "homepage": "https://github.com/simshaun/recurr",
+            "keywords": [
+                "dates",
+                "events",
+                "recurrence",
+                "recurring",
+                "rrule"
+            ],
+            "support": {
+                "issues": "https://github.com/simshaun/recurr/issues",
+                "source": "https://github.com/simshaun/recurr/tree/v5.0.3"
+            },
+            "time": "2024-12-12T15:39:24+00:00"
         },
         {
             "name": "steverhoades/oauth2-openid-connect-server",

@@ -5,13 +5,12 @@ const config: StorybookConfig = {
   "stories": [
     // -------------------------------------------------------------------------------
     // Listing components Vartheme BS5 Starterkit. ( Comment when using a custom theme for a project)
-    "../web/themes/contrib/vartheme_bs5/components/**/*.mdx",
-    "../web/themes/contrib/vartheme_bs5/components/**/*.stories.@(json)",
+    // "../web/themes/contrib/vartheme_bs5/components/**/*.mdx",
+    // "../web/themes/contrib/vartheme_bs5/components/**/*.stories.@(json)",
     // -------------------------------------------------------------------------------
-    // Uncomment the following line to start listing components from custom cloned generated theme
-    // Change `mytheme` to the name of the custom theme.
-    // "../web/themes/custom/mytheme/components/**/*.mdx",
-    // "../web/themes/custom/mytheme/components/**/*.stories.@(json)",
+    // Listing components from the Vartheme BS5 Educare theme.
+    "../web/themes/contrib/vartheme_bs5_educare/components/**/*.mdx",
+    "../web/themes/contrib/vartheme_bs5_educare/components/**/*.stories.@(json)",
     // -------------------------------------------------------------------------------
     // Uncomment the following line to start listing components from custom modules
     // "../web/modules/custom/my_custom_module/components/**/*.mdx",
@@ -37,7 +36,7 @@ const config: StorybookConfig = {
   },
   staticDirs: [
     {
-      from: "../web/themes/contrib/vartheme_bs5/components",
+      from: "../web/themes/contrib/vartheme_bs5_educare/components",
       to: "/components",
     },
   ],

@@ -31,6 +31,7 @@
     "drupal/core-recipe-unpack": "~11.4",
     "drupal/core-recommended": "~11.4",
     "drupal/core-vendor-hardening": "~11.4",
+    "drupal/educare": "~1.0.0",
     "drupal/gleap-gleap": "~1",
     "drupal/redis": "~1",
     "drush/drush": "~13",
