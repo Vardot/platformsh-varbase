@@ -15,7 +15,6 @@ applications:
                 - apcu
                 - yaml
                 - imagick
-                - pgsql
                 # - memcached
         # The relationships of the application with services or other applications.
         #
