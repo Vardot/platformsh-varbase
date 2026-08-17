@@ -62,6 +62,11 @@ ehthumbs.db
 .bashrc
 errors.log
 
+# Automated functional testing run artifacts (Varbase E2E)
+/tests/screenshots
+/tests/videos
+/tests/reports
+
 # Node.js dependencies
 /node_modules
 /web/**/node_modules

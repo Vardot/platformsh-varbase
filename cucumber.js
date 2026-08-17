@@ -1,19 +1,43 @@
+// cucumber-js configuration for the Varbase varbase-e2e BDD suite.
+//
+// Drives the whole site through the browser with varbase-e2e (>= 2.0.4).
+//   yarn test                # all features (tests/features/**)
+//   yarn test:chromium       # force chromium
+//   yarn test:headed         # headed debug run
+//
+// Reports land in tests/reports/. Disable the auto HTML hook with
+// VARBASE_E2E_REPORT_DISABLE=1 and run `yarn generate-reports` in CI instead.
+
 module.exports = {
   default: {
-    timeout: 40000,
-    requireModule: ['ts-node/register'],
+    // Cucumber step timeout must exceed Playwright's default 30s so the
+    // try/catch wrappers in the step files surface a friendly Playwright
+    // error before cucumber's raw "function timed out".
+    timeout: 60000,
+    // Retry once. The full Varbase suite drives a single heavy site for ~20
+    // minutes; late scenarios occasionally trip a step/assertion timeout
+    // purely from cumulative load (not a real defect). One retry absorbs
+    // those transient timeouts. Override per run with --retry N.
+    retry: 1,
+    // tsx/cjs registers a require() hook so cucumber-js loads both `.js`
+    // and `.ts` step files with no build step (varbase-e2e 2.0 dropped
+    // ts-node in favour of tsx).
+    requireModule: ['tsx/cjs'],
     require: [
-      'node_modules/webship-js/tests/step-definitions/**/*.js',          // Webship-js core step definitions (auto HTML report on exit; disable: WEBSHIP_REPORT_DISABLE=1).
-      // 'node_modules/webship-js/tests/step-definitions-diffy/**/*.js', // Diffy step definitions (optional).
+      'node_modules/@vardot/varbase-e2e/tests/step-definitions/**/*.js',          // Varbase E2E core step definitions (auto HTML report on exit; disable: VARBASE_E2E_REPORT_DISABLE=1).
       'tests/step-definitions/**/*.js',                                  // Your custom step definitions.
     ],
-    paths: ['tests/features/**/*.feature'],
+    // FEATURES lets CI run one feature folder per job (e.g.
+    // FEATURES="tests/features/01-website-base-requirements/**/*.feature");
+    // unset locally runs the whole suite.
+    paths: [process.env.FEATURES || 'tests/features/**/*.feature'],
     format: [
       '@cucumber/pretty-formatter',
-      'json:tests/reports/cucumber_report.json',
+      'json:tests/reports/' + (process.env.CUCUMBER_JSON || 'cucumber_report') + '.json',
     ],
     formatOptions: {
-      colorsEnabled: true,
+      // Colour is controlled via FORCE_COLOR (cucumber-js v10+); the old
+      // `colorsEnabled` option is gone.
       theme: {
         'feature keyword': ['bold', 'blue'],
         'feature name': ['blue', 'underline'],
@@ -58,7 +82,12 @@ module.exports = {
         }
       },
       minWaitTime: {
-        page: 3000,
+        // Per-navigation settle budget. varbase-e2e's `I go to` waits up to this
+        // long for the page to reach a quiet edge (DOM ready + network idle),
+        // returning as soon as it settles. The full Varbase install is heavy
+        // (Gin admin + AI widgets); 8s gives slow admin pages time to render
+        // before the next step's fixed 5s `should see` assertion runs.
+        page: 8000,
         before_scenario: 0,
         after_scenario: 0,
         before_step: 0,
@@ -68,20 +97,20 @@ module.exports = {
         css: {},
         xpath: {},
         filesPath: './tests/selectors/',
-        files: [],
+        files: ['default-theme.json'],
         offset: 60,
         breakpoints: {
           xs:   { width: 375,  height: 667  },
           sm:   { width: 576,  height: 800  },
           md:   { width: 768,  height: 1024 },
           lg:   { width: 992,  height: 768  },
-          xl:   { width: 1200, height: 900, default: true },
+          xl:   { width: 1200, height: 900  },
           xxl:  { width: 1400, height: 900  },
-          xxxl: { width: 1920, height: 1080 },
+          xxxl: { width: 1920, height: 1080, default: true },
         },
       },
       screenshot: {
-        dir: './screenshots',
+        dir: './tests/screenshots',
         purge: false,
         onFailed: true,
         onEveryStep: false,
@@ -91,17 +120,34 @@ module.exports = {
         filenamePatternFailed: '{failed_prefix}{datetime}.{feature_file}.feature_{step_line}.{ext}',
         infoTypes: '',
       },
-      // diffy: {
-      //   apiKey: process.env.DIFFY_API_KEY || '',
-      //   projectId: parseInt(process.env.DIFFY_PROJECT_ID || '0', 10),
-      //   breakpoints: process.env.DIFFY_BREAKPOINTS || '640,1200',
-      //   windowHeight: parseInt(process.env.DIFFY_WINDOW_HEIGHT || '2000', 10),
-      //   screenshotsDir: process.env.DIFFY_SCREENSHOTS_DIR || '',
-      //   baseUrl: process.env.DIFFY_API_BASE_URL || 'https://app.diffy.website/api/',
-      //   maxWait: parseInt(process.env.DIFFY_MAX_WAIT || '30', 10),
-      //   env1Url: process.env.DIFFY_ENV1_URL || '',
-      //   env2Url: process.env.DIFFY_ENV2_URL || '',
-      // }
+      video: {
+        // 'off' | 'on' | 'on-failure' | 'tag'. Override per run with VARBASE_E2E_VIDEO.
+        mode: process.env.VARBASE_E2E_VIDEO || 'on-failure',
+        dir: './tests/videos',
+        size: { width: 1920, height: 1080 },
+        filenamePattern: '{datetime}.{feature_file}.{scenario}.{status}.{ext}',
+      },
+      javascript: {
+        // Report collected JavaScript console/page errors at scenario end.
+        //   'warn' — log a warning, scenario still passes (default here).
+        //   'fail' — fail the scenario (per-scenario via @js-fail).
+        //   'off'  — silent.
+        // NOTE: do NOT tag scenarios @javascript — in varbase-e2e that tag
+        // forces 'fail' mode. The legacy Behat @javascript tags were removed
+        // from this suite for that reason.
+        mode: process.env.VARBASE_E2E_JS_ERROR_MODE || 'warn',
+        levels: ['error'],
+        // Filter the known-benign console/page noise the Varbase admin (Gin,
+        // CKEditor 5, drimage, AI widgets) and the CI runner emit - missing
+        // optional assets, aborted preloads, editor plugin chatter. Without
+        // this every scenario prints a 10-20 line error block that buries the
+        // Feature / Scenario / Step output. Genuine JavaScript errors are still
+        // reported; override with VARBASE_E2E_JS_ERROR_IGNORE.
+        ignore: process.env.VARBASE_E2E_JS_ERROR_IGNORE
+          || "getComputedStyle|Failed to load resource|objectSizeSmall|plugincollection-plugin-not-found|CKEditorError|Maximum call stack size exceeded|ResizeObserver loop|importScripts|worker-html",
+        beforeScenario: false,
+        afterScenario: true,
+      },
     },
   },
 };

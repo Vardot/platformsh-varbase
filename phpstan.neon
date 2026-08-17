@@ -1,4 +1,5 @@
 # Configuration file for PHPStan static code checking, see https://phpstan.org .
+# Only scans Varbase recipes - not contrib modules/themes/profiles or core.
 includes:
   - phar://phpstan.phar/conf/bleedingEdge.neon
 
@@ -7,14 +8,18 @@ parameters:
   level: 1
 
   paths:
-    - web/modules/custom
-    - web/themes/custom
+    - recipes/varbase_starter
 
   excludePaths:
     # Skip test fixtures.
     - ../*/node_modules/*
     - */tests/fixtures/*.php
     - */tests/fixtures/*.php.gz
+    # Skip contrib and core
+    - web/modules/contrib
+    - web/themes/contrib
+    - web/profiles/contrib
+    - web/core
 
   ignoreErrors:
     # new static() is a best practice in Drupal, so we cannot fix that.
