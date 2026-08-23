@@ -1,5 +1,5 @@
 {
-    "_hash": "dcd0c2902e3e306e4116436f6264389da57bd44225aff349a11c3b21d9105388",
+    "_hash": "6ce414b540af88abd022f89f29d59ca2415c0479e13b15b6e062d77e873d07ae",
     "patches": {
         "drupal/core": [
             {
@@ -608,18 +608,6 @@
                 "depth": null,
                 "extra": {
                     "provenance": "dependency:drupal/views_bulk_edit"
-                }
-            }
-        ],
-        "drupal/drimage_improved": [
-            {
-                "package": "drupal/drimage_improved",
-                "description": "fix: #3587334 Missing response and return handling in DrimageSubscriber image delivery",
-                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/drimage_improved--2026-04-28--3587334--mr-25.patch",
-                "sha256": null,
-                "depth": null,
-                "extra": {
-                    "provenance": "dependency:drupal/drimage_improved"
                 }
             }
         ],
