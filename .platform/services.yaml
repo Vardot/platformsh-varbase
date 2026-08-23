@@ -1,0 +1,22 @@
+# The services of the project.
+#
+# Each service listed will be deployed
+# to power your Platform.sh project.
+
+db:
+    type: mariadb:10.11
+    disk: 2048
+
+# cache:
+#   type: memcached:1.4
+
+#searchsolr:
+#    type: solr:8.0
+#    disk: 1024
+#    configuration:
+#        cores:
+#            maincore:
+#                conf_dir: !archive "solr_8.x_config/"
+#        endpoints:
+#            solr:
+#                core: maincore
