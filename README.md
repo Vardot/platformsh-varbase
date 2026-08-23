@@ -132,20 +132,6 @@ ddev makes it simple to develop Drupal locally. In general, the steps are as fol
 1. When you have finished with your work, run `ddev stop` and `ddev poweroff`.
 
 </details>
-<details>
-<summary>Drupal: using Lando</summary><br />
-
-Lando supports PHP applications configured to run on Upsun.
-
-1. [Install Lando](https://docs.lando.dev/getting-started/installation.html).
-1. Make sure Docker is already running - Lando will attempt to start Docker for you, but it's best to have it running in the background before beginning.
-1. Start your apps and services with the command `lando start`.
-1. To get up-to-date data from your Upsun environment, run the command `lando pull`.
-1. If at any time you have updated your Upsun configuration files, run the command `lando rebuild`.
-1. When you have finished with your work, run `lando stop` and `lando poweroff`.
-
-</details>
-
 > **Note:**
 >
 > For many of the steps above, you may need to include the CLI flags `-p PROJECT_ID` and `-e ENVIRONMENT_ID` if you are not in the project directory or if the environment is associated with an existing pull request.
@@ -208,7 +194,6 @@ Both workflows also run on `workflow_dispatch`, so you can start them by hand fr
 | [`drush/platformsh_generate_drush_yml.php`](drush/platformsh_generate_drush_yml.php) | Generates Drush YAML configuration on every deployment |
 | [`php.ini`](php.ini) | PHP settings tuned for production, based on [Blackfire.io](https://blackfire.io) best practices |
 | [`.blackfire.yml`](.blackfire.yml) | Starter [Blackfire.io](https://blackfire.io) configuration |
-| [`.lando.upstream.yml`](.lando.upstream.yml) | [Lando](https://docs.lando.dev/) local development configuration |
 | [`.ddev/config.yaml`](.ddev/config.yaml) | [ddev](https://ddev.readthedocs.io/) local development configuration |
 
 ## Migrating your data
