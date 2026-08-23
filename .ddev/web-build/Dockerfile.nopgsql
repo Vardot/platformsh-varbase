@@ -1,0 +1,8 @@
+# Match the Upsun runtime: this app ships no PostgreSQL extensions
+# (.upsun/config.yaml runtime.extensions = sodium, apcu, yaml, imagick).
+# composer.json declares `replace` for ext-pgsql / ext-pdo_pgsql, and a root
+# package that replaces an extension cannot coexist with the extension being
+# present, so `composer install` fails wherever pgsql is loaded. Removing the
+# extensions here keeps DDEV consistent with production. Varbase uses
+# MariaDB/MySQL; nothing in the stack needs PostgreSQL locally.
+RUN rm -f /etc/php/*/cli/conf.d/*pgsql*.ini /etc/php/*/fpm/conf.d/*pgsql*.ini /etc/php/*/apache2/conf.d/*pgsql*.ini || true
