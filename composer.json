@@ -41,10 +41,6 @@
   "conflict": {
     "drupal/drupal": "*"
   },
-  "replace": {
-    "ext-pgsql": "*",
-    "ext-pdo_pgsql": "*"
-  },
   "minimum-stability": "dev",
   "prefer-stable": true,
   "config": {

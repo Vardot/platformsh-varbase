@@ -56,7 +56,10 @@ applications:
                 source_path: 'console'
         # Configuration of the build of this application.
         build:
-            flavor: composer
+            # 'none' so the build hook owns the Composer step and can pass
+            # --ignore-platform-req for the pgsql extensions, which this runtime
+            # deliberately does not ship. See issue #42.
+            flavor: none
         # The hooks executed at various points in the lifecycle of the application.
         hooks:
             # The build hook runs after Composer to finish preparing up your code.
@@ -64,6 +67,13 @@ applications:
             build: |
                 set -e
                 cd $PLATFORM_APP_DIR
+                # drupal/ai_provider_amazeeio requires ext-pdo_pgsql, which is not
+                # in this app's runtime extensions on purpose. Ignore just that
+                # requirement rather than installing PostgreSQL. See issue #42.
+                composer install --no-dev --no-progress --prefer-dist \
+                    --optimize-autoloader \
+                    --ignore-platform-req=ext-pgsql \
+                    --ignore-platform-req=ext-pdo_pgsql
                 npx corepack enable
                 npx corepack prepare yarn@4.13.0 --activate
                 export PATH="$HOME/.yarn/bin:$PATH"
