@@ -2869,6 +2869,69 @@
             "time": "2026-03-18T20:09:59+00:00"
         },
         {
+            "name": "drupal/ai_tmgmt",
+            "version": "1.0.0-beta6",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/ai_tmgmt.git",
+                "reference": "1.0.0-beta6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/ai_tmgmt-1.0.0-beta6.zip",
+                "reference": "1.0.0-beta6",
+                "shasum": "1a520c3cfe599896a2692ad5b3e860fff2be4d03"
+            },
+            "require": {
+                "drupal/ai": "^1.0.4",
+                "drupal/core": "^10 || ^11",
+                "drupal/tmgmt": "^1.16"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.0-beta6",
+                    "datestamp": "1781152697",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Minnur Yunusov (minnur)",
+                    "homepage": "https://www.drupal.org/u/minnur",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Scott Euser (scott_euser)",
+                    "homepage": "https://www.drupal.org/u/scott_euser",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "scott_euser",
+                    "homepage": "https://www.drupal.org/user/3267594"
+                }
+            ],
+            "description": "TMGMT implementation of AI Module to allow use of many AI Providers like OpenAI, Ollama, etc.",
+            "homepage": "http://drupal.org/project/ai_tmgmt",
+            "keywords": [
+                "AI",
+                "Drupal",
+                "TMGMT",
+                "Translation"
+            ],
+            "support": {
+                "source": "https://git.drupalcode.org/project/ai_tmgmt",
+                "issues": "https://www.drupal.org/project/issues/ai_tmgmt"
+            }
+        },
+        {
             "name": "drupal/anchor_link",
             "version": "3.0.4",
             "source": {
@@ -15485,19 +15548,20 @@
         },
         {
             "name": "drupal/varbase_i18n_base",
-            "version": "1.0.0-rc2",
+            "version": "1.0.0-rc3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/varbase_i18n_base.git",
-                "reference": "f342a90d0e48d1eae41f21c119fc645cd167d30f"
+                "reference": "f89472d2954f54a5db6b50ee13a2d9f480a036be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fvarbase_i18n_base/repository/archive.zip?sha=f342a90d0e48d1eae41f21c119fc645cd167d30f",
-                "reference": "f342a90d0e48d1eae41f21c119fc645cd167d30f",
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fvarbase_i18n_base/repository/archive.zip?sha=f89472d2954f54a5db6b50ee13a2d9f480a036be",
+                "reference": "f89472d2954f54a5db6b50ee13a2d9f480a036be",
                 "shasum": ""
             },
             "require": {
+                "drupal/ai_tmgmt": "~1",
                 "drupal/core": "~11.4.0",
                 "drupal/eca": "~3",
                 "drupal/tmgmt": "~1"
@@ -15519,6 +15583,7 @@
                 "Drupal Canvas",
                 "TMGMT",
                 "Varbase recipes",
+                "ai translation",
                 "drupal recipe",
                 "drupal recipes",
                 "i18n",
@@ -15532,7 +15597,7 @@
                 "issues": "https://www.drupal.org/project/issues/varbase_i18n_base",
                 "source": "http://cgit.drupalcode.org/varbase_i18n_base"
             },
-            "time": "2026-08-20T14:31:34+00:00"
+            "time": "2026-08-23T17:08:57+00:00"
         },
         {
             "name": "drupal/varbase_media",
