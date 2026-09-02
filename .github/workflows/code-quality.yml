@@ -255,8 +255,8 @@ jobs:
         run: |
           test -f .yarnrc.yml || echo "nodeLinker: node-modules" > .yarnrc.yml
           corepack enable
-          # --mode=skip-build skips the composer-bound postinstall
-          # (drupal-libraries-sync), which a static Storybook build does not need.
+          # --mode=skip-build skips the build scripts, which a static Storybook
+          # build does not need. The front-end libraries come from Composer.
           yarn install --mode=skip-build
 
       - name: Install Playwright Chromium

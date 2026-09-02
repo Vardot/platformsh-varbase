@@ -34,6 +34,7 @@
     "drupal/gleap-gleap": "~1",
     "drupal/redis": "~1",
     "drush/drush": "~13",
+    "mnsami/composer-custom-directory-installer": "^2.0",
     "platformsh/config-reader": "~3",
     "vardot/varbase": "~11.0.0",
     "vardot/varbase-patches": "~11.0.0"
@@ -57,6 +58,7 @@
     },
     "allow-plugins": {
       "composer/installers": true,
+      "mnsami/composer-custom-directory-installer": true,
       "cweagans/composer-patches": true,
       "vardot/varbase-patches": true,
       "oomphinc/composer-installers-extender": true,
@@ -80,6 +82,8 @@
         },
         "installer-paths": {
             "web/core": ["type:drupal-core"],
+            "web/libraries/ckeditor5/plugins/media-embed": ["vardot/ckeditor5-media-embed-drupal"],
+            "web/libraries/swagger-ui": ["swagger-api/swagger-ui"],
             "web/libraries/{$name}": ["type:drupal-library"],
             "web/modules/contrib/{$name}": ["type:drupal-module"],
             "web/profiles/contrib/{$name}": ["type:drupal-profile"],
@@ -117,21 +121,5 @@
         },
         "patches-ignore": { },
         "patches": { }
-    },
-    "scripts": {
-        "drupal-libraries-sync": [
-          "@drupal-libraries-yarn-sync"
-        ],
-        "drupal-libraries-yarn-sync": [
-          "yarn install",
-          "node ./recipes/varbase_starter/scripts/drupal-libraries-sync.js"
-        ],
-        "drupal-libraries-npm-sync": [
-          "npm install",
-          "node ./recipes/varbase_starter/scripts/drupal-libraries-sync.js"
-        ],
-        "post-create-project-cmd": [
-          "@drupal-libraries-sync"
-        ]
     }
 }
