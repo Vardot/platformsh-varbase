@@ -89,7 +89,7 @@ export default class AnchorEditing extends Plugin {
 					name: '$text',
 					key: 'anchorId'
 				},
-				view: createAnchorElement
+				view: ( id, conversionApi ) => createAnchorElement( id, conversionApi )
 			} );
 		editor.conversion.for( 'dataDowncast' ).elementToElement( {
 			model: 'anchor',
@@ -101,7 +101,7 @@ export default class AnchorEditing extends Plugin {
 		editor.conversion.for( 'editingDowncast' )
 			.attributeToElement( { model: 'anchorId', view: ( id, conversionApi ) => {
 				if ( id ) {
-					return createAnchorElement( ensureSafeUrl( id ), conversionApi );
+					return createAnchorElement( ensureSafeUrl( id ), conversionApi, true );
 				}
 				else {
 					return null;
@@ -126,10 +126,6 @@ export default class AnchorEditing extends Plugin {
 					key: 'anchorId',
 					value: viewElement => {
 						if ( viewElement.childCount < 1 ) {
-							return;
-						}
-
-						if ( viewElement.hasAttribute( 'href' ) ) {
 							return;
 						}
 

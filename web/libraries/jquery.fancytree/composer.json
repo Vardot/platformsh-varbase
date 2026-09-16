@@ -1,0 +1,30 @@
+{
+  "name": "vardot/jquery.fancytree",
+  "description": "Fancytree, a jQuery tree view plugin, packaged as a Drupal library",
+  "homepage": "https://github.com/Vardot/jquery.fancytree",
+  "type": "drupal-library",
+  "license": "MIT",
+  "keywords": [
+    "fancytree",
+    "tree",
+    "jquery",
+    "Drupal",
+    "drupal-library"
+  ],
+  "authors": [
+    {
+      "name": "Martin Wendt",
+      "homepage": "https://github.com/mar10",
+      "role": "Upstream author"
+    },
+    {
+      "name": "Vardot",
+      "homepage": "https://github.com/vardot",
+      "role": "Maintainer"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/Vardot/jquery.fancytree/issues",
+    "source": "https://github.com/Vardot/jquery.fancytree"
+  }
+}

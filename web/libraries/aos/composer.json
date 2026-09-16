@@ -1,0 +1,30 @@
+{
+  "name": "vardot/aos",
+  "description": "Animate On Scroll library, packaged as a Drupal library",
+  "homepage": "https://github.com/Vardot/aos",
+  "type": "drupal-library",
+  "license": "MIT",
+  "keywords": [
+    "aos",
+    "animate",
+    "scroll",
+    "Drupal",
+    "drupal-library"
+  ],
+  "authors": [
+    {
+      "name": "Michał Sajnóg",
+      "homepage": "https://github.com/michalsnik",
+      "role": "Upstream author"
+    },
+    {
+      "name": "Vardot",
+      "homepage": "https://github.com/vardot",
+      "role": "Maintainer"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/Vardot/aos/issues",
+    "source": "https://github.com/Vardot/aos"
+  }
+}
