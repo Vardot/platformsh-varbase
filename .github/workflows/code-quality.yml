@@ -163,7 +163,14 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ env.PHP_VERSION }}
-          extensions: mbstring, xml
+          # :pgsql and :pdo_pgsql REMOVE those extensions. composer.json
+          # replaces ext-pgsql / ext-pdo_pgsql so the Upsun runtime, which
+          # ships neither, still satisfies drupal/ai_provider_amazeeio. A root
+          # package that replaces an extension cannot coexist with that
+          # extension being present, and the runner image loads pdo_pgsql, so
+          # composer install aborts unless it is removed here. Same reason as
+          # .ddev/web-build/Dockerfile.nopgsql locally.
+          extensions: mbstring, xml, :pgsql, :pdo_pgsql
           coverage: none
           tools: composer
 
@@ -226,7 +233,14 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ env.PHP_VERSION }}
-          extensions: gd, imagick, mbstring, xml, curl, zip, sodium, apcu, yaml
+          # :pgsql and :pdo_pgsql REMOVE those extensions. composer.json
+          # replaces ext-pgsql / ext-pdo_pgsql so the Upsun runtime, which
+          # ships neither, still satisfies drupal/ai_provider_amazeeio. A root
+          # package that replaces an extension cannot coexist with that
+          # extension being present, and the runner image loads pdo_pgsql, so
+          # composer install aborts unless it is removed here. Same reason as
+          # .ddev/web-build/Dockerfile.nopgsql locally.
+          extensions: gd, imagick, mbstring, xml, curl, zip, sodium, apcu, yaml, :pgsql, :pdo_pgsql
           coverage: none
           tools: composer
 
