@@ -1,0 +1,34 @@
+{
+  "name": "vardot/swagger-ui",
+  "description": "Swagger UI distribution build, packaged as a Drupal library",
+  "homepage": "https://github.com/Vardot/swagger-ui",
+  "type": "drupal-library",
+  "license": "Apache-2.0",
+  "keywords": [
+    "swagger",
+    "openapi",
+    "api",
+    "documentation",
+    "Drupal",
+    "drupal-library"
+  ],
+  "authors": [
+    {
+      "name": "SmartBear Software",
+      "homepage": "https://github.com/swagger-api",
+      "role": "Upstream author"
+    },
+    {
+      "name": "Vardot",
+      "homepage": "https://github.com/vardot",
+      "role": "Maintainer"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/Vardot/swagger-ui/issues",
+    "source": "https://github.com/Vardot/swagger-ui"
+  },
+  "replace": {
+    "swagger-api/swagger-ui": "self.version"
+  }
+}

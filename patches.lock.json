@@ -1,5 +1,5 @@
 {
-    "_hash": "6ce414b540af88abd022f89f29d59ca2415c0479e13b15b6e062d77e873d07ae",
+    "_hash": "82d006f37fa01e546efeabe7494591b713e6da899e8e9a6e163a0bdae419c4b0",
     "patches": {
         "drupal/core": [
             {
@@ -116,6 +116,16 @@
                 "package": "drupal/core",
                 "description": "Issue #3431330: Add Action Method to Add a button plugin and settings into the Active toolbar in editor",
                 "url": "https://raw.githubusercontent.com/Vardot/drupal-core-patches/refs/heads/patches/drupal-core--2025-02-18--3431330--drupal-11-1.patch",
+                "sha256": null,
+                "depth": null,
+                "extra": {
+                    "provenance": "dependency:drupal/core"
+                }
+            },
+            {
+                "package": "drupal/core",
+                "description": "Issue #3622837: Top bar page actions toggle is rendered when the user has access to none of the local tasks",
+                "url": "https://raw.githubusercontent.com/Vardot/drupal-core-patches/refs/heads/patches/drupal-core--2026-09-13--3622837--mr-17111.patch",
                 "sha256": null,
                 "depth": null,
                 "extra": {
@@ -272,26 +282,6 @@
             },
             {
                 "package": "drupal/canvas",
-                "description": "feat: #3585221 Fall back to active version when stored component version is not available",
-                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/canvas--2026-04-21--3585221--mr-927.patch",
-                "sha256": null,
-                "depth": null,
-                "extra": {
-                    "provenance": "dependency:drupal/canvas"
-                }
-            },
-            {
-                "package": "drupal/canvas",
-                "description": "feat: #3584713 Add Allow Edit Global Regions permission to restrict editing of global page regions",
-                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/canvas--2026-08-13--3584713--mr-911.patch",
-                "sha256": null,
-                "depth": null,
-                "extra": {
-                    "provenance": "dependency:drupal/canvas"
-                }
-            },
-            {
-                "package": "drupal/canvas",
                 "description": "fix: #3591751 Compile JSX server-side for AI-created/edited code components (fixes [object Object])",
                 "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/canvas--2026-07-10--3591751--mr-1315.patch",
                 "sha256": null,
@@ -303,7 +293,7 @@
             {
                 "package": "drupal/canvas",
                 "description": "fix: #3560889 JsComponent crash renders Canvas Editor unusable when Image Props have relative example URLs",
-                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/canvas--2026-07-26--3560889--mr-1425.patch",
+                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/canvas--2026-09-08--3560889--mr-1425-reroll-1.11.0.patch",
                 "sha256": null,
                 "depth": null,
                 "extra": {
@@ -314,16 +304,6 @@
                 "package": "drupal/canvas",
                 "description": "fix: #3584883 Undefined array key placeholder warning in Component::getSlotDefinitions() when versioned_properties lacks last_active_version key",
                 "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/canvas--2026-04-15--3584883--mr-916.patch",
-                "sha256": null,
-                "depth": null,
-                "extra": {
-                    "provenance": "dependency:drupal/canvas"
-                }
-            },
-            {
-                "package": "drupal/canvas",
-                "description": "feat: #3567225 Allow per-node override of Content Template via checkbox in node selector -- minimal re-roll against Canvas 1.10.0 (ComponentTreeLoader extension point only)",
-                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/canvas--2026-08-09--3567225--mr-948-minimal.patch",
                 "sha256": null,
                 "depth": null,
                 "extra": {
@@ -644,6 +624,28 @@
                 "depth": null,
                 "extra": {
                     "provenance": "dependency:drupal/drupal_cms_helper"
+                }
+            }
+        ],
+        "drupal/canvas_icon_picker": [
+            {
+                "package": "drupal/canvas_icon_picker",
+                "description": "fix: #3619510 The icon picker is silently ignored on a prop that also declares an enum",
+                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/canvas_icon_picker--2026-08-28--3619510--merged-fix.patch",
+                "sha256": null,
+                "depth": null,
+                "extra": {
+                    "provenance": "dependency:drupal/canvas_icon_picker"
+                }
+            },
+            {
+                "package": "drupal/canvas_icon_picker",
+                "description": "fix: #3619785 Icon changes are silently discarded when the prop has no allowed icon ids",
+                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/canvas_icon_picker--2026-08-29--3619785--mr-3.patch",
+                "sha256": null,
+                "depth": null,
+                "extra": {
+                    "provenance": "dependency:drupal/canvas_icon_picker"
                 }
             }
         ],

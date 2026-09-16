@@ -117,21 +117,5 @@
         },
         "patches-ignore": { },
         "patches": { }
-    },
-    "scripts": {
-        "drupal-libraries-sync": [
-          "@drupal-libraries-yarn-sync"
-        ],
-        "drupal-libraries-yarn-sync": [
-          "yarn install",
-          "node ./recipes/varbase_starter/scripts/drupal-libraries-sync.js"
-        ],
-        "drupal-libraries-npm-sync": [
-          "npm install",
-          "node ./recipes/varbase_starter/scripts/drupal-libraries-sync.js"
-        ],
-        "post-create-project-cmd": [
-          "@drupal-libraries-sync"
-        ]
     }
 }

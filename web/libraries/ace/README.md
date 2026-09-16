@@ -1,27 +1,61 @@
-Ace (Ajax.org Cloud9 Editor)
-============================
-[![CDNJS](https://img.shields.io/cdnjs/v/ace.svg)](https://cdnjs.com/libraries/ace)
-[![npm](https://img.shields.io/npm/v/ace-builds.svg)](https://www.npmjs.com/package/ace-builds)
+# Ace — as a Drupal library
 
-Ace is a code editor written in JavaScript.
+This repository packages the **minified no-conflict build** of
+[Ace (Ajax.org Cloud9 Editor)](https://github.com/ajaxorg/ace-builds) as a Composer
+`drupal-library`, so that a Drupal site can install it with Composer instead of copying files out
+of `node_modules` or downloading a zip by hand.
 
----
+`drupal/ace_editor` requires this package directly, the same way `drupal/anchor_link` requires
+[`vardot/ckeditor5-anchor-drupal`](https://github.com/Vardot/ckeditor5-anchor-drupal). Nothing
+needs to require it at the project level.
 
-### ❗<span style="color:red">ISSUES ARE DISABLED IN THIS REPOSITORY</span>❗
+## Installation
 
-This repository has only generated files. To report your issues, suggest features, ask questions, or work on Ace editor itself please go to Ace repository https://github.com/ajaxorg/ace.
+```bash
+composer require vardot/ace
+```
 
----
+With `composer/installers` and the usual Drupal `installer-paths`, the files land at:
 
+```
+web/libraries/ace/src-min-noconflict/ace.js
+web/libraries/ace/src-min-noconflict/ext-searchbox.js
+web/libraries/ace/src-min-noconflict/ext-language_tools.js
+web/libraries/ace/src-min-noconflict/mode-*.js
+web/libraries/ace/src-min-noconflict/theme-*.js
+web/libraries/ace/src-min-noconflict/worker-*.js
+```
 
-Here you can find pre-built files for convenience of embedding. It contains 4 versions:
- * [src](https://github.com/ajaxorg/ace-builds/tree/master/src)              concatenated but not minified
- * [src-min](https://github.com/ajaxorg/ace-builds/tree/master/src-min)      concatenated and minified with uglify.js
- * [src-noconflict](https://github.com/ajaxorg/ace-builds/tree/master/src-noconflict)      uses ace.require instead of require
- * [src-min-noconflict](https://github.com/ajaxorg/ace-builds/tree/master/src-min-noconflict)      concatenated, minified with uglify.js, and uses ace.require instead of require
+which is where `drupal/ace_editor` looks: it scans `/libraries/ace` for `ace.js` and prefers the
+minified no-conflict build over the other three.
 
+## What is shipped, and what is not
 
-For a simple way of embedding ace into webpage see [editor.html](https://github.com/ajaxorg/ace-builds/blob/master/editor.html) or list of other [simple examples](https://github.com/ajaxorg/ace-builds/tree/master/demo).
-To see ace in action go to [kitchen-sink-demo](http://ajaxorg.github.io/ace-builds/kitchen-sink.html), [scrollable-page-demo](http://ajaxorg.github.io/ace-builds/demo/scrollable-page.html) or [minimal demo](http://ajaxorg.github.io/ace-builds/editor.html).
+Upstream `ace-builds` ships the same library four times — `src/`, `src-min/`, `src-noconflict/`
+and `src-min-noconflict/` — around 58 MB in total. Only `src-min-noconflict/` is shipped here:
 
+- **minified**, so it is what a site should actually serve, and
+- **no-conflict**, so it does not define the global AMD `define()` and `require()` and cannot
+  clash with another loader on the page.
 
+The demos, the kitchen-sink page and the unminified builds are not shipped. If you need them, use
+[ajaxorg/ace-builds](https://github.com/ajaxorg/ace-builds) directly.
+
+The `1.x` branch and the `1.44.0` tag onward carry this layout. Tags up to `v1.2.8`, and the
+`master` branch, are the original 2017 full fork and are left untouched.
+
+## Versioning
+
+Tags follow the upstream `ace-builds` release they are built from. `1.44.0` here is the build of
+[ace-builds 1.44.0](https://github.com/ajaxorg/ace-builds).
+
+## Upstream
+
+- Pre-built files: https://github.com/ajaxorg/ace-builds
+- Source: https://github.com/ajaxorg/ace
+- Documentation: https://ace.c9.io/
+- Licence: BSD-3-Clause (see [LICENSE](LICENSE)) — © Ajax.org B.V.
+
+## Maintainers
+
+- [Vardot](https://github.com/vardot)

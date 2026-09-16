@@ -1,0 +1,31 @@
+{
+  "name": "vardot/dropzone",
+  "description": "Dropzone distribution build, laid out for Drupal, packaged as a Drupal library",
+  "homepage": "https://github.com/Vardot/dropzone",
+  "type": "drupal-library",
+  "license": "MIT",
+  "keywords": [
+    "dragndrop",
+    "drag and drop",
+    "file upload",
+    "upload",
+    "Drupal",
+    "drupal-library"
+  ],
+  "authors": [
+    {
+      "name": "Matias Meno",
+      "homepage": "https://www.matiasmeno.com",
+      "role": "Upstream author"
+    },
+    {
+      "name": "Vardot",
+      "homepage": "https://github.com/vardot",
+      "role": "Maintainer"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/Vardot/dropzone/issues",
+    "source": "https://github.com/Vardot/dropzone"
+  }
+}
