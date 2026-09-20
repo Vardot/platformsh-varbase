@@ -9,18 +9,18 @@ Feature: Content Management - Cloning content and entities
     Given I am a logged in user with the "webmaster" user
      When I go to "/admin/config/system/entity-clone"
       And wait
-     Then I should see "Entity Clone Settings"
+     Then I should see "Entity clone settings"
 
   @check @local @development @staging @production
   Scenario: Check that anonymous users can not access the Entity clone settings
     Given I am an anonymous user
      When I go to "/admin/config/system/entity-clone"
       And wait
-     Then I should not see "Entity Clone Settings"
+     Then I should not see "Entity clone settings"
 
   @check @local @development @staging @production
   Scenario: Check that Normal users can not access the Entity clone settings
     Given I am a logged in user with the "Normal user" user
      When I go to "/admin/config/system/entity-clone"
       And wait
-     Then I should not see "Entity Clone Settings"
+     Then I should not see "Entity clone settings"
