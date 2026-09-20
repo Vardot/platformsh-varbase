@@ -439,6 +439,23 @@ jobs:
           key: varbase-build-${{ github.run_id }}
           fail-on-cache-miss: true
 
+      # MUST run before the artifact download, not after it. `drush
+      # site:install` leaves web/sites/default at 0555 and settings.php at
+      # 0444, and the cache preserves those modes, so the restored docroot
+      # arrives read-only. The installed-site artifact writes
+      # web/sites/default/settings.php back into that directory, which needs
+      # write permission on the directory itself, so the extraction fails with
+      # a permission error. download-artifact swallows the cause and reports
+      # only "Artifact download failed after 5 retries", which reads like a
+      # network problem and is not one: it failed in all 24 test jobs of every
+      # run of this workflow since it was added. These three lines used to sit
+      # in "Restore the database and start the web server", one step too late.
+      - name: Make the restored docroot writable
+        run: |
+          chmod -R u+w web/sites || true
+          mkdir -p web/sites/default/files web/sites/simpletest
+          chmod -R 777 web/sites/default/files web/sites/simpletest
+
       - name: Download the installed site state
         uses: actions/download-artifact@v4
         with:
@@ -449,9 +466,6 @@ jobs:
 
       - name: Restore the database and start the web server
         run: |
-          chmod -R u+w web/sites || true
-          mkdir -p web/sites/default/files web/sites/simpletest
-          chmod -R 777 web/sites/default/files web/sites/simpletest
           gunzip -c varbase-db.sql.gz | ./vendor/bin/drush --root="${{ github.workspace }}/web" sql:cli
           ./vendor/bin/drush --root="${{ github.workspace }}/web" cache:rebuild
           cd web

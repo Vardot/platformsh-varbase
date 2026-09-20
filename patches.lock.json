@@ -1,5 +1,5 @@
 {
-    "_hash": "82d006f37fa01e546efeabe7494591b713e6da899e8e9a6e163a0bdae419c4b0",
+    "_hash": "aa12f819f1a8142d5d8d3fe69966c58a96be08004427e55a00f274210ad28bb1",
     "patches": {
         "drupal/core": [
             {
@@ -371,18 +371,6 @@
                 }
             }
         ],
-        "drupal/schemata": [
-            {
-                "package": "drupal/schemata",
-                "description": "fix: #3523349 PHP 8.4: Implicitly nullable parameter declarations deprecated",
-                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/schemata--2025-12-09--3523349--mr-17.patch",
-                "sha256": null,
-                "depth": null,
-                "extra": {
-                    "provenance": "dependency:drupal/schemata"
-                }
-            }
-        ],
         "drupal/ai_agents": [
             {
                 "package": "drupal/ai_agents",
@@ -532,18 +520,6 @@
                 "depth": null,
                 "extra": {
                     "provenance": "dependency:drupal/simple_oauth"
-                }
-            }
-        ],
-        "neilime/php-css-lint": [
-            {
-                "package": "neilime/php-css-lint",
-                "description": "fix: #3498301 PHP 8.4 compatibility to fix PHP 8.4 deprecation warning for implicit nullable parameter in CssLint Linter",
-                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/php-css-lint--2025-12-21--3498301.patch",
-                "sha256": null,
-                "depth": null,
-                "extra": {
-                    "provenance": "dependency:neilime/php-css-lint"
                 }
             }
         ],
