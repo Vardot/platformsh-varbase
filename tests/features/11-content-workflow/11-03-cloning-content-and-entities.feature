@@ -1,4 +1,17 @@
-@regression @any @content @workflow
+# @wip until Entity Clone is enabled on a Varbase site again.
+#
+# Varbase Admin Base 1.0.1 removed the entity_clone module deliberately,
+# "temporarily remove Entity Clone until it has a stable release"
+# (https://www.drupal.org/i/3621449), and 1.0.2 cleaned up the permission
+# grants it left behind (https://www.drupal.org/i/3621823). The profile still
+# requires drupal/entity_clone as a package, but no recipe enables the module,
+# so /admin/config/system/entity-clone returns "Page not found" on a fresh
+# install. Confirmed from this suite's own failure screenshot.
+#
+# The scenarios are kept, and corrected, rather than deleted: when Entity Clone
+# gets a stable release and the recipe takes it back, remove the @wip tag and
+# they run as they stand.
+@wip @regression @any @content @workflow
 Feature: Content Management - Cloning content and entities
       As a site admin user
       I want to be able to access the Entity Clone settings
