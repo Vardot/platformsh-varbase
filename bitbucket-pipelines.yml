@@ -1,0 +1,813 @@
+################################################################################
+# Bitbucket Pipelines for the Platform.sh / Upsun Varbase template.
+#
+# Full parity with the two GitHub Actions workflows this repository already
+# ships:
+#
+#   .github/workflows/code-quality.yml              -> the `lint` steps below
+#     YAML lint, PHPCS, PHPStan, Storybook build.
+#
+#   .github/workflows/automated-functional-testing.yml -> install / test /
+#     reports below. Three phases, the same 24-suite split, the same merged
+#     HTML + PDF report:
+#
+#       install  Build the codebase, install Varbase with the `varbase`
+#                profile, apply the base + AI recipes, seed the per-role
+#                testing users, make the site deterministic, export a DB dump.
+#       test     One step per feature suite, fanned out under `parallel:`.
+#       reports  Merge every suite's cucumber JSON into one HTML + PDF.
+#
+# ==============================================================================
+# WHAT BITBUCKET MAKES DIFFERENT, AND WHAT THIS FILE DOES ABOUT IT
+# ==============================================================================
+#
+# 1. NO MATRIX. Bitbucket Pipelines has no equivalent of `strategy.matrix` or
+#    GitLab's `parallel: matrix`. The 24 suites are written out as explicit
+#    steps under `parallel:`. YAML anchors carry everything the steps share
+#    (image, size, caches, services, artifacts), and the per-suite difference is
+#    ONE line of shell calling ci/bitbucket/run-e2e-suite.sh. Adding a suite is
+#    a copy of a six-line step with one string changed - see "ADDING A SUITE".
+#
+# 2. BILLING. Bitbucket bills build minutes per step, and parallel steps are
+#    billed concurrently, not free. `size: 2x` doubles both the memory and the
+#    minutes. A full E2E run here is roughly 700-750 billed minutes (see the
+#    cost table in the pull request). That is why only lint + install run on
+#    every push, and the full fan-out is a manual `custom:` pipeline.
+#
+# 3. STEP TIME CAP. A single step is capped at 120 minutes (`max-time`), which
+#    is the same ceiling the Actions jobs set. The suite split keeps every E2E
+#    step well inside it.
+#
+# 4. THE 1 GB CEILING. Bitbucket will not upload a cache larger than 1 GB, and
+#    caps a step's artifacts at 1 GB (expiring after 14 days). A built Varbase
+#    tree (vendor + node_modules + web + recipes) is far past both, so unlike
+#    the Actions workflow the built trees are NOT shipped between steps. What
+#    moves between steps is:
+#      * content-addressed Composer / Yarn / Playwright download caches, so a
+#        rebuild is a local unpack, and
+#      * the small installed-site state (gzipped DB dump, settings.php, the
+#        files directory, .easy_encryption) as an artifact.
+#    Each E2E step therefore rebuilds the codebase (~3-5 warm minutes) before
+#    restoring the database. That cost is Bitbucket's ceiling, not a choice.
+#
+# 5. SERVICE MEMORY COMES OUT OF THE STEP. A default step has 4 GB total and
+#    `size: 2x` has 8 GB, and a service's `memory:` is subtracted from it. The
+#    MariaDB service is given 1024 MB and every step that uses it is `size: 2x`,
+#    leaving ~7 GB for Composer, Node, PHP and Chromium in the build container.
+#
+# 6. NO sudo, AND THE IMAGE IS BARE. Steps run as root in the pinned
+#    `php:8.4.25-cli-bookworm` image, which ships PHP and nothing else. Node,
+#    ImageMagick with WebP, the PHP extensions and the Playwright system
+#    libraries are installed by ci/bitbucket/setup-tooling.sh, which is the one
+#    place that list lives.
+#
+# 7. THE TREE IS READ-ONLY AFTER INSTALL. `drush site:install` leaves
+#    web/sites/default at 0555 and settings.php at 0444, and those modes travel
+#    with the artifact. Bitbucket unpacks artifacts BEFORE the step's script
+#    runs, so run-e2e-suite.sh chmods web/sites writable as its first action -
+#    before `composer install`, never after it has already failed.
+#
+# ==============================================================================
+# ADDING A SUITE (a one-line change)
+# ==============================================================================
+#
+# tests/features/09-drupal-canvas/ currently holds 09-01 .. 09-06. When 09-07
+# and 09-08 land, add two steps to the `parallel:` block and change one string
+# in each:
+#
+#       - step:
+#           <<< the same six lines as its neighbours >>>
+#           script:
+#             - ./ci/bitbucket/run-e2e-suite.sh '09-drupal-canvas-e' 'tests/features/09-drupal-canvas/09-07-*.feature'
+#
+# Nothing else in this file, and nothing in the report merge, needs touching:
+# the reports step globs tests/reports/cucumber_report_*.json.
+#
+# ==============================================================================
+# THIS PIPELINE HAS NEVER BEEN EXECUTED
+# ==============================================================================
+#
+# It was authored against the two GitHub Actions workflows and validated as
+# YAML, with every script, config and feature path it names checked to exist in
+# this repository. It has not been run: there is no Bitbucket repository, no
+# runner and no credentials for this project. Treat the first real run as the
+# verification step, and expect image/extension build times in particular to
+# need tuning.
+################################################################################
+
+image: php:8.4.25-cli-bookworm
+
+clone:
+  depth: 1
+
+definitions:
+  caches:
+    # Composer's download cache. Keyed on composer.lock, so a lock change
+    # produces a new cache rather than reusing a stale one - which matters
+    # because a Bitbucket cache is immutable for its key once written.
+    composer-dl:
+      key:
+        files:
+          - composer.lock
+      path: /root/.composer/cache
+
+    # Yarn 4 (Berry) keeps its zips here.
+    yarn-dl:
+      key:
+        files:
+          - yarn.lock
+      path: /root/.yarn/berry/cache
+
+    # Chromium only, ~150 MB - comfortably inside the 1 GB cache ceiling.
+    playwright:
+      key:
+        files:
+          - yarn.lock
+      path: /root/.cache/ms-playwright
+
+  services:
+    # Matches the mariadb:10.11 service the Upsun project runs in production,
+    # pinned to a patch release. 1024 MB is taken out of the step's own budget,
+    # which is why every step using it is `size: 2x` (8 GB).
+    database:
+      image: mariadb:10.11.19
+      memory: 1024
+      variables:
+        MARIADB_ROOT_PASSWORD: drupal
+        MARIADB_DATABASE: drupal
+        MARIADB_USER: drupal
+        MARIADB_PASSWORD: drupal
+
+  steps:
+    # =========================================================================
+    # LINT - the four jobs from .github/workflows/code-quality.yml.
+    #
+    # Each is self-contained: it installs what it needs and depends on no
+    # shared build artifact, exactly as in the Actions workflow.
+    #
+    # Cspell, ESLint and Stylelint are deliberately NOT here, for the reason
+    # code-quality.yml states at length: their configs reference packages that
+    # are not in devDependencies, so the commands abort, and the GitLab
+    # pipeline only keeps them green by masking them with `|| true`. Three
+    # permanently green checks that verify nothing are worse than none. Do NOT
+    # add them back with `|| true`.
+    # =========================================================================
+
+    - step: &yaml-lint
+        name: "Lint: YAML parses"
+        max-time: 15
+        script:
+          - apt-get update -y && apt-get install -y --no-install-recommends python3 python3-yaml
+          # A catch-all constructor keeps custom `!tags` from failing what is
+          # only meant to be a syntax check. Contrib, core and build output are
+          # skipped.
+          - |
+            python3 - <<'PY'
+            import sys, yaml
+            from pathlib import Path
+
+            class Loader(yaml.SafeLoader):
+                pass
+            Loader.add_multi_constructor('', lambda loader, suffix, node: None)
+
+            SKIP = ('vendor/', 'node_modules/', 'web/core/', 'web/modules/contrib/',
+                    'web/themes/contrib/', 'web/profiles/contrib/', 'web/profiles/varbase/',
+                    'web/libraries/', 'drush/contrib/', 'recipes/', '.cache/')
+            errors = 0
+            count = 0
+            for path in sorted(Path('.').rglob('*.y*ml')):
+                rel = str(path).lstrip('./')
+                if any(s in rel for s in SKIP):
+                    continue
+                count += 1
+                try:
+                    with open(path) as fh:
+                        list(yaml.load_all(fh, Loader=Loader))
+                except yaml.YAMLError as e:
+                    errors += 1
+                    print(f"INVALID: {rel}\n  {e}")
+            print(f"Checked {count} YAML files, {errors} invalid.")
+            sys.exit(1 if errors else 0)
+            PY
+
+    - step: &phpcs
+        name: "Lint: PHPCS"
+        max-time: 30
+        caches:
+          - composer-dl
+        script:
+          - . ci/bitbucket/setup-tooling.sh
+          # Composer 2.2+ blocks third-party plugins by default; allow the
+          # standards installer before requiring it, or the require aborts.
+          - composer global config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+          - composer global require drupal/coder:^8.3 dealerdirect/phpcodesniffer-composer-installer --no-interaction
+          - export PATH="$(composer global config bin-dir --absolute):$PATH"
+          - phpcs --version
+          # A project developer's own code lives in web/modules/custom,
+          # web/themes/custom and web/recipes/custom. A fresh template ships
+          # none, and PHPCS errors on an empty target, so only sniff what has
+          # PHP in it.
+          - |
+            SCOPE=""
+            for d in web/modules/custom web/themes/custom web/recipes/custom; do
+              if [ -d "$d" ] && find "$d" -type f \( -name '*.php' -o -name '*.module' -o -name '*.inc' -o -name '*.install' -o -name '*.theme' -o -name '*.profile' \) | grep -q .; then
+                SCOPE="$SCOPE $d"
+              fi
+            done
+            if [ -n "$SCOPE" ]; then
+              phpcs --standard=.phpcs.xml -p $SCOPE
+            else
+              echo "No PHP in web/*/custom - nothing for PHPCS to sniff."
+            fi
+
+    - step: &phpstan
+        name: "Lint: PHPStan"
+        max-time: 45
+        caches:
+          - composer-dl
+        script:
+          - . ci/bitbucket/setup-tooling.sh
+          # phpstan.neon scopes recipes/varbase_starter, which composer
+          # installs into ./recipes (installer-paths), so the codebase has to
+          # be built first.
+          - composer install --no-interaction --no-progress --prefer-dist
+          - curl -sSL https://github.com/phpstan/phpstan/releases/latest/download/phpstan.phar -o phpstan.phar
+          - chmod +x phpstan.phar
+          - |
+            SCOPE=""
+            for d in recipes/varbase_starter web/modules/custom web/themes/custom web/recipes/custom; do
+              if [ -d "$d" ] && find "$d" -name '*.php' | grep -q .; then
+                SCOPE="$SCOPE $d"
+              fi
+            done
+            if [ -n "$SCOPE" ]; then
+              php phpstan.phar analyse -c phpstan.neon --no-progress $SCOPE
+            else
+              echo "No PHP files in the PHPStan scope - nothing to analyse."
+            fi
+
+    - step: &storybook
+        name: "Lint: Storybook build"
+        size: 2x
+        max-time: 90
+        caches:
+          - composer-dl
+          - yarn-dl
+          - playwright
+        artifacts:
+          paths:
+            - storybook/**
+            - storybook-dev.log
+        script:
+          # Read by .storybook/middleware.js and preview.ts. Only embedded into
+          # the build; they do not need to be reachable for the index to be
+          # produced.
+          - export STORYBOOK_SERVER_URL="http://localhost"
+          - export STORYBOOK_SERVER_RENDER_URL="http://localhost/storybook/stories/render"
+          - export YARN_ENABLE_IMMUTABLE_INSTALLS=false
+          - WITH_NODE=1 WITH_BROWSER=1 . ci/bitbucket/setup-tooling.sh
+          # Brings in web/themes/contrib/vartheme_bs5 with its shipped
+          # component stories.
+          - composer install --no-interaction --no-progress --prefer-dist
+          - test -f .yarnrc.yml || echo "nodeLinker: node-modules" > .yarnrc.yml
+          # --mode=skip-build skips the build scripts, which a static Storybook
+          # build does not need. The front-end libraries come from Composer.
+          - yarn install --mode=skip-build
+          - ./node_modules/.bin/playwright install --with-deps chromium
+          - test -d web/themes/contrib/vartheme_bs5/components || { echo "vartheme_bs5 components missing"; exit 1; }
+          - |
+            yarn storybook:build
+            test -f storybook/index.html || { echo "build produced no index.html"; exit 1; }
+            test -f storybook/index.json || { echo "build produced no index.json"; exit 1; }
+            BUILD_COUNT=$(grep -o '"id":' storybook/index.json | wc -l)
+            echo "Storybook build: ${BUILD_COUNT} entries in index.json"
+            test "${BUILD_COUNT}" -gt 0 || { echo "0 stories in the built index.json"; exit 1; }
+          - |
+            yarn storybook:dev > storybook-dev.log 2>&1 &
+            SB_PID=$!
+            UP=0
+            for i in $(seq 1 60); do
+              if curl -sf http://127.0.0.1:6006/index.json | grep -q '"entries"'; then UP=1; break; fi
+              sleep 5
+            done
+            if [ "${UP}" != "1" ]; then
+              echo "dev server did not come up on :6006"; tail -n 50 storybook-dev.log; exit 1
+            fi
+            DEV_COUNT=$(curl -sf http://127.0.0.1:6006/index.json | grep -o '"id":' | wc -l)
+            echo "Storybook dev: ${DEV_COUNT} entries served on :6006"
+            test "${DEV_COUNT}" -gt 0 || { echo "dev server served 0 stories"; exit 1; }
+            # Drives Chromium against the dev server and asserts a story renders
+            # in the preview iframe. Uses the static "Welcome" story, so it
+            # passes with no Drupal render backend.
+            SB_URL=http://127.0.0.1:6006 node tests/storybook/check-storybook-page.mjs
+            kill "${SB_PID}" 2>/dev/null || true
+
+    # =========================================================================
+    # INSTALL - the pre-test phase.
+    #
+    # Builds the codebase, installs Varbase, applies the recipes, seeds the
+    # testing users and exports the database. The DB dump plus the small site
+    # state is the artifact every E2E step restores.
+    # =========================================================================
+
+    - step: &install-varbase
+        name: "Install Varbase"
+        size: 2x
+        max-time: 120
+        caches:
+          - composer-dl
+          - yarn-dl
+          - playwright
+        services:
+          - database
+        artifacts:
+          paths:
+            - varbase-db.sql.gz
+            - web/sites/default/settings.php
+            - web/sites/default/files/**
+            - .easy_encryption/**
+            - webserver.log
+        script:
+          - export SIMPLETEST_DB="mysql://drupal:drupal@127.0.0.1:3306/drupal"
+          - export DRUPAL_ADMIN_USERNAME="webmaster"
+          - export DRUPAL_ADMIN_PASSWORD="dD.123123ddd"
+          - export YARN_ENABLE_IMMUTABLE_INSTALLS=false
+          - WITH_NODE=1 WITH_BROWSER=1 . ci/bitbucket/setup-tooling.sh
+
+          # Install strictly from the committed lock so CI proves the same
+          # resolution the template ships, not a fresh one.
+          - composer install --no-interaction --no-progress --optimize-autoloader --prefer-dist
+
+          - |
+            test -f .yarnrc.yml || echo "nodeLinker: node-modules" > .yarnrc.yml
+            # varbase-e2e's postinstall scaffolds a cucumber.js when none
+            # exists. Under yarn 4 it can clobber the committed one, so restore
+            # it after.
+            cp cucumber.js .cucumber.js.bak
+            yarn install
+            cp .cucumber.js.bak cucumber.js && rm .cucumber.js.bak
+            ./node_modules/.bin/playwright install --with-deps chromium
+
+          # Drupal core's own .ht.router.php rewrites missing files (image
+          # style derivatives, including the WebP ones drimage_improved
+          # generates on the fly) back to index.php. PHP_CLI_SERVER_WORKERS is
+          # required: the built-in server is single-process by default, and a
+          # real browser opening many parallel requests would serialise behind
+          # one worker or dead-lock on Drupal sub-requests.
+          - |
+            mkdir -p web/sites/default/files web/sites/simpletest
+            chmod -R 777 web/sites/default/files web/sites/simpletest
+            ( cd web && PHP_CLI_SERVER_WORKERS=8 php -S 127.0.0.1:8080 .ht.router.php > "${OLDPWD}/webserver.log" 2>&1 & )
+            for i in $(seq 1 30); do
+              curl -sf -o /dev/null "http://127.0.0.1:8080/core/install.php" && break
+              sleep 2
+            done
+            curl -sf -o /dev/null "http://127.0.0.1:8080/core/install.php" || { echo "Web server did not come up."; cat webserver.log; exit 1; }
+
+          - |
+            ./vendor/bin/drush --root="${PWD}/web" site:install varbase \
+              --db-url="$SIMPLETEST_DB" \
+              --account-name="$DRUPAL_ADMIN_USERNAME" \
+              --account-pass="$DRUPAL_ADMIN_PASSWORD" \
+              --account-mail=webmaster@vardot.com \
+              --site-name="Varbase Test" --locale=en -y
+
+          # Recipes are applied with core's `dr` runner: Drush 13.x has NO
+          # `recipe` command. Rebuilding caches before each apply lets a recipe
+          # see the modules and hooks the previous one enabled, and avoids
+          # stale-container fatals. `dr` lives in vendor/bin here, because this
+          # template sets composer config bin-dir to vendor/bin.
+          - |
+            DRUSH="./vendor/bin/drush --root=${PWD}/web"
+            DR="./vendor/bin/dr"
+            test -f "$DR" || { echo "core recipe runner 'dr' missing from vendor/bin"; exit 1; }
+            apply_recipe() {
+              $DRUSH cache:rebuild || true
+              php "$DR" recipe "${PWD}/recipes/$1" || true
+            }
+            apply_recipe varbase_dev_base
+            apply_recipe varbase_i18n_base
+            apply_recipe varbase_api_base
+            apply_recipe varbase_auth_base
+            # Auth Base enables Google only; Facebook and LinkedIn ship disabled.
+            $DRUSH pm:enable social_auth_facebook social_auth_linkedin -y || true
+            apply_recipe varbase_ai_base
+            apply_recipe varbase_ai_context
+            apply_recipe varbase_ai_safety
+            # The AI safety/taxonomy sub-recipes abort on config actions that
+            # need a live AI provider (API key / default chat model), which CI
+            # has not got, so their modules never get enabled. Enable them
+            # explicitly so their admin pages exist; the config actions are
+            # optional.
+            $DRUSH cache:rebuild || true
+            $DRUSH pm:enable ai_logging ai_observability ai_automators -y || true
+
+          # Rendering the ai_ckeditor "AI Assistant" settings subform performs a
+          # live AI-provider lookup, which hangs on a runner with no provider
+          # and blows the browser's navigation budget on the text-format edit
+          # page. Strip the button/plugin from every editor; the module stays
+          # enabled.
+          - |
+            ./vendor/bin/drush --root="${PWD}/web" php:eval 'foreach(\Drupal::entityTypeManager()->getStorage("editor")->loadMultiple() as $e){$s=$e->getSettings();$c=false;if(!empty($s["toolbar"]["items"])&&is_array($s["toolbar"]["items"])){$n=array_values(array_filter($s["toolbar"]["items"],function($i){return stripos((string)$i,"ai_ckeditor")===false&&stripos((string)$i,"aickeditor")===false;}));if($n!==$s["toolbar"]["items"]){$s["toolbar"]["items"]=$n;$c=true;}}if(!empty($s["plugins"])&&is_array($s["plugins"])){foreach(array_keys($s["plugins"]) as $k){if(stripos($k,"ai_ckeditor")!==false){unset($s["plugins"][$k]);$c=true;}}}if($c){$e->setSettings($s);$e->save();}}' || true
+            ./vendor/bin/drush --root="${PWD}/web" cache:rebuild || true
+
+          # The registry of accounts here mirrors worldParameters.users in
+          # cucumber.js. NOTE: this script sets one published password for every
+          # account; that is acceptable only on a throwaway CI site and must
+          # never be used on a public environment.
+          - ( cd recipes/varbase_starter/scripts && bash add-testing-users.sh )
+
+          - |
+            DRUSH="./vendor/bin/drush --root=${PWD}/web"
+            $DRUSH pm:uninstall antibot -y || true
+            $DRUSH config:set user.flood ip_limit 1000000 -y
+            $DRUSH config:set user.flood user_limit 1000000 -y
+            $DRUSH config:set honeypot.settings time_limit 0 -y || true
+            $DRUSH php:eval '$b=\Drupal::entityTypeManager()->getStorage("block")->load("ai_chatbot"); if($b){$b->disable()->save();}' || true
+            # Keep aggregation ON: with it off, heavy admin pages (the CKEditor
+            # 5 text-format config in particular) emit ~90 script tags and
+            # exceed the browser's domcontentloaded budget. Aggregated they load
+            # fast and match production.
+            $DRUSH config:set system.performance css.preprocess 1 -y
+            $DRUSH config:set system.performance js.preprocess 1 -y
+            $DRUSH config:set system.logging error_level all -y
+            $DRUSH cache:rebuild
+
+          - ./vendor/bin/drush --root="${PWD}/web" sql:dump --gzip --result-file="${PWD}/varbase-db.sql"
+
+    # =========================================================================
+    # REPORTS - the post-test phase.
+    #
+    # Bitbucket makes every earlier step's artifacts available here, so each
+    # suite's cucumber JSON is already on disk.
+    # =========================================================================
+
+    - step: &reports
+        name: "Create reports"
+        max-time: 45
+        caches:
+          - playwright
+        artifacts:
+          paths:
+            - tests/reports/**
+            - tests/screenshots/**
+            - tests/videos/**
+        script:
+          - WITH_NODE=1 WITH_BROWSER=1 . ci/bitbucket/setup-tooling.sh
+          - npm install --no-save @vardot/varbase-e2e
+          # The PDF report renders through headless Chromium; --with-deps pulls
+          # the system libraries the image lacks.
+          - ./node_modules/.bin/playwright install --with-deps chromium
+          - |
+            shopt -s nullglob
+            FILES=(tests/reports/cucumber_report_*.json)
+            if [ ${#FILES[@]} -eq 0 ]; then
+              echo "No suite reports were produced, so there is nothing to merge."
+              exit 1
+            fi
+            jq -s 'add' "${FILES[@]}" > tests/reports/cucumber_report.json
+            REPORT="varbase--${BITBUCKET_BRANCH//\//-}--automated-functional-testing-report--$(date +%Y-%m-%d)--$(date +%H-%M)"
+            node ./node_modules/@vardot/varbase-e2e/bin/generate-reports.js \
+              --json tests/reports/cucumber_report.json \
+              --out  "tests/reports/${REPORT}.html" \
+              --format all \
+              --pdf-out "tests/reports/${REPORT}.pdf"
+
+pipelines:
+  # ===========================================================================
+  # Every push and every pull request: lint, then prove Varbase installs.
+  #
+  # This is the cheap half - roughly 130 billed minutes - and it catches a
+  # broken lock file, a broken recipe apply and a broken Storybook build, which
+  # is most of what a push to this template breaks.
+  # ===========================================================================
+  default:
+    - parallel:
+        fail-fast: false
+        steps:
+          - step: *yaml-lint
+          - step: *phpcs
+          - step: *phpstan
+          - step: *storybook
+    - step: *install-varbase
+
+  pull-requests:
+    '**':
+      - parallel:
+          fail-fast: false
+          steps:
+            - step: *yaml-lint
+            - step: *phpcs
+            - step: *phpstan
+            - step: *storybook
+      - step: *install-varbase
+
+  # ===========================================================================
+  # The full E2E fan-out is MANUAL, on purpose.
+  #
+  # Run it from Bitbucket's "Run pipeline" button, choosing
+  # `full-functional-testing`, or with:
+  #   curl -X POST .../pipelines/ -d '{"target":{"ref_type":"branch",
+  #     "type":"pipeline_ref_target","ref_name":"master",
+  #     "selector":{"type":"custom","pattern":"full-functional-testing"}}}'
+  #
+  # RECOMMENDATION, not a decision made for you: at roughly 700-750 billed
+  # minutes a run, an automatic full suite on every master push would consume a
+  # Premium plan's whole 3500-minute monthly allowance in five pushes. Keeping
+  # it manual means those minutes are spent when someone wants the answer. If
+  # the team would rather have it automatic, move this step list under
+  # `branches: master:` - or, better, attach it to a nightly schedule in
+  # Repository settings > Pipelines > Schedules, where a `custom:` pipeline can
+  # be scheduled without becoming a per-push cost.
+  # ===========================================================================
+  custom:
+    # Lint only. Cheap (~45 billed minutes), for when a change cannot affect
+    # the build and you just want the four quality checks.
+    lint-only:
+      - parallel:
+          fail-fast: false
+          steps:
+            - step: *yaml-lint
+            - step: *phpcs
+            - step: *phpstan
+            - step: *storybook
+
+    full-functional-testing:
+      - step: *install-varbase
+      # -----------------------------------------------------------------------
+      # One step per feature suite, mirroring the matrix in
+      # .github/workflows/automated-functional-testing.yml exactly: 13 suites
+      # that fit one step, and 11 steps splitting the four heaviest folders by
+      # feature-file glob. Splitting LOWERS wall-clock time, because the steps
+      # run concurrently - but it RAISES billed minutes, because each one pays
+      # its own rebuild. That trade is the reason this pipeline is manual.
+      #
+      # `fail-fast: false` - one failing suite must not cancel the rest. The
+      # whole point of the fan-out is to see every suite's result in one run.
+      #
+      # Bitbucket caps concurrent steps by plan (on the order of 10 / 20 / 40
+      # for Free / Standard / Premium - confirm against your plan). Beyond the
+      # cap the steps queue rather than fail, so wall-clock time grows while
+      # the billed total stays the same.
+      # -----------------------------------------------------------------------
+      - parallel:
+          fail-fast: false
+          steps:
+            # --- Suites small enough to run whole. ---------------------------
+            - step:
+                name: "E2E: 02-user-management"
+                size: 2x
+                max-time: 120
+                caches: &e2e-caches
+                  - composer-dl
+                  - yarn-dl
+                  - playwright
+                services: &e2e-services
+                  - database
+                artifacts: &e2e-artifacts
+                  paths:
+                    - tests/reports/**
+                    - tests/screenshots/**
+                    - tests/videos/**
+                script:
+                  - ./ci/bitbucket/run-e2e-suite.sh '02-user-management'
+
+            - step:
+                name: "E2E: 03-admin-pages"
+                size: 2x
+                max-time: 120
+                caches: *e2e-caches
+                services: *e2e-services
+                artifacts: *e2e-artifacts
+                script:
+                  - ./ci/bitbucket/run-e2e-suite.sh '03-admin-pages'
+
+            - step:
+                name: "E2E: 05-content-pages"
+                size: 2x
+                max-time: 120
+                caches: *e2e-caches
+                services: *e2e-services
+                artifacts: *e2e-artifacts
+                script:
+                  - ./ci/bitbucket/run-e2e-suite.sh '05-content-pages'
+
+            - step:
+                name: "E2E: 06-content-blog"
+                size: 2x
+                max-time: 120
+                caches: *e2e-caches
+                services: *e2e-services
+                artifacts: *e2e-artifacts
+                script:
+                  - ./ci/bitbucket/run-e2e-suite.sh '06-content-blog'
+
+            - step:
+                name: "E2E: 07-content-contact"
+                size: 2x
+                max-time: 120
+                caches: *e2e-caches
+                services: *e2e-services
+                artifacts: *e2e-artifacts
+                script:
+                  - ./ci/bitbucket/run-e2e-suite.sh '07-content-contact'
+
+            - step:
+                name: "E2E: 08-content-homepage"
+                size: 2x
+                max-time: 120
+                caches: *e2e-caches
+                services: *e2e-services
+                artifacts: *e2e-artifacts
+                script:
+                  - ./ci/bitbucket/run-e2e-suite.sh '08-content-homepage'
+
+            - step:
+                name: "E2E: 10-content-permissions"
+                size: 2x
+                max-time: 120
+                caches: *e2e-caches
+                services: *e2e-services
+                artifacts: *e2e-artifacts
+                script:
+                  - ./ci/bitbucket/run-e2e-suite.sh '10-content-permissions'
+
+            - step:
+                name: "E2E: 11-content-workflow"
+                size: 2x
+                max-time: 120
+                caches: *e2e-caches
+                services: *e2e-services
+                artifacts: *e2e-artifacts
+                script:
+                  - ./ci/bitbucket/run-e2e-suite.sh '11-content-workflow'
+
+            - step:
+                name: "E2E: 13-varbase-recipes"
+                size: 2x
+                max-time: 120
+                caches: *e2e-caches
+                services: *e2e-services
+                artifacts: *e2e-artifacts
+                script:
+                  - ./ci/bitbucket/run-e2e-suite.sh '13-varbase-recipes'
+
+            - step:
+                name: "E2E: 14-ai"
+                size: 2x
+                max-time: 120
+                caches: *e2e-caches
+                services: *e2e-services
+                artifacts: *e2e-artifacts
+                script:
+                  - ./ci/bitbucket/run-e2e-suite.sh '14-ai'
+
+            - step:
+                name: "E2E: 15-quality"
+                size: 2x
+                max-time: 120
+                caches: *e2e-caches
+                services: *e2e-services
+                artifacts: *e2e-artifacts
+                script:
+                  - ./ci/bitbucket/run-e2e-suite.sh '15-quality'
+
+            # 16-eca-workflow-modeler is in the Actions matrix but not in the
+            # GitLab one, so its 3 feature files never ran there. Kept, to
+            # match the Actions workflow this file is at parity with.
+            - step:
+                name: "E2E: 16-eca-workflow-modeler"
+                size: 2x
+                max-time: 120
+                caches: *e2e-caches
+                services: *e2e-services
+                artifacts: *e2e-artifacts
+                script:
+                  - ./ci/bitbucket/run-e2e-suite.sh '16-eca-workflow-modeler'
+
+            - step:
+                name: "E2E: 17-search"
+                size: 2x
+                max-time: 120
+                caches: *e2e-caches
+                services: *e2e-services
+                artifacts: *e2e-artifacts
+                script:
+                  - ./ci/bitbucket/run-e2e-suite.sh '17-search'
+
+            # --- The heaviest folders, split by feature-file glob. -----------
+            - step:
+                name: "E2E: 01-website-base-requirements-a"
+                size: 2x
+                max-time: 120
+                caches: *e2e-caches
+                services: *e2e-services
+                artifacts: *e2e-artifacts
+                script:
+                  - ./ci/bitbucket/run-e2e-suite.sh '01-website-base-requirements-a' 'tests/features/01-website-base-requirements/01-{00,01,02,03}-*.feature'
+
+            - step:
+                name: "E2E: 01-website-base-requirements-b"
+                size: 2x
+                max-time: 120
+                caches: *e2e-caches
+                services: *e2e-services
+                artifacts: *e2e-artifacts
+                script:
+                  - ./ci/bitbucket/run-e2e-suite.sh '01-website-base-requirements-b' 'tests/features/01-website-base-requirements/01-{04,05,06}-*.feature'
+
+            - step:
+                name: "E2E: 01-website-base-requirements-c"
+                size: 2x
+                max-time: 120
+                caches: *e2e-caches
+                services: *e2e-services
+                artifacts: *e2e-artifacts
+                script:
+                  - ./ci/bitbucket/run-e2e-suite.sh '01-website-base-requirements-c' 'tests/features/01-website-base-requirements/01-07-*.feature'
+
+            - step:
+                name: "E2E: 04-admin-users-a"
+                size: 2x
+                max-time: 120
+                caches: *e2e-caches
+                services: *e2e-services
+                artifacts: *e2e-artifacts
+                script:
+                  - ./ci/bitbucket/run-e2e-suite.sh '04-admin-users-a' 'tests/features/04-admin-users/04-01-*.feature'
+
+            - step:
+                name: "E2E: 04-admin-users-b"
+                size: 2x
+                max-time: 120
+                caches: *e2e-caches
+                services: *e2e-services
+                artifacts: *e2e-artifacts
+                script:
+                  - ./ci/bitbucket/run-e2e-suite.sh '04-admin-users-b' 'tests/features/04-admin-users/04-{02,03}-*.feature'
+
+            # tests/features/09-drupal-canvas/ currently holds 09-01 .. 09-06.
+            # 09-07 and 09-08 are coming; each is one more step here with one
+            # string changed - see "ADDING A SUITE" at the top of this file.
+            - step:
+                name: "E2E: 09-drupal-canvas-a"
+                size: 2x
+                max-time: 120
+                caches: *e2e-caches
+                services: *e2e-services
+                artifacts: *e2e-artifacts
+                script:
+                  - ./ci/bitbucket/run-e2e-suite.sh '09-drupal-canvas-a' 'tests/features/09-drupal-canvas/09-01-*.feature'
+
+            - step:
+                name: "E2E: 09-drupal-canvas-b"
+                size: 2x
+                max-time: 120
+                caches: *e2e-caches
+                services: *e2e-services
+                artifacts: *e2e-artifacts
+                script:
+                  - ./ci/bitbucket/run-e2e-suite.sh '09-drupal-canvas-b' 'tests/features/09-drupal-canvas/09-02-*.feature'
+
+            - step:
+                name: "E2E: 09-drupal-canvas-c"
+                size: 2x
+                max-time: 120
+                caches: *e2e-caches
+                services: *e2e-services
+                artifacts: *e2e-artifacts
+                script:
+                  - ./ci/bitbucket/run-e2e-suite.sh '09-drupal-canvas-c' 'tests/features/09-drupal-canvas/09-{03,04,05}-*.feature'
+
+            - step:
+                name: "E2E: 09-drupal-canvas-d"
+                size: 2x
+                max-time: 120
+                caches: *e2e-caches
+                services: *e2e-services
+                artifacts: *e2e-artifacts
+                script:
+                  - ./ci/bitbucket/run-e2e-suite.sh '09-drupal-canvas-d' 'tests/features/09-drupal-canvas/09-06-*.feature'
+
+            - step:
+                name: "E2E: 12-content-access-and-lock-a"
+                size: 2x
+                max-time: 120
+                caches: *e2e-caches
+                services: *e2e-services
+                artifacts: *e2e-artifacts
+                script:
+                  - ./ci/bitbucket/run-e2e-suite.sh '12-content-access-and-lock-a' 'tests/features/12-content-access-and-lock/12-01-*.feature'
+
+            - step:
+                name: "E2E: 12-content-access-and-lock-b"
+                size: 2x
+                max-time: 120
+                caches: *e2e-caches
+                services: *e2e-services
+                artifacts: *e2e-artifacts
+                script:
+                  - ./ci/bitbucket/run-e2e-suite.sh '12-content-access-and-lock-b' 'tests/features/12-content-access-and-lock/12-02-*.feature'
+
+      - step: *reports
+
