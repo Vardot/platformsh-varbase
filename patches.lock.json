@@ -1,5 +1,5 @@
 {
-    "_hash": "aa12f819f1a8142d5d8d3fe69966c58a96be08004427e55a00f274210ad28bb1",
+    "_hash": "0de5625ea2d32d16972feaec4f87454995a1d53630316f58a4d98ef7604e78b5",
     "patches": {
         "drupal/core": [
             {
@@ -588,18 +588,6 @@
                 "depth": null,
                 "extra": {
                     "provenance": "dependency:drupal/persistent_login"
-                }
-            }
-        ],
-        "drupal/drupal_cms_helper": [
-            {
-                "package": "drupal/drupal_cms_helper",
-                "description": "fix: #3573589 Activate Full Content view mode for all new content types",
-                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/drupal_cms_helper--2026-02-15--3573589-mr-806.patch",
-                "sha256": null,
-                "depth": null,
-                "extra": {
-                    "provenance": "dependency:drupal/drupal_cms_helper"
                 }
             }
         ],

@@ -361,6 +361,14 @@ jobs:
             features: "tests/features/09-drupal-canvas/09-{03,04,05}-*.feature"
           - suite: "09-drupal-canvas-d"
             features: "tests/features/09-drupal-canvas/09-06-*.feature"
+          # The Canvas editor suites republish pages through the React editor,
+          # so they get a second retry, as in drupal/varbase_project.
+          - suite: "09-drupal-canvas-e"
+            features: "tests/features/09-drupal-canvas/09-07-*.feature"
+            retry: "2"
+          - suite: "09-drupal-canvas-f"
+            features: "tests/features/09-drupal-canvas/09-08-*.feature"
+            retry: "2"
           - suite: "12-content-access-and-lock-a"
             features: "tests/features/12-content-access-and-lock/12-01-*.feature"
           - suite: "12-content-access-and-lock-b"
@@ -388,6 +396,8 @@ jobs:
       # the per-suite report the post-test job merges.
       FEATURES: ${{ matrix.features || format('tests/features/{0}/**/*.feature', matrix.suite) }}
       CUCUMBER_JSON: "cucumber_report_${{ matrix.suite }}"
+      # cucumber.js reads CUCUMBER_RETRY; unset, it retries once.
+      CUCUMBER_RETRY: ${{ matrix.retry || '1' }}
       # Report generation is the separate reports job; disable varbase-e2e's
       # auto HTML hook so it does not build one from process.on('exit').
       VARBASE_E2E_REPORT_DISABLE: "1"

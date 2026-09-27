@@ -71,14 +71,13 @@
 # ADDING A SUITE (a one-line change)
 # ==============================================================================
 #
-# tests/features/09-drupal-canvas/ currently holds 09-01 .. 09-06. When 09-07
-# and 09-08 land, add two steps to the `parallel:` block and change one string
-# in each:
+# A new feature group is one more step in the `parallel:` block, with one
+# string changed:
 #
 #       - step:
 #           <<< the same six lines as its neighbours >>>
 #           script:
-#             - ./ci/bitbucket/run-e2e-suite.sh '09-drupal-canvas-e' 'tests/features/09-drupal-canvas/09-07-*.feature'
+#             - ./ci/bitbucket/run-e2e-suite.sh '<suite>-<letter>' 'tests/features/<suite>/<NN>-*.feature'
 #
 # Nothing else in this file, and nothing in the report merge, needs touching:
 # the reports step globs tests/reports/cucumber_report_*.json.
@@ -746,9 +745,8 @@ pipelines:
                 script:
                   - ./ci/bitbucket/run-e2e-suite.sh '04-admin-users-b' 'tests/features/04-admin-users/04-{02,03}-*.feature'
 
-            # tests/features/09-drupal-canvas/ currently holds 09-01 .. 09-06.
-            # 09-07 and 09-08 are coming; each is one more step here with one
-            # string changed - see "ADDING A SUITE" at the top of this file.
+            # One step per Canvas feature group; 09-07 and 09-08 get a second
+            # cucumber retry (CUCUMBER_RETRY=2), as in drupal/varbase_project.
             - step:
                 name: "E2E: 09-drupal-canvas-a"
                 size: 2x
@@ -788,6 +786,26 @@ pipelines:
                 artifacts: *e2e-artifacts
                 script:
                   - ./ci/bitbucket/run-e2e-suite.sh '09-drupal-canvas-d' 'tests/features/09-drupal-canvas/09-06-*.feature'
+
+            - step:
+                name: "E2E: 09-drupal-canvas-e"
+                size: 2x
+                max-time: 120
+                caches: *e2e-caches
+                services: *e2e-services
+                artifacts: *e2e-artifacts
+                script:
+                  - CUCUMBER_RETRY=2 ./ci/bitbucket/run-e2e-suite.sh '09-drupal-canvas-e' 'tests/features/09-drupal-canvas/09-07-*.feature'
+
+            - step:
+                name: "E2E: 09-drupal-canvas-f"
+                size: 2x
+                max-time: 120
+                caches: *e2e-caches
+                services: *e2e-services
+                artifacts: *e2e-artifacts
+                script:
+                  - CUCUMBER_RETRY=2 ./ci/bitbucket/run-e2e-suite.sh '09-drupal-canvas-f' 'tests/features/09-drupal-canvas/09-08-*.feature'
 
             - step:
                 name: "E2E: 12-content-access-and-lock-a"
