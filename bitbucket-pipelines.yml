@@ -745,8 +745,8 @@ pipelines:
                 script:
                   - ./ci/bitbucket/run-e2e-suite.sh '04-admin-users-b' 'tests/features/04-admin-users/04-{02,03}-*.feature'
 
-            # One step per Canvas feature group; 09-07 and 09-08 get a second
-            # cucumber retry (CUCUMBER_RETRY=2), as in drupal/varbase_project.
+            # One step per Canvas feature group; 09-07 (page translations) gets a
+            # second cucumber retry (CUCUMBER_RETRY=2), as in drupal/varbase_starter.
             - step:
                 name: "E2E: 09-drupal-canvas-a"
                 size: 2x
@@ -797,15 +797,6 @@ pipelines:
                 script:
                   - CUCUMBER_RETRY=2 ./ci/bitbucket/run-e2e-suite.sh '09-drupal-canvas-e' 'tests/features/09-drupal-canvas/09-07-*.feature'
 
-            - step:
-                name: "E2E: 09-drupal-canvas-f"
-                size: 2x
-                max-time: 120
-                caches: *e2e-caches
-                services: *e2e-services
-                artifacts: *e2e-artifacts
-                script:
-                  - CUCUMBER_RETRY=2 ./ci/bitbucket/run-e2e-suite.sh '09-drupal-canvas-f' 'tests/features/09-drupal-canvas/09-08-*.feature'
 
             - step:
                 name: "E2E: 12-content-access-and-lock-a"

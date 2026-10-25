@@ -1,5 +1,5 @@
 {
-    "_hash": "0de5625ea2d32d16972feaec4f87454995a1d53630316f58a4d98ef7604e78b5",
+    "_hash": "6f645946df159574779f7719033c104fec660eaa9f421b709df3d42662ff0d7e",
     "patches": {
         "drupal/core": [
             {
@@ -184,16 +184,6 @@
             },
             {
                 "package": "drupal/core",
-                "description": "Issue #3465033: Fix not saving addItemToToolbar recipe action for divider | (vertical separator) or wrapping - items to CKEditor 5",
-                "url": "https://raw.githubusercontent.com/Vardot/drupal-core-patches/refs/heads/patches/drupal-core--2024-08-01--3465033--mr-9003.patch",
-                "sha256": null,
-                "depth": null,
-                "extra": {
-                    "provenance": "dependency:drupal/core"
-                }
-            },
-            {
-                "package": "drupal/core",
                 "description": "Issue #3272720: Fix PHP8.1+ Deprecated function: hash(): Passing null to parameter #2 ($data) of type string is deprecated in generateFieldTableName",
                 "url": "https://raw.githubusercontent.com/Vardot/drupal-core-patches/refs/heads/patches/3272720-6.patch",
                 "sha256": null,
@@ -339,7 +329,7 @@
             {
                 "package": "drupal/tagify",
                 "description": "fix: #3555084 Exposed filter tag input missing label; add aria-labelledby to Tagify input and propagate to contenteditable",
-                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/tagify--2026-07-28--3555084--mr-177.patch",
+                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/tagify--2026-10-08--3555084--mr-270.patch",
                 "sha256": null,
                 "depth": null,
                 "extra": {

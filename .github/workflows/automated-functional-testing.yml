@@ -361,13 +361,10 @@ jobs:
             features: "tests/features/09-drupal-canvas/09-{03,04,05}-*.feature"
           - suite: "09-drupal-canvas-d"
             features: "tests/features/09-drupal-canvas/09-06-*.feature"
-          # The Canvas editor suites republish pages through the React editor,
-          # so they get a second retry, as in drupal/varbase_project.
+          # The Canvas page translation suite republishes pages through the
+          # React editor, so it gets a second retry, as in drupal/varbase_starter.
           - suite: "09-drupal-canvas-e"
             features: "tests/features/09-drupal-canvas/09-07-*.feature"
-            retry: "2"
-          - suite: "09-drupal-canvas-f"
-            features: "tests/features/09-drupal-canvas/09-08-*.feature"
             retry: "2"
           - suite: "12-content-access-and-lock-a"
             features: "tests/features/12-content-access-and-lock/12-01-*.feature"
@@ -533,8 +530,13 @@ jobs:
           merge-multiple: true
 
       - name: Install the report generator
+        # The repository is a Yarn Berry workspace (packageManager in
+        # package.json), and npm 12 on the runner can no longer resolve it
+        # ("Cannot read properties of null (reading 'edgesOut')"). Install the
+        # way the install job does; @vardot/varbase-e2e is a devDependency.
         run: |
-          npm install --no-save @vardot/varbase-e2e
+          corepack enable
+          yarn install --mode=skip-build
           # The PDF report renders through headless Chromium; --with-deps pulls
           # the system libraries the runner image lacks.
           ./node_modules/.bin/playwright install --with-deps chromium

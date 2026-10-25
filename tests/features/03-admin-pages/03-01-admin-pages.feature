@@ -14,7 +14,7 @@ Feature: Pre-check important administrator and development pages
      Then I should see "Content"
 
 
- @check @local @development @staging @production
+  @check @local @development @staging @production
   Scenario: Check Files admin page
      When I go to "/admin/content/files"
       And wait
