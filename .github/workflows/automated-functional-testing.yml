@@ -530,8 +530,13 @@ jobs:
           merge-multiple: true
 
       - name: Install the report generator
+        # The repository is a Yarn Berry workspace (packageManager in
+        # package.json), and npm 12 on the runner can no longer resolve it
+        # ("Cannot read properties of null (reading 'edgesOut')"). Install the
+        # way the install job does; @vardot/varbase-e2e is a devDependency.
         run: |
-          npm install --no-save @vardot/varbase-e2e
+          corepack enable
+          yarn install --mode=skip-build
           # The PDF report renders through headless Chromium; --with-deps pulls
           # the system libraries the runner image lacks.
           ./node_modules/.bin/playwright install --with-deps chromium
