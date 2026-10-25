@@ -361,13 +361,10 @@ jobs:
             features: "tests/features/09-drupal-canvas/09-{03,04,05}-*.feature"
           - suite: "09-drupal-canvas-d"
             features: "tests/features/09-drupal-canvas/09-06-*.feature"
-          # The Canvas editor suites republish pages through the React editor,
-          # so they get a second retry, as in drupal/varbase_project.
+          # The Canvas page translation suite republishes pages through the
+          # React editor, so it gets a second retry, as in drupal/varbase_starter.
           - suite: "09-drupal-canvas-e"
             features: "tests/features/09-drupal-canvas/09-07-*.feature"
-            retry: "2"
-          - suite: "09-drupal-canvas-f"
-            features: "tests/features/09-drupal-canvas/09-08-*.feature"
             retry: "2"
           - suite: "12-content-access-and-lock-a"
             features: "tests/features/12-content-access-and-lock/12-01-*.feature"

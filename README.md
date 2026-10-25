@@ -140,7 +140,7 @@ ddev makes it simple to develop Drupal locally. In general, the steps are as fol
 
 Browser-driven acceptance tests for the whole site, built on
 [Varbase E2E](https://github.com/Vardot/varbase-e2e) (Playwright + Cucumber). The suite lives in
-[`tests/`](tests/README.md): 17 feature suites, 288 scenarios, covering the base requirements, user
+[`tests/`](tests/README.md): 17 feature suites, 260 scenarios, covering the base requirements, user
 and admin management, content structure and workflow, Drupal Canvas, the AI recipes, the ECA
 workflow modeler and search.
 
