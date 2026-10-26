@@ -1,0 +1,16 @@
+# Production overrides, loaded after development.local.services.yml on the
+# production environment only (see settings.platformsh.php).
+#
+# development.local.services.yml carries two unrelated things: the CORS
+# settings the Storybook app needs to render stories through this site, and
+# Twig debugging. Storybook also runs on production, so the file stays; this
+# one switches the debugging back off there. Twig debug markup on production
+# is not only noise on every page: the AI Search contextual_chunks embedding
+# strategy hands each chunk to league/html-to-markdown, and a chunk that is
+# only THEME DEBUG comments has no <html> element and fails with
+# "Invalid HTML was provided", so the content_vector index cannot be built.
+parameters:
+  twig.config:
+    debug: false
+    cache: true
+  http.response.debug_cacheability_headers: false

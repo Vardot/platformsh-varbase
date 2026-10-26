@@ -212,5 +212,12 @@ $config['search_api.server.' . $solr_server_name]['backend_config']['connector_c
 // if (isset($platformsh->branch)) {
 //   if (!$platformsh->onProduction() || !$platformsh->onDedicated()) {
 $settings['container_yamls'][] = $app_root . '/' . $site_path . '/development.local.services.yml';
+// On production keep the CORS settings Storybook needs but turn Twig debugging
+// back off: a later container_yamls entry overrides the parameters of an
+// earlier one. Twig debug markup also breaks the AI Search vector index; see
+// production.services.yml.
+if (isset($platformsh) && $platformsh->onProduction()) {
+  $settings['container_yamls'][] = $app_root . '/' . $site_path . '/production.services.yml';
+}
 //   }
 // }
