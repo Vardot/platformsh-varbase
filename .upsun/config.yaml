@@ -65,10 +65,10 @@ applications:
                 set -e
                 cd $PLATFORM_APP_DIR
                 npx corepack enable
-                npx corepack prepare yarn@4.13.0 --activate
+                npx corepack prepare yarn@4.18.1 --activate
                 export PATH="$HOME/.yarn/bin:$PATH"
                 corepack yarn --version
-                corepack yarn install
+                YARN_ENABLE_IMMUTABLE_INSTALLS=false corepack yarn install
             # The deploy hook runs after your application has been deployed and started.
             # Code cannot be modified at this point but the database is available.
             # The site is not accepting requests while this script runs so keep it
@@ -185,10 +185,10 @@ applications:
                 cd $PLATFORM_APP_DIR
                 composer install --ignore-platform-reqs --no-scripts
                 npx corepack enable
-                npx corepack prepare yarn@4.13.0 --activate
+                npx corepack prepare yarn@4.18.1 --activate
                 export PATH="$HOME/.yarn/bin:$PATH"
                 corepack yarn --version
-                corepack yarn install
+                YARN_ENABLE_IMMUTABLE_INSTALLS=false corepack yarn install
                 # Build with a placeholder URL — deploy hook replaces it with the
                 # real per-environment Drupal URL from PLATFORM_ROUTES.
                 export STORYBOOK_SERVER_RENDER_URL="__DRUPAL_RENDER_URL__"
