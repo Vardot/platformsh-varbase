@@ -61,7 +61,7 @@ permissions:
 
 env:
   PHP_VERSION: "8.4"
-  NODE_VERSION: "20"
+  NODE_VERSION: "24"
   COMPOSER_MEMORY_LIMIT: "-1"
   # Yarn 4 defaults to immutable installs and would refuse to touch the
   # lockfile in CI; the postinstall script needs to run, so allow it.

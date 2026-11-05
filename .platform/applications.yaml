@@ -188,7 +188,7 @@
 #   This will allow for a start of a storybook:http upstream
 # -------------------------------------------------------------
 -   name: storybook
-    type: 'nodejs:20'
+    type: 'nodejs:24'
     source:
         root: "/"
     dependencies:
