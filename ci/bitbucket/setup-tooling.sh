@@ -24,7 +24,7 @@ export COMPOSER_ALLOW_SUPERUSER=1
 
 WITH_NODE="${WITH_NODE:-0}"
 WITH_BROWSER="${WITH_BROWSER:-0}"
-NODE_VERSION="${NODE_VERSION:-20}"
+NODE_VERSION="${NODE_VERSION:-24}"
 
 echo "--- apt packages"
 apt-get update -y
