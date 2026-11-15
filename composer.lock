@@ -11565,6 +11565,87 @@
             "published-time": "2026-10-21T16:56:31+00:00"
         },
         {
+            "name": "drupal/mcp",
+            "version": "dev-2.0.x",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/mcp.git",
+                "reference": "ad2b2a02652cd118e304b2e5d503f274455845e3"
+            },
+            "require": {
+                "drupal/consumers": "^1.24",
+                "drupal/core": "^11",
+                "drupal/mcp_server": "^2.0@beta",
+                "drupal/mcp_server_oauth": "^1.0@alpha",
+                "drupal/mcp_server_tool_bridge": "^1.0@beta",
+                "drupal/simple_oauth": "^6.1",
+                "drupal/tool": "^1.0@beta",
+                "drupal/tool_belt": "^1.0@alpha",
+                "drupal/tool_belt_content": "*",
+                "drupal/tool_belt_entity": "*",
+                "e0ipso/simple_oauth_21": "^1.13",
+                "php": ">=8.3"
+            },
+            "provide": {
+                "drupal/simple_oauth_21": "self.version",
+                "drupal/simple_oauth_client_registration": "self.version",
+                "drupal/simple_oauth_server_metadata": "self.version"
+            },
+            "require-dev": {
+                "drupal/ai_agents": "*",
+                "drupal/mcp_server": "*",
+                "drush/drush": "^13"
+            },
+            "suggest": {
+                "drupal/ai_agents": "Define agents in Drupal and expose them over MCP (mcp_agents submodule, 2.1).",
+                "drupal/ai_context": "Context Control Center knowledge delivered to remote agents (mcp_agents submodule, 2.1).",
+                "drupal/mcp_tools": "227 more Tool API tools (site building, media, views…). Blocked until it allows mcp/sdk ^0.7 alongside mcp_server 2.0 beta2+; expose its tools per scope in the Tool Bridge."
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-2.0.x": "2.0.x-dev"
+                },
+                "drupal": {
+                    "version": "2.0.x-dev",
+                    "datestamp": "1790084753",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "gagosha",
+                    "homepage": "https://www.drupal.org/user/3506581"
+                },
+                {
+                    "name": "jibla",
+                    "homepage": "https://www.drupal.org/user/1013184"
+                },
+                {
+                    "name": "joshmiller",
+                    "homepage": "https://www.drupal.org/user/315047"
+                },
+                {
+                    "name": "marcus_johansson",
+                    "homepage": "https://www.drupal.org/user/385947"
+                }
+            ],
+            "description": "The one package that makes a Drupal site MCP-ready: MCP Server 2.x, OAuth 2.1 scopes, Tool API and a curated starter tool set. One composer require, one drush command.",
+            "homepage": "https://www.drupal.org/project/mcp",
+            "support": {
+                "source": "https://git.drupalcode.org/project/mcp",
+                "issues": "https://www.drupal.org/project/issues/mcp",
+                "docs": "https://drupalmcp.io"
+            }
+        },
+        {
             "name": "drupal/mcp_server",
             "version": "2.0.0-beta7",
             "source": {
@@ -16497,6 +16578,92 @@
             "published-time": "2026-09-28T06:39:39+00:00"
         },
         {
+            "name": "drupal/tool_belt_content",
+            "version": "1.0.0-alpha6",
+            "require": {
+                "drupal/core": "^10.5 || ^11 || ^12",
+                "drupal/tool_belt": "*"
+            },
+            "type": "metapackage",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.0-alpha6",
+                    "datestamp": "1790577600",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "ajits",
+                    "homepage": "https://www.drupal.org/user/981944"
+                },
+                {
+                    "name": "b_sharpe",
+                    "homepage": "https://www.drupal.org/user/2512258"
+                },
+                {
+                    "name": "michaellander",
+                    "homepage": "https://www.drupal.org/user/636494"
+                }
+            ],
+            "description": "Provides tools for creating, editing and delete content entities and field data.",
+            "homepage": "https://www.drupal.org/project/tool_belt",
+            "support": {
+                "source": "https://git.drupalcode.org/project/tool_belt"
+            },
+            "published-time": "2026-09-28T06:39:39+00:00"
+        },
+        {
+            "name": "drupal/tool_belt_entity",
+            "version": "1.0.0-alpha6",
+            "require": {
+                "drupal/core": "^10.5 || ^11 || ^12",
+                "drupal/tool_belt": "*"
+            },
+            "type": "metapackage",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.0-alpha6",
+                    "datestamp": "1790577600",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "ajits",
+                    "homepage": "https://www.drupal.org/user/981944"
+                },
+                {
+                    "name": "b_sharpe",
+                    "homepage": "https://www.drupal.org/user/2512258"
+                },
+                {
+                    "name": "michaellander",
+                    "homepage": "https://www.drupal.org/user/636494"
+                }
+            ],
+            "description": "Provides tools for creating, modifying and describing content entity and field definitions.",
+            "homepage": "https://www.drupal.org/project/tool_belt",
+            "support": {
+                "source": "https://git.drupalcode.org/project/tool_belt"
+            },
+            "published-time": "2026-09-28T06:39:39+00:00"
+        },
+        {
             "name": "drupal/trash",
             "version": "3.1.2",
             "source": {
@@ -17560,21 +17727,22 @@
         },
         {
             "name": "drupal/varbase_ai_mcp_server_base",
-            "version": "1.0.0-rc1",
+            "version": "1.0.0-alpha1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/varbase_ai_mcp_server_base.git",
-                "reference": "220fae1fbaf3582ae8c3bf92fb40b3787fc98b0f"
+                "reference": "10b3ebcb719a7c27cb21d3280a561b593a793fff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fvarbase_ai_mcp_server_base/repository/archive.zip?sha=220fae1fbaf3582ae8c3bf92fb40b3787fc98b0f",
-                "reference": "220fae1fbaf3582ae8c3bf92fb40b3787fc98b0f",
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fvarbase_ai_mcp_server_base/repository/archive.zip?sha=10b3ebcb719a7c27cb21d3280a561b593a793fff",
+                "reference": "10b3ebcb719a7c27cb21d3280a561b593a793fff",
                 "shasum": ""
             },
             "require": {
                 "drupal/consumers": "^1.24",
                 "drupal/core": "^11.4",
+                "drupal/mcp": "2.0.x-dev",
                 "drupal/mcp_server": "^2.0@beta",
                 "drupal/mcp_server_oauth": "^1.0@alpha",
                 "drupal/mcp_server_tool_bridge": "^1.0@beta",
@@ -17612,8 +17780,8 @@
                 "issues": "https://www.drupal.org/project/issues/varbase_ai_mcp_server_base",
                 "source": "https://git.drupalcode.org/project/varbase_ai_mcp_server_base"
             },
-            "time": "2026-11-15T00:11:24+00:00",
-            "published-time": "2026-11-15T08:55:04+00:00"
+            "time": "2026-10-24T17:59:36+00:00",
+            "published-time": "2026-10-24T18:20:55+00:00"
         },
         {
             "name": "drupal/varbase_ai_media_base",
