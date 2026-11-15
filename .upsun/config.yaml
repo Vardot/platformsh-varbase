@@ -9,6 +9,12 @@ applications:
                 "drush/drush": "~13"
             nodejs:
                 npm: ">=11.5.2"
+                # Installs a patched Node.js (version from .nvmrc) over the one bundled
+                # in php:8.4, for CVE-2026-111497.
+                n: "*"
+        variables:
+            env:
+                N_PREFIX: /app/.global
         runtime:
             extensions:
                 - sodium
@@ -62,6 +68,9 @@ applications:
             # The build hook runs after Composer to finish preparing up your code.
             # No services are available but the disk is writeable.
             build: |
+                n auto || exit 1
+                hash -r
+                node -v
                 set -e
                 cd $PLATFORM_APP_DIR
                 npx corepack enable
