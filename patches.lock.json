@@ -1,5 +1,5 @@
 {
-    "_hash": "6f645946df159574779f7719033c104fec660eaa9f421b709df3d42662ff0d7e",
+    "_hash": "3aa919fca053d5a6d452d0cf65774172643e4206f59f8cf8590f42c6d9c6d220",
     "patches": {
         "drupal/core": [
             {
@@ -299,6 +299,16 @@
                 "extra": {
                     "provenance": "dependency:drupal/canvas"
                 }
+            },
+            {
+                "package": "drupal/canvas",
+                "description": "fix: #3553957 Unable to use Ajax submission for a Webform block inside another component's slot (with #3591989 Do not swallow BrokenPostRequestException; combines MR !701 and MR !1558, drop once both land)",
+                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/canvas--2026-11-10--3553957--3591989.patch",
+                "sha256": null,
+                "depth": null,
+                "extra": {
+                    "provenance": "dependency:drupal/canvas"
+                }
             }
         ],
         "drupal/coffee": [
@@ -310,18 +320,6 @@
                 "depth": null,
                 "extra": {
                     "provenance": "dependency:drupal/coffee"
-                }
-            }
-        ],
-        "drupal/shield": [
-            {
-                "package": "drupal/shield",
-                "description": "fix: #3562392 PHP 8.4 - Implicit nullable parameters for Shield",
-                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/shield--2025-12-10--3562392--mr-30.patch",
-                "sha256": null,
-                "depth": null,
-                "extra": {
-                    "provenance": "dependency:drupal/shield"
                 }
             }
         ],
