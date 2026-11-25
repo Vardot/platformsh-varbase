@@ -263,11 +263,13 @@ jobs:
           $DRUSH config:set user.flood user_limit 1000000 -y
           $DRUSH config:set honeypot.settings time_limit 0 -y || true
           $DRUSH php:eval '$b=\Drupal::entityTypeManager()->getStorage("block")->load("ai_chatbot"); if($b){$b->disable()->save();}' || true
-          # The AI dashboard's two Project Browser blocks fetch from drupal.org
-          # and git.drupalcode.org while /admin/config/ai renders, and a slow
-          # answer blows the browser's 30 s navigation budget. Remove them on
-          # the CI site only; the dashboard and its other blocks stay.
-          $DRUSH php:eval '$c=\Drupal::configFactory()->getEditable("dashboard.dashboard.ai_dashboard"); $l=$c->get("layout"); if(is_array($l)){foreach($l as $i=>$s){foreach(($s["components"]??[]) as $u=>$b){if(str_starts_with((string)($b["configuration"]["id"]??""),"project_browser_block:")){unset($l[$i]["components"][$u]);}}} $c->set("layout",$l)->save();}' || true
+          # While /admin/config/ai renders, the AI dashboard's two Project
+          # Browser blocks fetch from drupal.org and git.drupalcode.org, and its
+          # Status and Setup blocks ask every AI provider whether it is usable
+          # (amazee.ai over the network). A slow answer blows the browser's 30 s
+          # navigation budget. Remove those blocks on the CI site only; the
+          # dashboard page, its configuration links and documentation stay.
+          $DRUSH php:eval '$c=\Drupal::configFactory()->getEditable("dashboard.dashboard.ai_dashboard"); $l=$c->get("layout"); if(is_array($l)){foreach($l as $i=>$s){foreach(($s["components"]??[]) as $u=>$b){$id=(string)($b["configuration"]["id"]??""); if(str_starts_with($id,"project_browser_block:")||in_array($id,["ai_operations_status","ai_setup_ai_provider"],true)){unset($l[$i]["components"][$u]);}}} $c->set("layout",$l)->save();}' || true
           # Keep aggregation ON: with it off, heavy admin pages (the CKEditor 5
           # text-format config in particular) emit ~90 script tags and exceed
           # the browser's domcontentloaded budget. Aggregated they load fast and
