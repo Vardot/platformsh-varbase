@@ -24,19 +24,18 @@
   },
   "require": {
     "composer/installers": "^2.3",
-    "cweagans/composer-patches": "~2.0",
+    "cweagans/composer-patches": "^2.0",
     "drupal/core": "~11.4.0",
     "drupal/core-composer-scaffold": "~11.4",
     "drupal/core-project-message": "~11.4",
-    "drupal/core-recipe-unpack": "~11.4",
     "drupal/core-recommended": "~11.4",
     "drupal/core-vendor-hardening": "~11.4",
-    "drupal/gleap-gleap": "~1",
-    "drupal/redis": "~1",
-    "drush/drush": "~13",
-    "platformsh/config-reader": "~3",
+    "drupal/gleap-gleap": "^1",
+    "drupal/redis": "^1",
+    "drush/drush": "^13",
+    "platformsh/config-reader": "^3",
     "vardot/varbase": "~11.0.0",
-    "vardot/varbase-patches": "~11.0.0"
+    "vardot/varbase-patches": "^11.0"
   },
   "conflict": {
     "drupal/drupal": "*"
@@ -66,7 +65,7 @@
       "dealerdirect/phpcodesniffer-composer-installer": true,
       "php-http/discovery": true,
       "pyrech/composer-changelogs": true,
-      "drupal/core-recipe-unpack": true,
+      "drupal/core-recipe-unpack": false,
       "drupal/core-vendor-hardening": true,
       "vardot/drupal-core-patches": true,
       "symfony/runtime": true

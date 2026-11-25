@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e800ff9d1039fc15b26c2710d3f605ce",
+    "content-hash": "aa7a562c896d829e79e18f915be8a443",
     "packages": [
         {
             "name": "altcha-org/altcha",
@@ -6500,54 +6500,6 @@
             },
             "time": "2026-01-07T19:00:53+00:00",
             "published-time": "2026-11-18T16:59:15+00:00"
-        },
-        {
-            "name": "drupal/core-recipe-unpack",
-            "version": "11.4.13",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/drupal/core-recipe-unpack.git",
-                "reference": "6328365d870f9545ec8f953a9c16f6a628fc5e46"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/drupal/core-recipe-unpack/zipball/6328365d870f9545ec8f953a9c16f6a628fc5e46",
-                "reference": "6328365d870f9545ec8f953a9c16f6a628fc5e46",
-                "shasum": ""
-            },
-            "require": {
-                "composer-plugin-api": "^2",
-                "php": ">=8.3"
-            },
-            "require-dev": {
-                "composer/composer": "^2.7"
-            },
-            "type": "composer-plugin",
-            "extra": {
-                "class": "Drupal\\Composer\\Plugin\\RecipeUnpack\\Plugin",
-                "branch-alias": {
-                    "dev-main": "11.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Drupal\\Composer\\Plugin\\RecipeUnpack\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "description": "A Composer project unpacker for Drupal recipes.",
-            "homepage": "https://www.drupal.org/project/drupal",
-            "keywords": [
-                "drupal"
-            ],
-            "support": {
-                "source": "https://github.com/drupal/core-recipe-unpack/tree/11.5.0-beta1"
-            },
-            "time": "2026-01-07T19:00:53+00:00",
-            "published-time": "2026-11-18T16:59:53+00:00"
         },
         {
             "name": "drupal/core-recommended",
@@ -17448,58 +17400,58 @@
         },
         {
             "name": "drupal/varbase_admin_base",
-            "version": "1.0.7",
+            "version": "1.0.8",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/varbase_admin_base.git",
-                "reference": "2314822ce8fa0a158e72e21fad194e3e376197a7"
+                "reference": "d8d9059132b88df25062bc90707dca3592d4e44d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fvarbase_admin_base/repository/archive.zip?sha=2314822ce8fa0a158e72e21fad194e3e376197a7",
-                "reference": "2314822ce8fa0a158e72e21fad194e3e376197a7",
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fvarbase_admin_base/repository/archive.zip?sha=d8d9059132b88df25062bc90707dca3592d4e44d",
+                "reference": "d8d9059132b88df25062bc90707dca3592d4e44d",
                 "shasum": ""
             },
             "require": {
-                "drupal/admin_audit_trail": "~1",
-                "drupal/automatic_updates": "~4.1",
-                "drupal/autosave_form": "~1",
-                "drupal/canvas_icon_picker": "~1",
-                "drupal/coffee": "~2",
-                "drupal/config_perms": "~2",
-                "drupal/core": "~11.4.0",
-                "drupal/dashboard": "~2.2",
-                "drupal/drupal_cms_helper": "~2",
-                "drupal/drupical": "~1",
-                "drupal/eca": "~3",
-                "drupal/eca_vbo": "~2",
-                "drupal/gin": "~5",
-                "drupal/gin_everywhere": "~1",
-                "drupal/gin_login": "~2",
-                "drupal/gin_toolbar": "~3",
-                "drupal/gin_type_tray": "~1",
-                "drupal/length_indicator": "~1",
-                "drupal/masquerade": "~2",
-                "drupal/maxlength": "~3",
-                "drupal/menu_admin_per_menu": "~1",
-                "drupal/menu_block": "~1",
-                "drupal/navigation_extra_tools": "~1",
-                "drupal/prevent_homepage_deletion": "~3",
-                "drupal/project_browser": "~2.1",
-                "drupal/revision_log_default": "~1",
-                "drupal/roleassign": "~2",
-                "drupal/sam": "~1.2",
-                "drupal/smart_date": "~4.3.0",
-                "drupal/tagify": "~2.0",
-                "drupal/taxonomy_access_fix": "~4",
-                "drupal/taxonomy_manager": "~2",
-                "drupal/trash": "~3",
-                "drupal/ui_icons": "~1",
-                "drupal/userprotect": "~1",
-                "drupal/varbase_recipes": "~1.0.0",
-                "drupal/view_password": "~6",
-                "drupal/views_bulk_edit": "~3",
-                "drupal/views_bulk_operations": "~4",
+                "drupal/admin_audit_trail": "^1",
+                "drupal/automatic_updates": "^4.1",
+                "drupal/autosave_form": "^1",
+                "drupal/canvas_icon_picker": "^1",
+                "drupal/coffee": "^2",
+                "drupal/config_perms": "^2",
+                "drupal/core": "^11.4 || ^12.0",
+                "drupal/dashboard": "^2.2",
+                "drupal/drupal_cms_helper": "^2",
+                "drupal/drupical": "^1",
+                "drupal/eca": "^3",
+                "drupal/eca_vbo": "^2",
+                "drupal/gin": "^5",
+                "drupal/gin_everywhere": "^1",
+                "drupal/gin_login": "^2",
+                "drupal/gin_toolbar": "^3",
+                "drupal/gin_type_tray": "^1",
+                "drupal/length_indicator": "^1",
+                "drupal/masquerade": "^2",
+                "drupal/maxlength": "^3",
+                "drupal/menu_admin_per_menu": "^1",
+                "drupal/menu_block": "^1",
+                "drupal/navigation_extra_tools": "^1",
+                "drupal/prevent_homepage_deletion": "^3",
+                "drupal/project_browser": "^2.1",
+                "drupal/revision_log_default": "^1",
+                "drupal/roleassign": "^2",
+                "drupal/sam": "^1.2",
+                "drupal/smart_date": "^4.3.0",
+                "drupal/tagify": "^2.0",
+                "drupal/taxonomy_access_fix": "^4",
+                "drupal/taxonomy_manager": "^2",
+                "drupal/trash": "^3",
+                "drupal/ui_icons": "^1",
+                "drupal/userprotect": "^1",
+                "drupal/varbase_recipes": "^1.0.3",
+                "drupal/view_password": "^6",
+                "drupal/views_bulk_edit": "^3",
+                "drupal/views_bulk_operations": "^4",
                 "vardot/jquery.fancytree": "^2.38.5"
             },
             "type": "drupal-recipe",
@@ -17530,8 +17482,8 @@
                 "issues": "https://www.drupal.org/project/issues/varbase_admin_base",
                 "source": "http://cgit.drupalcode.org/varbase_admin_base"
             },
-            "time": "2026-10-11T14:43:13+00:00",
-            "published-time": "2026-10-11T14:47:05+00:00"
+            "time": "2026-11-25T11:48:20+00:00",
+            "published-time": "2026-11-25T11:53:06+00:00"
         },
         {
             "name": "drupal/varbase_ai_answers_base",
@@ -18837,27 +18789,27 @@
         },
         {
             "name": "drupal/varbase_blog_base",
-            "version": "1.0.3",
+            "version": "1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/varbase_blog_base.git",
-                "reference": "4304d5d01561d53c1e3eee3a2ac0aa8a277b922a"
+                "reference": "46d1745da983e747b92e6fc55d9a6b6eeebe37ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fvarbase_blog_base/repository/archive.zip?sha=4304d5d01561d53c1e3eee3a2ac0aa8a277b922a",
-                "reference": "4304d5d01561d53c1e3eee3a2ac0aa8a277b922a",
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fvarbase_blog_base/repository/archive.zip?sha=46d1745da983e747b92e6fc55d9a6b6eeebe37ae",
+                "reference": "46d1745da983e747b92e6fc55d9a6b6eeebe37ae",
                 "shasum": ""
             },
             "require": {
-                "drupal/core": "~11.4.0",
-                "drupal/selective_better_exposed_filters": "~3",
-                "drupal/varbase_components": "~4.0.0",
-                "drupal/varbase_content_base": "~1.0.0",
-                "drupal/varbase_media_base": "~1.0.0",
-                "drupal/varbase_seo_base": "~1.0.0",
-                "drupal/varbase_workflow_base": "~1.0.0",
-                "drupal/webshare": "~2.0.0"
+                "drupal/core": "^11.4 || ^12.0",
+                "drupal/selective_better_exposed_filters": "^3",
+                "drupal/varbase_components": "^4.0.6",
+                "drupal/varbase_content_base": "^1.0.8",
+                "drupal/varbase_media_base": "^1.0.2",
+                "drupal/varbase_seo_base": "^1.0.3",
+                "drupal/varbase_workflow_base": "^1.0.1",
+                "drupal/webshare": "^2.0.0"
             },
             "type": "drupal-recipe",
             "notification-url": "https://packagist.org/downloads/",
@@ -18876,8 +18828,8 @@
                 "issues": "https://www.drupal.org/project/issues/varbase_blog_base",
                 "source": "http://cgit.drupalcode.org/varbase_blog_base"
             },
-            "time": "2026-11-22T12:23:24+00:00",
-            "published-time": "2026-11-22T12:45:06+00:00"
+            "time": "2026-11-25T10:15:32+00:00",
+            "published-time": "2026-11-25T10:21:38+00:00"
         },
         {
             "name": "drupal/varbase_canvas_ai",
@@ -19528,25 +19480,25 @@
         },
         {
             "name": "drupal/varbase_page_base",
-            "version": "1.0.2",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/varbase_page_base.git",
-                "reference": "80c8b5cb1cb735536d1a7b679cf83886a7dfa0e3"
+                "reference": "9514f1ff5075cc197744dcca955068497fc62356"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fvarbase_page_base/repository/archive.zip?sha=80c8b5cb1cb735536d1a7b679cf83886a7dfa0e3",
-                "reference": "80c8b5cb1cb735536d1a7b679cf83886a7dfa0e3",
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fvarbase_page_base/repository/archive.zip?sha=9514f1ff5075cc197744dcca955068497fc62356",
+                "reference": "9514f1ff5075cc197744dcca955068497fc62356",
                 "shasum": ""
             },
             "require": {
-                "drupal/core": "~11.4.0",
-                "drupal/varbase_content_base": "~1.0.0",
-                "drupal/varbase_editor_base": "~1.0.0",
-                "drupal/varbase_media_base": "~1.0.0",
-                "drupal/varbase_seo_base": "~1.0.0",
-                "drupal/varbase_workflow_base": "~1.0.0"
+                "drupal/core": "^11.4 || ^12.0",
+                "drupal/varbase_content_base": "^1.0.8",
+                "drupal/varbase_editor_base": "^1.0.2",
+                "drupal/varbase_media_base": "^1.0.2",
+                "drupal/varbase_seo_base": "^1.0.3",
+                "drupal/varbase_workflow_base": "^1.0.1"
             },
             "type": "drupal-recipe",
             "notification-url": "https://packagist.org/downloads/",
@@ -19565,8 +19517,8 @@
                 "issues": "https://www.drupal.org/project/issues/varbase_page_base",
                 "source": "http://cgit.drupalcode.org/varbase_page_base"
             },
-            "time": "2026-11-22T12:43:15+00:00",
-            "published-time": "2026-11-22T12:51:02+00:00"
+            "time": "2026-11-25T10:19:09+00:00",
+            "published-time": "2026-11-25T10:26:12+00:00"
         },
         {
             "name": "drupal/varbase_performance_base",
@@ -20064,28 +20016,28 @@
         },
         {
             "name": "drupal/vartheme_bs5",
-            "version": "5.0.13",
+            "version": "5.0.14",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/vartheme_bs5.git",
-                "reference": "5.0.13"
+                "reference": "5.0.14"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/vartheme_bs5-5.0.13.zip",
-                "reference": "5.0.13",
-                "shasum": "10196ccb66eea0aff7da7ae4689373099690c390"
+                "url": "https://ftp.drupal.org/files/projects/vartheme_bs5-5.0.14.zip",
+                "reference": "5.0.14",
+                "shasum": "3b7d8f9efa9e175d765153325d570c63b5b73da3"
             },
             "require": {
-                "drupal/canvas": "~1",
-                "drupal/core": "~11.4.0",
+                "drupal/canvas": "^1",
+                "drupal/core": "^11.4 || ^12.0",
                 "drupal/cva": "^1"
             },
             "type": "drupal-theme",
             "extra": {
                 "drupal": {
-                    "version": "5.0.13",
-                    "datestamp": "1795453988",
+                    "version": "5.0.14",
+                    "datestamp": "1795606276",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -20124,7 +20076,7 @@
                 "source": "http://cgit.drupalcode.org/vartheme_bs5",
                 "issues": "http://drupal.org/project/issues/vartheme_bs5"
             },
-            "published-time": "2026-11-22T08:23:17+00:00"
+            "published-time": "2026-11-25T11:30:56+00:00"
         },
         {
             "name": "drupal/view_password",
@@ -21309,16 +21261,16 @@
         },
         {
             "name": "fileeye/pel",
-            "version": "0.12.1",
+            "version": "0.12.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FileEye/pel.git",
-                "reference": "96cce8aef576c8fe3154282d9d37f3cace7455e9"
+                "reference": "4559d23bca3363c85302e098f2c3fad35014a2fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FileEye/pel/zipball/96cce8aef576c8fe3154282d9d37f3cace7455e9",
-                "reference": "96cce8aef576c8fe3154282d9d37f3cace7455e9",
+                "url": "https://api.github.com/repos/FileEye/pel/zipball/4559d23bca3363c85302e098f2c3fad35014a2fc",
+                "reference": "4559d23bca3363c85302e098f2c3fad35014a2fc",
                 "shasum": ""
             },
             "require": {
@@ -21365,10 +21317,10 @@
             ],
             "support": {
                 "issues": "https://github.com/FileEye/pel/issues",
-                "source": "https://github.com/FileEye/pel/tree/0.12.1"
+                "source": "https://github.com/FileEye/pel/tree/0.12.2"
             },
-            "time": "2026-03-19T18:27:55+00:00",
-            "published-time": "2026-03-21T09:21:07+00:00"
+            "time": "2026-11-25T12:26:07+00:00",
+            "published-time": "2026-11-25T12:29:38+00:00"
         },
         {
             "name": "goalgorilla/rtseo.js",

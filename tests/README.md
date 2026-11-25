@@ -274,11 +274,13 @@ Varbase project template's `.gitlab-ci.yml`.
 
 - **`.github/workflows/automated-functional-testing.yml`**: the browser suite, in
   three phases:
-  1. `install` builds the codebase, installs Varbase with the `varbase` profile,
-     applies the base + AI recipes, seeds the testing users and relaxes the login
-     flood / Honeypot limits (mirroring `ddev init-full-automated-testing`), then
-     exports a database dump.
-  2. `test` fans the suites out into 24 parallel jobs. Each restores the installed
+  1. `install` builds the codebase, adds Varbase Events, News and Podcasts Base
+     (`ci/require-testing-recipes.sh`, runner only), then runs
+     `ci/install-testing-site.sh`: the testing site template
+     (`tests/recipes/varbase_testing_site`), the test content in
+     `tests/recipes`, the base + AI recipes, the AI provider, the testing users
+     and the flood / Honeypot limits, then exports a database dump.
+  2. `test` fans the suites out into 34 parallel jobs. Each restores the installed
      site and runs one suite, writing its own cucumber JSON.
   3. `reports` merges every suite's JSON into one HTML + PDF report, published as
      a build artifact.
@@ -287,6 +289,14 @@ Varbase project template's `.gitlab-ci.yml`.
 
 Both workflows also run on `workflow_dispatch`, so you can start either by hand
 from the repository's Actions tab.
+
+### AI provider
+
+Varbase AI Base sets up an amazee.ai trial as the default AI provider.
+`tests/scripts/ai-provider.sh` checks it took. When amazee.ai cannot be reached,
+it tries twice more, then switches to the AI module's Echo test provider
+(`echoai`, `gpt-test`) and prints "amazee.ai unavailable: running with the Echo
+test provider". No scenario asserts on what a model wrote.
 
 ### Selecting suites
 

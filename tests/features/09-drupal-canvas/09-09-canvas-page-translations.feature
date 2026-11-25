@@ -24,7 +24,7 @@ Feature: Drupal Canvas - translating a Canvas page
   # Fixture the @wip scenarios expect: English (default) + Arabic, and the
   # "Features" Canvas page translated into Arabic with the title "المزايا".
   # Run them with:
-  #   FEATURES="tests/features/09-drupal-canvas/09-07-*.feature" \
+  #   FEATURES="tests/features/09-drupal-canvas/09-09-*.feature" \
   #     ./node_modules/.bin/cucumber-js --config cucumber.js --tags "@multilingual"
 
   Background:
