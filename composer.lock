@@ -21261,16 +21261,16 @@
         },
         {
             "name": "fileeye/pel",
-            "version": "0.12.1",
+            "version": "0.12.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FileEye/pel.git",
-                "reference": "96cce8aef576c8fe3154282d9d37f3cace7455e9"
+                "reference": "4559d23bca3363c85302e098f2c3fad35014a2fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FileEye/pel/zipball/96cce8aef576c8fe3154282d9d37f3cace7455e9",
-                "reference": "96cce8aef576c8fe3154282d9d37f3cace7455e9",
+                "url": "https://api.github.com/repos/FileEye/pel/zipball/4559d23bca3363c85302e098f2c3fad35014a2fc",
+                "reference": "4559d23bca3363c85302e098f2c3fad35014a2fc",
                 "shasum": ""
             },
             "require": {
@@ -21317,10 +21317,10 @@
             ],
             "support": {
                 "issues": "https://github.com/FileEye/pel/issues",
-                "source": "https://github.com/FileEye/pel/tree/0.12.1"
+                "source": "https://github.com/FileEye/pel/tree/0.12.2"
             },
-            "time": "2026-03-19T18:27:55+00:00",
-            "published-time": "2026-03-21T09:21:07+00:00"
+            "time": "2026-11-25T12:26:07+00:00",
+            "published-time": "2026-11-25T12:29:38+00:00"
         },
         {
             "name": "goalgorilla/rtseo.js",
