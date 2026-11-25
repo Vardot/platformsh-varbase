@@ -20,7 +20,7 @@ The default app is configured under `.upsun/` so no extra flags are needed.
 
 ## Services
 
-- PHP 8.4
+- PHP 8.5
 - MariaDB 10.11
 - Redis 6
 - Drush included

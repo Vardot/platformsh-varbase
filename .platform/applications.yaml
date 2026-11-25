@@ -12,7 +12,7 @@
 # The name of this app. Must be unique within a project.
 -   name: varbase
     # The runtime the application uses.
-    type: php:8.4
+    type: php:8.5
     source:
         root: "/"
     dependencies:
@@ -22,7 +22,7 @@
         nodejs:
             npm: ">=11.5.2"
             # Installs a patched Node.js (version from .nvmrc) over the one bundled
-            # in php:8.4, for CVE-2026-111497.
+            # in php:8.5, for CVE-2026-111497.
             n: "*"
     variables:
         env:
@@ -203,8 +203,6 @@
     dependencies:
         nodejs:
             npm: ">=11.5.2"
-        php:
-            "composer/composer": "^2.9.8"
     disk: 512
     build:
         flavor: none
@@ -222,7 +220,15 @@
         build: |
             set -e
             cd $PLATFORM_APP_DIR
-            composer install --ignore-platform-reqs --no-scripts
+            # The nodejs image cannot install composer/composer as a php build
+            # dependency ("Could not authenticate against github.com"), so fetch
+            # the Composer phar, check its published SHA-256, and run it with a
+            # clean Composer home and no inherited GitHub credential.
+            command -v php >/dev/null || { echo "php is not available in the storybook build image"; exit 1; }
+            curl -fsSL https://getcomposer.org/download/latest-2.x/composer.phar -o /tmp/composer.phar
+            echo "$(curl -fsSL https://getcomposer.org/download/latest-2.x/composer.phar.sha256)  /tmp/composer.phar" | sha256sum -c -
+            mkdir -p /tmp/composer-home
+            env -u COMPOSER_AUTH -u GITHUB_TOKEN COMPOSER_HOME=/tmp/composer-home php /tmp/composer.phar install --ignore-platform-reqs --no-scripts
             npx corepack enable
             npx corepack prepare yarn@4.18.1 --activate
             export PATH="$HOME/.yarn/bin:$PATH"

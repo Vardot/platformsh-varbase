@@ -1,5 +1,5 @@
 {
-    "_hash": "3aa919fca053d5a6d452d0cf65774172643e4206f59f8cf8590f42c6d9c6d220",
+    "_hash": "ae6e487f6a4de0a92df8afcbda8dddddd8581cc7830c313c4942a3d0b0882286",
     "patches": {
         "drupal/core": [
             {
@@ -106,6 +106,16 @@
                 "package": "drupal/core",
                 "description": "Issue 3544608: Fix Media Library: Selected media lost after pager navigation prevents insertion",
                 "url": "https://raw.githubusercontent.com/Vardot/drupal-core-patches/refs/heads/patches/drupal-core--2025-09-03--mr-13141.patch",
+                "sha256": null,
+                "depth": null,
+                "extra": {
+                    "provenance": "dependency:drupal/core"
+                }
+            },
+            {
+                "package": "drupal/core",
+                "description": "Issue #3639007: TranslateFilterForm uses a NULL filter default as an array key (PHP 8.5 deprecation)",
+                "url": "https://raw.githubusercontent.com/Vardot/drupal-core-patches/refs/heads/patches/drupal-core--2026-11-18--3639007--mr-17845.patch",
                 "sha256": null,
                 "depth": null,
                 "extra": {
@@ -223,7 +233,29 @@
                 }
             }
         ],
+        "drupal/ai": [
+            {
+                "package": "drupal/ai",
+                "description": "fix: #3586873 PHP 8.5: AiAssistantForm uses a NULL entity ID as an array offset when adding an assistant",
+                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/ai--2026-11-18--3586873--mr-2204.patch",
+                "sha256": null,
+                "depth": null,
+                "extra": {
+                    "provenance": "dependency:drupal/ai"
+                }
+            }
+        ],
         "drupal/gin": [
+            {
+                "package": "drupal/gin",
+                "description": "fix: #3583491 Using null as an array offset is deprecated error on admin/content and admin/people",
+                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/gin--2026-11-18--3583491--mr-785.patch",
+                "sha256": null,
+                "depth": null,
+                "extra": {
+                    "provenance": "dependency:drupal/gin"
+                }
+            },
             {
                 "package": "drupal/gin",
                 "description": "fix: #3590827 Sticky form actions appear on node revision revert/delete confirm forms (incomplete exclusion pattern)",
@@ -247,19 +279,17 @@
                 }
             }
         ],
-        "drupal/embed": [
+        "drupal/canvas": [
             {
-                "package": "drupal/embed",
-                "description": "Issue #3517882: The namespace of EmbedCKEditor5PluginBase does not respect PSR4",
-                "url": "https://www.drupal.org/files/issues/2025-06-30/embed--2025-06-30--3517882--mr-26.patch",
+                "package": "drupal/canvas",
+                "description": "fix: #3592058 Cron crashed on trashed entities",
+                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/canvas--2026-11-20--3592058--mr-1809.patch",
                 "sha256": null,
                 "depth": null,
                 "extra": {
-                    "provenance": "dependency:drupal/embed"
+                    "provenance": "dependency:drupal/canvas"
                 }
-            }
-        ],
-        "drupal/canvas": [
+            },
             {
                 "package": "drupal/canvas",
                 "description": "fix: #3591751 Compile on serve when a code component's compiled JS is empty",
@@ -273,7 +303,7 @@
             {
                 "package": "drupal/canvas",
                 "description": "fix: #3591751 Compile JSX server-side for AI-created/edited code components (fixes [object Object])",
-                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/canvas--2026-07-10--3591751--mr-1315.patch",
+                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/canvas--2026-11-19--3591751--mr-1315.patch",
                 "sha256": null,
                 "depth": null,
                 "extra": {
@@ -347,6 +377,18 @@
                 }
             }
         ],
+        "drupal/webform": [
+            {
+                "package": "drupal/webform",
+                "description": "fix: #3590360 Make tests pass on PHP 8.5",
+                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/webform--2026-11-18--3590360--commit-34bfb9cc.patch",
+                "sha256": null,
+                "depth": null,
+                "extra": {
+                    "provenance": "dependency:drupal/webform"
+                }
+            }
+        ],
         "drupal/redirect": [
             {
                 "package": "drupal/redirect",
@@ -383,6 +425,18 @@
                 }
             }
         ],
+        "drupal/easy_email": [
+            {
+                "package": "drupal/easy_email",
+                "description": "fix: #3611615 Non-canonical cast (boolean) in EmailAttachmentEvaluator is deprecated in PHP 8.4",
+                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/easy_email--2026-11-18--3611615--mr-69.patch",
+                "sha256": null,
+                "depth": null,
+                "extra": {
+                    "provenance": "dependency:drupal/easy_email"
+                }
+            }
+        ],
         "drupal/eca_helper": [
             {
                 "package": "drupal/eca_helper",
@@ -392,6 +446,18 @@
                 "depth": null,
                 "extra": {
                     "provenance": "dependency:drupal/eca_helper"
+                }
+            }
+        ],
+        "drupal/social_api": [
+            {
+                "package": "drupal/social_api",
+                "description": "fix: #3593752 Deprecated implicit nullable $request parameter in OAuth2Manager::__construct() on PHP 8.4 (breaks the installer's AJAX batch response)",
+                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/social_api--2026-07-17--3593752--mr-17.patch",
+                "sha256": null,
+                "depth": null,
+                "extra": {
+                    "provenance": "dependency:drupal/social_api"
                 }
             }
         ],
@@ -416,6 +482,18 @@
                 "depth": null,
                 "extra": {
                     "provenance": "dependency:drupal/block_class"
+                }
+            }
+        ],
+        "drupal/imagemagick": [
+            {
+                "package": "drupal/imagemagick",
+                "description": "Issue #3543548: Use atomic file system actions",
+                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/imagemagick--2026-11-21--3543548--mr-54.patch",
+                "sha256": null,
+                "depth": null,
+                "extra": {
+                    "provenance": "dependency:drupal/imagemagick"
                 }
             }
         ],
@@ -471,17 +549,7 @@
             {
                 "package": "drupal/entity_embed",
                 "description": "Issue #2679875: Inline Entity Form integration",
-                "url": "https://www.drupal.org/files/issues/2023-11-08/2679875-27.patch",
-                "sha256": null,
-                "depth": null,
-                "extra": {
-                    "provenance": "dependency:drupal/entity_embed"
-                }
-            },
-            {
-                "package": "drupal/entity_embed",
-                "description": "Issue #3531672:  Drupal 10.5/11.2 compatability (tooltip broken, cannot edit embedded entities)",
-                "url": "https://www.drupal.org/files/issues/2025-06-30/entity_embed--2025-06-30--3531672--mr-62.patch",
+                "url": "https://raw.githubusercontent.com/Vardot/varbase-patches/refs/heads/patches/entity_embed--2026-11-20--2679875--reroll-1.8.0.patch",
                 "sha256": null,
                 "depth": null,
                 "extra": {
@@ -491,7 +559,7 @@
             {
                 "package": "drupal/entity_embed",
                 "description": "Issue #3070343: Allow to add a Drupal core link with Link Widget for Image entities using Entity Embed Dialog in CKEditor",
-                "url": "https://www.drupal.org/files/issues/2023-11-02/entity-embed-add-link-image-entity-3070343-37.patch",
+                "url": "https://raw.githubusercontent.com/Vardot/varbase-patches/refs/heads/patches/entity_embed--2026-11-20--3070343--reroll-1.8.0.patch",
                 "sha256": null,
                 "depth": null,
                 "extra": {
@@ -508,6 +576,18 @@
                 "depth": null,
                 "extra": {
                     "provenance": "dependency:drupal/simple_oauth"
+                }
+            }
+        ],
+        "drupal/webform_views": [
+            {
+                "package": "drupal/webform_views",
+                "description": "task: #3578380 Fix \"null as array offset\" deprecation in WebformSubmissionViewsData::getViewsData()",
+                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/webform_views--2026-11-18--3578380--mr-42.patch",
+                "sha256": null,
+                "depth": null,
+                "extra": {
+                    "provenance": "dependency:drupal/webform_views"
                 }
             }
         ],
@@ -552,6 +632,18 @@
                 "depth": null,
                 "extra": {
                     "provenance": "dependency:drupal/views_bulk_edit"
+                }
+            }
+        ],
+        "drupal/field_validation": [
+            {
+                "package": "drupal/field_validation",
+                "description": "fix: #3634371 Non-canonical (double) casts are deprecated in PHP 8.5 in the legacy Numeric validation rule",
+                "url": "https://raw.githubusercontent.com/vardot/varbase-patches/refs/heads/patches/field_validation--2026-11-19--3634371--mr-34.patch",
+                "sha256": null,
+                "depth": null,
+                "extra": {
+                    "provenance": "dependency:drupal/field_validation"
                 }
             }
         ],

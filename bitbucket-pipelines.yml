@@ -56,7 +56,7 @@
 #    leaving ~7 GB for Composer, Node, PHP and Chromium in the build container.
 #
 # 6. NO sudo, AND THE IMAGE IS BARE. Steps run as root in the pinned
-#    `php:8.4.25-cli-bookworm` image, which ships PHP and nothing else. Node,
+#    `php:8.5.13-cli-bookworm` image, which ships PHP and nothing else. Node,
 #    ImageMagick with WebP, the PHP extensions and the Playwright system
 #    libraries are installed by ci/bitbucket/setup-tooling.sh, which is the one
 #    place that list lives.
@@ -94,7 +94,7 @@
 # need tuning.
 ################################################################################
 
-image: php:8.4.25-cli-bookworm
+image: php:8.5.13-cli-bookworm
 
 clone:
   depth: 1
