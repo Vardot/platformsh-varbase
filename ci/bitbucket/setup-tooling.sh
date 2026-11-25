@@ -2,7 +2,7 @@
 ################################################################################
 # Shared tooling setup for every Bitbucket Pipelines step.
 #
-# The pipeline runs on the official `php:8.4.25-cli-bookworm` image, which ships
+# The pipeline runs on the official `php:8.5.13-cli-bookworm` image, which ships
 # PHP and nothing else. This script adds what the Varbase build, the lint jobs
 # and the browser suite need, and it is the ONE place that list lives, so the
 # 24 parallel E2E steps cannot drift from the install step.

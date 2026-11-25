@@ -12,7 +12,7 @@
 # The name of this app. Must be unique within a project.
 -   name: varbase
     # The runtime the application uses.
-    type: php:8.4
+    type: php:8.5
     source:
         root: "/"
     dependencies:
@@ -22,7 +22,7 @@
         nodejs:
             npm: ">=11.5.2"
             # Installs a patched Node.js (version from .nvmrc) over the one bundled
-            # in php:8.4, for CVE-2026-111497.
+            # in php:8.5, for CVE-2026-111497.
             n: "*"
     variables:
         env:
