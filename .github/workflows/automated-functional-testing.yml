@@ -5,10 +5,12 @@
 # project template's .gitlab-ci.yml. Same three phases, same suite split, same
 # report output:
 #
-#   install  (pre-test)  Build the codebase, install Varbase with the `varbase`
-#                        profile, apply the base + AI recipes, seed the per-role
-#                        testing users, prepare the site for deterministic
-#                        testing, then export a DB dump for the test jobs.
+#   install  (pre-test)  Build the codebase, install the testing site template
+#                        with the `varbase` profile, seed the test content,
+#                        apply the base + AI recipes, seed the per-role testing
+#                        users, prepare the site for deterministic testing
+#                        (ci/install-testing-site.sh), then export a DB dump
+#                        for the test jobs.
 #   test     (test)      One job per feature suite, fanned out by `matrix`. Each
 #                        restores the installed site and runs ONE suite, writing
 #                        its own cucumber JSON.
@@ -163,6 +165,12 @@ jobs:
         run: |
           composer install --no-interaction --no-progress --optimize-autoloader --prefer-dist
 
+      # Varbase Events, News and Podcasts Base are not in this template; the
+      # 18-events, 19-news and 20-podcasts suites need them. Added on the
+      # runner only, as the Varbase project template does.
+      - name: Add the recipes the suites need
+        run: bash ci/require-testing-recipes.sh
+
       - name: Install Node dependencies and Playwright Chromium
         run: |
           test -f .yarnrc.yml || echo "nodeLinker: node-modules" > .yarnrc.yml
@@ -199,85 +207,12 @@ jobs:
           done
           echo "Web server did not come up."; cat webserver.log; exit 1
 
-      - name: Install Varbase
-        run: |
-          ./vendor/bin/drush --root="${{ github.workspace }}/web" site:install varbase \
-            --db-url="$SIMPLETEST_DB" \
-            --account-name="$DRUPAL_ADMIN_USERNAME" \
-            --account-pass="$DRUPAL_ADMIN_PASSWORD" \
-            --account-mail=webmaster@vardot.com \
-            --site-name="Varbase Test" --locale=en -y
-
-      # Recipes are applied with core's `dr` runner (Drush 13.x has no `recipe`
-      # command). Rebuilding caches before each apply avoids stale-container
-      # fatals from modules the previous recipe enabled.
-      - name: Apply the base and AI recipes
-        run: |
-          DRUSH="./vendor/bin/drush --root=${{ github.workspace }}/web"
-          DR="./vendor/bin/dr"
-          test -f "$DR" || { echo "core recipe runner 'dr' missing from vendor/bin"; exit 1; }
-          apply_recipe() {
-            $DRUSH cache:rebuild || true
-            php "$DR" recipe "${{ github.workspace }}/recipes/$1" || true
-          }
-          apply_recipe varbase_dev_base
-          apply_recipe varbase_i18n_base
-          apply_recipe varbase_api_base
-          apply_recipe varbase_auth_base
-          # Auth Base enables Google only; Facebook and LinkedIn ship disabled.
-          $DRUSH pm:enable social_auth_facebook social_auth_linkedin -y || true
-          apply_recipe varbase_ai_base
-          apply_recipe varbase_ai_context
-          apply_recipe varbase_ai_safety
-          # The AI safety/taxonomy sub-recipes abort on config actions that need
-          # a live AI provider (API key / default chat model), which CI has not
-          # got, so their modules never get enabled. Enable them explicitly so
-          # their admin pages exist; the config actions are optional.
-          $DRUSH cache:rebuild || true
-          $DRUSH pm:enable ai_logging ai_observability ai_automators -y || true
-
-      # Rendering the ai_ckeditor "AI Assistant" settings subform performs a
-      # live AI-provider lookup, which hangs on a runner with no provider and
-      # blows the browser's navigation budget on the text-format edit page.
-      # Strip the button/plugin from every editor; the module stays enabled.
-      - name: Remove the AI CKEditor button from every editor
-        run: |
-          ./vendor/bin/drush --root="${{ github.workspace }}/web" php:eval 'foreach(\Drupal::entityTypeManager()->getStorage("editor")->loadMultiple() as $e){$s=$e->getSettings();$c=false;if(!empty($s["toolbar"]["items"])&&is_array($s["toolbar"]["items"])){$n=array_values(array_filter($s["toolbar"]["items"],function($i){return stripos((string)$i,"ai_ckeditor")===false&&stripos((string)$i,"aickeditor")===false;}));if($n!==$s["toolbar"]["items"]){$s["toolbar"]["items"]=$n;$c=true;}}if(!empty($s["plugins"])&&is_array($s["plugins"])){foreach(array_keys($s["plugins"]) as $k){if(stripos($k,"ai_ckeditor")!==false){unset($s["plugins"][$k]);$c=true;}}}if($c){$e->setSettings($s);$e->save();}}' || true
-          ./vendor/bin/drush --root="${{ github.workspace }}/web" cache:rebuild || true
-
-      # The registry of accounts here mirrors worldParameters.users in
-      # cucumber.js. NOTE: this script sets one published password for every
-      # account; that is acceptable only on a throwaway CI site and must never
-      # be used on a public environment.
-      - name: Seed the per-role testing users
-        run: |
-          cd recipes/varbase_starter/scripts
-          bash add-testing-users.sh
-          cd "${{ github.workspace }}"
-
-      - name: Prepare the site for deterministic testing
-        run: |
-          DRUSH="./vendor/bin/drush --root=${{ github.workspace }}/web"
-          $DRUSH pm:uninstall antibot -y || true
-          $DRUSH config:set user.flood ip_limit 1000000 -y
-          $DRUSH config:set user.flood user_limit 1000000 -y
-          $DRUSH config:set honeypot.settings time_limit 0 -y || true
-          $DRUSH php:eval '$b=\Drupal::entityTypeManager()->getStorage("block")->load("ai_chatbot"); if($b){$b->disable()->save();}' || true
-          # While /admin/config/ai renders, the AI dashboard's two Project
-          # Browser blocks fetch from drupal.org and git.drupalcode.org, and its
-          # Status and Setup blocks ask every AI provider whether it is usable
-          # (amazee.ai over the network). A slow answer blows the browser's 30 s
-          # navigation budget. Remove those blocks on the CI site only; the
-          # dashboard page, its configuration links and documentation stay.
-          $DRUSH php:eval '$c=\Drupal::configFactory()->getEditable("dashboard.dashboard.ai_dashboard"); $l=$c->get("layout"); if(is_array($l)){foreach($l as $i=>$s){foreach(($s["components"]??[]) as $u=>$b){$id=(string)($b["configuration"]["id"]??""); if(str_starts_with($id,"project_browser_block:")||in_array($id,["ai_operations_status","ai_setup_ai_provider"],true)){unset($l[$i]["components"][$u]);}}} $c->set("layout",$l)->save();}' || true
-          # Keep aggregation ON: with it off, heavy admin pages (the CKEditor 5
-          # text-format config in particular) emit ~90 script tags and exceed
-          # the browser's domcontentloaded budget. Aggregated they load fast and
-          # match production.
-          $DRUSH config:set system.performance css.preprocess 1 -y
-          $DRUSH config:set system.performance js.preprocess 1 -y
-          $DRUSH config:set system.logging error_level all -y
-          $DRUSH cache:rebuild
+      # The testing site template (Varbase Starter plus Events, News and
+      # Podcasts), the test content, the base and AI recipes, the AI provider,
+      # the testing users and the deterministic-testing settings. The script is
+      # shared with bitbucket-pipelines.yml; see its header for each step.
+      - name: Install the testing site
+        run: bash ci/install-testing-site.sh
 
       - name: Export the installed site
         run: |
@@ -344,10 +279,10 @@ jobs:
           - suite: "10-content-permissions"
           - suite: "11-content-workflow"
           - suite: "13-varbase-recipes"
-          - suite: "14-ai"
           - suite: "15-quality"
           - suite: "16-eca-workflow-modeler"
-          - suite: "17-search"
+          - suite: "18-events"
+          - suite: "19-news"
           # The heaviest suites are split by feature-file glob so each job stays
           # short. They run concurrently, so more jobs lower wall-clock time.
           - suite: "01-website-base-requirements-a"
@@ -368,15 +303,36 @@ jobs:
             features: "tests/features/09-drupal-canvas/09-{03,04,05}-*.feature"
           - suite: "09-drupal-canvas-d"
             features: "tests/features/09-drupal-canvas/09-06-*.feature"
-          # The Canvas page translation suite republishes pages through the
-          # React editor, so it gets a second retry, as in drupal/varbase_starter.
+          # Pattern inserts, pattern reuse and page translations build and
+          # publish pages through the React editor, so they get a second retry,
+          # as in the Varbase project template and drupal/varbase_starter.
           - suite: "09-drupal-canvas-e"
             features: "tests/features/09-drupal-canvas/09-07-*.feature"
+            retry: "2"
+          - suite: "09-drupal-canvas-f"
+            features: "tests/features/09-drupal-canvas/09-08-*.feature"
+            retry: "2"
+          - suite: "09-drupal-canvas-g"
+            features: "tests/features/09-drupal-canvas/09-09-*.feature"
             retry: "2"
           - suite: "12-content-access-and-lock-a"
             features: "tests/features/12-content-access-and-lock/12-01-*.feature"
           - suite: "12-content-access-and-lock-b"
             features: "tests/features/12-content-access-and-lock/12-02-*.feature"
+          - suite: "14-ai-a"
+            features: "tests/features/14-ai/14-{00,01,02,03,04,05,06,07,08,09,10,11,12,13}-*.feature"
+          - suite: "14-ai-b"
+            features: "tests/features/14-ai/14-{14,15,16,17,18,19,20,21,22,23,24,25,26}-*.feature"
+          - suite: "17-search-a"
+            features: "tests/features/17-search/17-{01,02,03,04}-*.feature"
+          - suite: "17-search-b"
+            features: "tests/features/17-search/17-{05,06,07,08}-*.feature"
+          - suite: "20-podcasts-a"
+            features: "tests/features/20-podcasts/20-{01,02,03,04,05,06}-*.feature"
+          - suite: "20-podcasts-b"
+            features: "tests/features/20-podcasts/20-{07,08,09,10,11,12}-*.feature"
+          - suite: "20-podcasts-c"
+            features: "tests/features/20-podcasts/20-{13,14,15,16,17}-*.feature"
 
     services:
       database:

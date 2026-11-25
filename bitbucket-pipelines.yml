@@ -336,6 +336,9 @@ definitions:
           # Install strictly from the committed lock so CI proves the same
           # resolution the template ships, not a fresh one.
           - composer install --no-interaction --no-progress --optimize-autoloader --prefer-dist
+          # Varbase Events, News and Podcasts Base, for the 18-events, 19-news
+          # and 20-podcasts suites. Runner only; see the script.
+          - bash ci/require-testing-recipes.sh
 
           - |
             test -f .yarnrc.yml || echo "nodeLinker: node-modules" > .yarnrc.yml
@@ -363,74 +366,10 @@ definitions:
             done
             curl -sf -o /dev/null "http://127.0.0.1:8080/core/install.php" || { echo "Web server did not come up."; cat webserver.log; exit 1; }
 
-          - |
-            ./vendor/bin/drush --root="${PWD}/web" site:install varbase \
-              --db-url="$SIMPLETEST_DB" \
-              --account-name="$DRUPAL_ADMIN_USERNAME" \
-              --account-pass="$DRUPAL_ADMIN_PASSWORD" \
-              --account-mail=webmaster@vardot.com \
-              --site-name="Varbase Test" --locale=en -y
-
-          # Recipes are applied with core's `dr` runner: Drush 13.x has NO
-          # `recipe` command. Rebuilding caches before each apply lets a recipe
-          # see the modules and hooks the previous one enabled, and avoids
-          # stale-container fatals. `dr` lives in vendor/bin here, because this
-          # template sets composer config bin-dir to vendor/bin.
-          - |
-            DRUSH="./vendor/bin/drush --root=${PWD}/web"
-            DR="./vendor/bin/dr"
-            test -f "$DR" || { echo "core recipe runner 'dr' missing from vendor/bin"; exit 1; }
-            apply_recipe() {
-              $DRUSH cache:rebuild || true
-              php "$DR" recipe "${PWD}/recipes/$1" || true
-            }
-            apply_recipe varbase_dev_base
-            apply_recipe varbase_i18n_base
-            apply_recipe varbase_api_base
-            apply_recipe varbase_auth_base
-            # Auth Base enables Google only; Facebook and LinkedIn ship disabled.
-            $DRUSH pm:enable social_auth_facebook social_auth_linkedin -y || true
-            apply_recipe varbase_ai_base
-            apply_recipe varbase_ai_context
-            apply_recipe varbase_ai_safety
-            # The AI safety/taxonomy sub-recipes abort on config actions that
-            # need a live AI provider (API key / default chat model), which CI
-            # has not got, so their modules never get enabled. Enable them
-            # explicitly so their admin pages exist; the config actions are
-            # optional.
-            $DRUSH cache:rebuild || true
-            $DRUSH pm:enable ai_logging ai_observability ai_automators -y || true
-
-          # Rendering the ai_ckeditor "AI Assistant" settings subform performs a
-          # live AI-provider lookup, which hangs on a runner with no provider
-          # and blows the browser's navigation budget on the text-format edit
-          # page. Strip the button/plugin from every editor; the module stays
-          # enabled.
-          - |
-            ./vendor/bin/drush --root="${PWD}/web" php:eval 'foreach(\Drupal::entityTypeManager()->getStorage("editor")->loadMultiple() as $e){$s=$e->getSettings();$c=false;if(!empty($s["toolbar"]["items"])&&is_array($s["toolbar"]["items"])){$n=array_values(array_filter($s["toolbar"]["items"],function($i){return stripos((string)$i,"ai_ckeditor")===false&&stripos((string)$i,"aickeditor")===false;}));if($n!==$s["toolbar"]["items"]){$s["toolbar"]["items"]=$n;$c=true;}}if(!empty($s["plugins"])&&is_array($s["plugins"])){foreach(array_keys($s["plugins"]) as $k){if(stripos($k,"ai_ckeditor")!==false){unset($s["plugins"][$k]);$c=true;}}}if($c){$e->setSettings($s);$e->save();}}' || true
-            ./vendor/bin/drush --root="${PWD}/web" cache:rebuild || true
-
-          # The registry of accounts here mirrors worldParameters.users in
-          # cucumber.js. NOTE: this script sets one published password for every
-          # account; that is acceptable only on a throwaway CI site and must
-          # never be used on a public environment.
-          - ( cd recipes/varbase_starter/scripts && bash add-testing-users.sh )
-
-          - |
-            DRUSH="./vendor/bin/drush --root=${PWD}/web"
-            $DRUSH pm:uninstall antibot -y || true
-            $DRUSH config:set user.flood ip_limit 1000000 -y
-            $DRUSH config:set user.flood user_limit 1000000 -y
-            $DRUSH config:set honeypot.settings time_limit 0 -y || true
-            $DRUSH php:eval '$b=\Drupal::entityTypeManager()->getStorage("block")->load("ai_chatbot"); if($b){$b->disable()->save();}' || true
-            # Keep aggregation ON: with it off, heavy admin pages (the CKEditor
-            # 5 text-format config in particular) emit ~90 script tags and
-            # exceed the browser's domcontentloaded budget. Aggregated they load
-            # fast and match production.
-            $DRUSH config:set system.performance css.preprocess 1 -y
-            $DRUSH config:set system.performance js.preprocess 1 -y
-            $DRUSH config:set system.logging error_level all -y
-            $DRUSH cache:rebuild
+          # The testing site, test content, base and AI recipes, AI provider,
+          # testing users and deterministic-testing settings. Shared with the
+          # GitHub Actions workflow; see the script header.
+          - bash ci/install-testing-site.sh
 
           - ./vendor/bin/drush --root="${PWD}/web" sql:dump --gzip --result-file="${PWD}/varbase-db.sql"
 
@@ -652,16 +591,6 @@ pipelines:
                   - ./ci/bitbucket/run-e2e-suite.sh '13-varbase-recipes'
 
             - step:
-                name: "E2E: 14-ai"
-                size: 2x
-                max-time: 120
-                caches: *e2e-caches
-                services: *e2e-services
-                artifacts: *e2e-artifacts
-                script:
-                  - ./ci/bitbucket/run-e2e-suite.sh '14-ai'
-
-            - step:
                 name: "E2E: 15-quality"
                 size: 2x
                 max-time: 120
@@ -685,14 +614,24 @@ pipelines:
                   - ./ci/bitbucket/run-e2e-suite.sh '16-eca-workflow-modeler'
 
             - step:
-                name: "E2E: 17-search"
+                name: "E2E: 18-events"
                 size: 2x
                 max-time: 120
                 caches: *e2e-caches
                 services: *e2e-services
                 artifacts: *e2e-artifacts
                 script:
-                  - ./ci/bitbucket/run-e2e-suite.sh '17-search'
+                  - ./ci/bitbucket/run-e2e-suite.sh '18-events'
+
+            - step:
+                name: "E2E: 19-news"
+                size: 2x
+                max-time: 120
+                caches: *e2e-caches
+                services: *e2e-services
+                artifacts: *e2e-artifacts
+                script:
+                  - ./ci/bitbucket/run-e2e-suite.sh '19-news'
 
             # --- The heaviest folders, split by feature-file glob. -----------
             - step:
@@ -797,6 +736,25 @@ pipelines:
                 script:
                   - CUCUMBER_RETRY=2 ./ci/bitbucket/run-e2e-suite.sh '09-drupal-canvas-e' 'tests/features/09-drupal-canvas/09-07-*.feature'
 
+            - step:
+                name: "E2E: 09-drupal-canvas-f"
+                size: 2x
+                max-time: 120
+                caches: *e2e-caches
+                services: *e2e-services
+                artifacts: *e2e-artifacts
+                script:
+                  - CUCUMBER_RETRY=2 ./ci/bitbucket/run-e2e-suite.sh '09-drupal-canvas-f' 'tests/features/09-drupal-canvas/09-08-*.feature'
+
+            - step:
+                name: "E2E: 09-drupal-canvas-g"
+                size: 2x
+                max-time: 120
+                caches: *e2e-caches
+                services: *e2e-services
+                artifacts: *e2e-artifacts
+                script:
+                  - CUCUMBER_RETRY=2 ./ci/bitbucket/run-e2e-suite.sh '09-drupal-canvas-g' 'tests/features/09-drupal-canvas/09-09-*.feature'
 
             - step:
                 name: "E2E: 12-content-access-and-lock-a"
@@ -817,6 +775,76 @@ pipelines:
                 artifacts: *e2e-artifacts
                 script:
                   - ./ci/bitbucket/run-e2e-suite.sh '12-content-access-and-lock-b' 'tests/features/12-content-access-and-lock/12-02-*.feature'
+
+            - step:
+                name: "E2E: 14-ai-a"
+                size: 2x
+                max-time: 120
+                caches: *e2e-caches
+                services: *e2e-services
+                artifacts: *e2e-artifacts
+                script:
+                  - ./ci/bitbucket/run-e2e-suite.sh '14-ai-a' 'tests/features/14-ai/14-{00,01,02,03,04,05,06,07,08,09,10,11,12,13}-*.feature'
+
+            - step:
+                name: "E2E: 14-ai-b"
+                size: 2x
+                max-time: 120
+                caches: *e2e-caches
+                services: *e2e-services
+                artifacts: *e2e-artifacts
+                script:
+                  - ./ci/bitbucket/run-e2e-suite.sh '14-ai-b' 'tests/features/14-ai/14-{14,15,16,17,18,19,20,21,22,23,24,25,26}-*.feature'
+
+            - step:
+                name: "E2E: 17-search-a"
+                size: 2x
+                max-time: 120
+                caches: *e2e-caches
+                services: *e2e-services
+                artifacts: *e2e-artifacts
+                script:
+                  - ./ci/bitbucket/run-e2e-suite.sh '17-search-a' 'tests/features/17-search/17-{01,02,03,04}-*.feature'
+
+            - step:
+                name: "E2E: 17-search-b"
+                size: 2x
+                max-time: 120
+                caches: *e2e-caches
+                services: *e2e-services
+                artifacts: *e2e-artifacts
+                script:
+                  - ./ci/bitbucket/run-e2e-suite.sh '17-search-b' 'tests/features/17-search/17-{05,06,07,08}-*.feature'
+
+            - step:
+                name: "E2E: 20-podcasts-a"
+                size: 2x
+                max-time: 120
+                caches: *e2e-caches
+                services: *e2e-services
+                artifacts: *e2e-artifacts
+                script:
+                  - ./ci/bitbucket/run-e2e-suite.sh '20-podcasts-a' 'tests/features/20-podcasts/20-{01,02,03,04,05,06}-*.feature'
+
+            - step:
+                name: "E2E: 20-podcasts-b"
+                size: 2x
+                max-time: 120
+                caches: *e2e-caches
+                services: *e2e-services
+                artifacts: *e2e-artifacts
+                script:
+                  - ./ci/bitbucket/run-e2e-suite.sh '20-podcasts-b' 'tests/features/20-podcasts/20-{07,08,09,10,11,12}-*.feature'
+
+            - step:
+                name: "E2E: 20-podcasts-c"
+                size: 2x
+                max-time: 120
+                caches: *e2e-caches
+                services: *e2e-services
+                artifacts: *e2e-artifacts
+                script:
+                  - ./ci/bitbucket/run-e2e-suite.sh '20-podcasts-c' 'tests/features/20-podcasts/20-{13,14,15,16,17}-*.feature'
 
       - step: *reports
 

@@ -72,6 +72,8 @@ chmod -R u+w web/sites 2>/dev/null || true
 WITH_NODE=1 WITH_BROWSER=1 . ci/bitbucket/setup-tooling.sh
 
 composer install --no-interaction --no-progress --optimize-autoloader --prefer-dist
+# The same Events, News and Podcasts recipes the install step added.
+bash ci/require-testing-recipes.sh
 
 test -f .yarnrc.yml || echo "nodeLinker: node-modules" > .yarnrc.yml
 # varbase-e2e's postinstall scaffolds a cucumber.js when none exists. Under
